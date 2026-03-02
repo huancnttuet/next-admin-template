@@ -36,8 +36,8 @@ Instructions for the elearning-admin-v2 project built with Next.js 16 (App Route
 - `containers/<domain>/` — Feature-level smart components grouped by domain
 - `stores/` — Zustand stores (preferences-store, sidebar-store)
 - `services/<domain>/` — API logic: `<domain>.type.ts`, `<domain>.api.ts`, `<domain>.query.ts`
-- `configs/` — Application constants (routes, sidebar navigation data)
-- `lib/` — Shared utilities (auth, api-client, utils)
+- `configs/` — Application constants (routes, sidebar navigation data, API endpoints)
+- `lib/` — Shared utilities (auth, api-client factory, utils)
 - `types/` — Shared TypeScript types (sidebar types, etc.)
 - `i18n/` — Internationalization config (`config.ts`, `request.ts`) + `messages/` subfolder (en.json, vi.json)
 
@@ -54,8 +54,8 @@ import {
   LanguageSwitcher,
   ThemeSwitch,
   ProfileDropdown,
-} from '@/components/layout'
-;<>
+} from '@/components/layout';
+<>
   <Header>
     <Search />
     <div className='ml-auto flex items-center gap-2'>
@@ -66,7 +66,7 @@ import {
     </div>
   </Header>
   <Main>{/* Page-specific content */}</Main>
-</>
+</>;
 ```
 
 ## Development Standards
@@ -95,7 +95,9 @@ import {
 
 ### API Integration
 
-- Use the Axios client from `@/lib/api-client` for all API calls
+- API base URLs are centralized in `configs/endpoints.ts` (`ApiEndpoints`)
+- Default client: `import apiClient from '@/lib/api-client'` (uses `ApiEndpoints.main`)
+- For additional APIs: `import { createApiClient } from '@/lib/api-client'` then `createApiClient('<key>')`
 - Follow the services pattern: `services/<domain>/<domain>.api.ts` for fetch functions
 - Create TanStack Query hooks in `services/<domain>/<domain>.query.ts`
 - Define types in `services/<domain>/<domain>.type.ts`

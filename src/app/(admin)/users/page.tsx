@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { Header } from '@/components/layout/header'
-import { Main } from '@/components/layout/main'
-import { Search } from '@/components/layout/search'
-import { ThemeSwitch } from '@/components/layout/theme-switch'
-import { ProfileDropdown } from '@/components/layout/profile-dropdown'
-import { LayoutControls } from '@/components/layout/layout-controls'
-import { LanguageSwitcher } from '@/components/layout/language-switcher'
+import { useTranslations } from 'next-intl';
+import { Header } from '@/components/layout/header';
+import { Main } from '@/components/layout/main';
+import { Search } from '@/components/layout/search';
+import { ThemeSwitch } from '@/components/layout/theme-switch';
+import { ProfileDropdown } from '@/components/layout/profile-dropdown';
+import { LayoutControls } from '@/components/layout/layout-controls';
+import { LanguageSwitcher } from '@/components/layout/language-switcher';
 
 export default function UsersPage() {
-  const t = useTranslations('pages')
+  const t = useTranslations('pages');
 
   return (
     <>
@@ -32,5 +32,5 @@ export default function UsersPage() {
         </div>
       </Main>
     </>
-  )
+  );
 }

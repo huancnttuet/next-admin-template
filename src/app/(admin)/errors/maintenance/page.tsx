@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl';
 
 export default function MaintenancePage() {
-  const t = useTranslations('errors')
+  const t = useTranslations('errors');
 
   return (
     <div className='flex min-h-svh flex-col items-center justify-center gap-6 p-6 text-center'>
@@ -14,5 +14,5 @@ export default function MaintenancePage() {
       </div>
       <p className='text-sm text-muted-foreground'>{t('maintenanceNote')}</p>
     </div>
-  )
+  );
 }

@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { usePreferencesStore } from '@/stores/preferences-store'
+import { useEffect } from 'react';
+import { usePreferencesStore } from '@/stores/preferences-store';
 
 /** Default border-radius from :root */
-const DEFAULT_RADIUS = '0.5rem'
+const DEFAULT_RADIUS = '0.5rem';
 
 /** Scale CSS values */
 const SCALE_MAP = {
   normal: '1',
   xs: '0.9',
   lg: '1.1',
-} as const
+} as const;
 
 /** Radius CSS values */
 const RADIUS_MAP = {
@@ -20,7 +20,7 @@ const RADIUS_MAP = {
   md: '0.5rem',
   lg: '0.75rem',
   xl: '1rem',
-} as const
+} as const;
 
 /** All font CSS classes that can be applied to the body */
 const FONT_CLASSES = [
@@ -31,7 +31,7 @@ const FONT_CLASSES = [
   'font-space-grotesk',
   'font-dm-sans',
   'font-system',
-] as const
+] as const;
 
 /**
  * Applies user preferences (theme preset, font, scale, radius, content layout)
@@ -40,45 +40,45 @@ const FONT_CLASSES = [
  * Mount once inside <Providers> — it has no visible UI.
  */
 export function PreferencesApplier() {
-  const themePreset = usePreferencesStore((s) => s.themePreset)
-  const font = usePreferencesStore((s) => s.font)
-  const scale = usePreferencesStore((s) => s.scale)
-  const radius = usePreferencesStore((s) => s.radius)
-  const contentLayout = usePreferencesStore((s) => s.contentLayout)
+  const themePreset = usePreferencesStore((s) => s.themePreset);
+  const font = usePreferencesStore((s) => s.font);
+  const scale = usePreferencesStore((s) => s.scale);
+  const radius = usePreferencesStore((s) => s.radius);
+  const contentLayout = usePreferencesStore((s) => s.contentLayout);
 
   /* ── Theme preset ── */
   useEffect(() => {
-    const root = document.documentElement
+    const root = document.documentElement;
     if (themePreset === 'default') {
-      root.removeAttribute('data-theme-preset')
-      root.style.setProperty('--radius', DEFAULT_RADIUS)
+      root.removeAttribute('data-theme-preset');
+      root.style.setProperty('--radius', DEFAULT_RADIUS);
     } else {
-      root.setAttribute('data-theme-preset', themePreset)
+      root.setAttribute('data-theme-preset', themePreset);
     }
-  }, [themePreset])
+  }, [themePreset]);
 
   /* ── Font family ── */
   useEffect(() => {
-    const body = document.body
-    body.classList.remove(...FONT_CLASSES)
-    body.classList.add(`font-${font}`)
-  }, [font])
+    const body = document.body;
+    body.classList.remove(...FONT_CLASSES);
+    body.classList.add(`font-${font}`);
+  }, [font]);
 
   /* ── Scale ── */
   useEffect(() => {
     document.documentElement.style.fontSize =
-      scale === 'normal' ? '' : `calc(16px * ${SCALE_MAP[scale]})`
-  }, [scale])
+      scale === 'normal' ? '' : `calc(16px * ${SCALE_MAP[scale]})`;
+  }, [scale]);
 
   /* ── Radius ── */
   useEffect(() => {
-    document.documentElement.style.setProperty('--radius', RADIUS_MAP[radius])
-  }, [radius])
+    document.documentElement.style.setProperty('--radius', RADIUS_MAP[radius]);
+  }, [radius]);
 
   /* ── Content layout ── */
   useEffect(() => {
-    document.documentElement.setAttribute('data-content-layout', contentLayout)
-  }, [contentLayout])
+    document.documentElement.setAttribute('data-content-layout', contentLayout);
+  }, [contentLayout]);
 
-  return null
+  return null;
 }

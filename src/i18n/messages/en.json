@@ -160,6 +160,7 @@
   "preferences": {
     "themePreset": "Theme Preset",
     "fonts": "Fonts",
+    "language": "Language",
     "themeMode": "Theme Mode",
     "light": "Light",
     "dark": "Dark",

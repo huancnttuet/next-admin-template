@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Sidebar,
@@ -6,17 +6,17 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from '@/components/ui/sidebar'
-import { useSidebarData } from '@/configs/sidebar-data'
-import { usePreferencesStore } from '@/stores/preferences-store'
-import { NavGroup } from './nav-group'
-import { NavUser } from './nav-user'
-import { MainLogo } from './main-logo'
+} from '@/components/ui/sidebar';
+import { useSidebarData } from '@/configs/sidebar-data';
+import { usePreferencesStore } from '@/stores/preferences-store';
+import { NavGroup } from './nav-group';
+import { NavUser } from './nav-user';
+import { MainLogo } from './main-logo';
 
 export function AppSidebar() {
-  const sidebarVariant = usePreferencesStore((s) => s.sidebarVariant)
-  const sidebarCollapsible = usePreferencesStore((s) => s.sidebarCollapsible)
-  const data = useSidebarData()
+  const sidebarVariant = usePreferencesStore((s) => s.sidebarVariant);
+  const sidebarCollapsible = usePreferencesStore((s) => s.sidebarCollapsible);
+  const data = useSidebarData();
 
   return (
     <Sidebar collapsible={sidebarCollapsible} variant={sidebarVariant}>
@@ -33,5 +33,5 @@ export function AppSidebar() {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

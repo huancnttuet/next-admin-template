@@ -76,7 +76,7 @@
   }
 
   /* ── Blue preset ── */
-  [data-theme-preset='blue'] {
+  [data-theme-preset="blue"] {
     --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
     --ring: 221.2 83.2% 53.3%;
@@ -85,8 +85,8 @@
     --sidebar-ring: 221.2 83.2% 53.3%;
   }
 
-  .dark[data-theme-preset='blue'],
-  [data-theme-preset='blue'] .dark {
+  .dark[data-theme-preset="blue"],
+  [data-theme-preset="blue"] .dark {
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --ring: 217.2 91.2% 59.8%;
@@ -96,7 +96,7 @@
   }
 
   /* ── Green preset ── */
-  [data-theme-preset='green'] {
+  [data-theme-preset="green"] {
     --primary: 142.1 76.2% 36.3%;
     --primary-foreground: 355.7 100% 97.3%;
     --ring: 142.1 76.2% 36.3%;
@@ -105,8 +105,8 @@
     --sidebar-ring: 142.1 76.2% 36.3%;
   }
 
-  .dark[data-theme-preset='green'],
-  [data-theme-preset='green'] .dark {
+  .dark[data-theme-preset="green"],
+  [data-theme-preset="green"] .dark {
     --primary: 142.1 70.6% 45.3%;
     --primary-foreground: 144.9 80.4% 10%;
     --ring: 142.1 70.6% 45.3%;
@@ -116,7 +116,7 @@
   }
 
   /* ── Orange preset ── */
-  [data-theme-preset='orange'] {
+  [data-theme-preset="orange"] {
     --primary: 24.6 95% 53.1%;
     --primary-foreground: 60 9.1% 97.8%;
     --ring: 24.6 95% 53.1%;
@@ -125,8 +125,8 @@
     --sidebar-ring: 24.6 95% 53.1%;
   }
 
-  .dark[data-theme-preset='orange'],
-  [data-theme-preset='orange'] .dark {
+  .dark[data-theme-preset="orange"],
+  [data-theme-preset="orange"] .dark {
     --primary: 20.5 90.2% 48.2%;
     --primary-foreground: 60 9.1% 97.8%;
     --ring: 20.5 90.2% 48.2%;
@@ -136,7 +136,7 @@
   }
 
   /* ── Tangerine preset ── */
-  [data-theme-preset='tangerine'] {
+  [data-theme-preset="tangerine"] {
     --background: 60 0% 92.1%;
     --foreground: 0 0% 19.9%;
     --card: 0 0% 100%;
@@ -165,8 +165,8 @@
     --sidebar-ring: 13.2 72.3% 55.1%;
   }
 
-  .dark[data-theme-preset='tangerine'],
-  [data-theme-preset='tangerine'] .dark {
+  .dark[data-theme-preset="tangerine"],
+  [data-theme-preset="tangerine"] .dark {
     --background: 219.1 28.5% 15.5%;
     --foreground: 0 0% 89.6%;
     --card: 223.6 20.8% 20.7%;
@@ -196,7 +196,7 @@
   }
 
   /* ── Soft Pop preset ── */
-  [data-theme-preset='soft-pop'] {
+  [data-theme-preset="soft-pop"] {
     --background: 80 33.4% 96.5%;
     --foreground: 0 0% 0%;
     --card: 0 0% 100%;
@@ -226,8 +226,8 @@
     --sidebar-ring: 229.7 93.5% 81.8%;
   }
 
-  .dark[data-theme-preset='soft-pop'],
-  [data-theme-preset='soft-pop'] .dark {
+  .dark[data-theme-preset="soft-pop"],
+  [data-theme-preset="soft-pop"] .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
     --card: 215.3 24.6% 13.5%;
@@ -257,7 +257,7 @@
   }
 
   /* ── Brutalist preset ── */
-  [data-theme-preset='brutalist'] {
+  [data-theme-preset="brutalist"] {
     --background: 0 0% 100%;
     --foreground: 0 0% 0%;
     --card: 0 0% 100%;
@@ -287,8 +287,8 @@
     --sidebar-ring: 0 100% 60%;
   }
 
-  .dark[data-theme-preset='brutalist'],
-  [data-theme-preset='brutalist'] .dark {
+  .dark[data-theme-preset="brutalist"],
+  [data-theme-preset="brutalist"] .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
     --card: 0 0% 20%;
@@ -318,7 +318,7 @@
   }
 
   /* ── Underground preset ── */
-  [data-theme-preset='underground'] {
+  [data-theme-preset="underground"] {
     --background: 40 20% 94%;
     --foreground: 30 10% 12%;
     --card: 40 30% 97%;
@@ -347,8 +347,8 @@
     --sidebar-ring: 36 90% 50%;
   }
 
-  .dark[data-theme-preset='underground'],
-  [data-theme-preset='underground'] .dark {
+  .dark[data-theme-preset="underground"],
+  [data-theme-preset="underground"] .dark {
     --background: 30 15% 8%;
     --foreground: 40 20% 90%;
     --card: 30 12% 14%;
@@ -378,7 +378,7 @@
   }
 
   /* ── Sunset Glow preset ── */
-  [data-theme-preset='sunset-glow'] {
+  [data-theme-preset="sunset-glow"] {
     --background: 20 30% 96%;
     --foreground: 350 15% 12%;
     --card: 0 0% 100%;
@@ -407,8 +407,8 @@
     --sidebar-ring: 350 85% 55%;
   }
 
-  .dark[data-theme-preset='sunset-glow'],
-  [data-theme-preset='sunset-glow'] .dark {
+  .dark[data-theme-preset="sunset-glow"],
+  [data-theme-preset="sunset-glow"] .dark {
     --background: 350 15% 8%;
     --foreground: 20 25% 92%;
     --card: 350 12% 14%;
@@ -438,7 +438,7 @@
   }
 
   /* ── Rose Garden preset ── */
-  [data-theme-preset='rose-garden'] {
+  [data-theme-preset="rose-garden"] {
     --background: 330 25% 96%;
     --foreground: 330 15% 12%;
     --card: 0 0% 100%;
@@ -467,8 +467,8 @@
     --sidebar-ring: 330 70% 55%;
   }
 
-  .dark[data-theme-preset='rose-garden'],
-  [data-theme-preset='rose-garden'] .dark {
+  .dark[data-theme-preset="rose-garden"],
+  [data-theme-preset="rose-garden"] .dark {
     --background: 330 15% 8%;
     --foreground: 330 20% 92%;
     --card: 330 12% 14%;
@@ -498,7 +498,7 @@
   }
 
   /* ── Lake View preset ── */
-  [data-theme-preset='lake-view'] {
+  [data-theme-preset="lake-view"] {
     --background: 195 30% 96%;
     --foreground: 195 15% 12%;
     --card: 0 0% 100%;
@@ -527,8 +527,8 @@
     --sidebar-ring: 195 80% 42%;
   }
 
-  .dark[data-theme-preset='lake-view'],
-  [data-theme-preset='lake-view'] .dark {
+  .dark[data-theme-preset="lake-view"],
+  [data-theme-preset="lake-view"] .dark {
     --background: 195 20% 8%;
     --foreground: 195 25% 92%;
     --card: 195 15% 14%;
@@ -558,7 +558,7 @@
   }
 
   /* ── Forest Whispers preset ── */
-  [data-theme-preset='forest-whispers'] {
+  [data-theme-preset="forest-whispers"] {
     --background: 140 20% 95%;
     --foreground: 140 15% 12%;
     --card: 0 0% 100%;
@@ -587,8 +587,8 @@
     --sidebar-ring: 150 60% 30%;
   }
 
-  .dark[data-theme-preset='forest-whispers'],
-  [data-theme-preset='forest-whispers'] .dark {
+  .dark[data-theme-preset="forest-whispers"],
+  [data-theme-preset="forest-whispers"] .dark {
     --background: 140 15% 7%;
     --foreground: 140 20% 92%;
     --card: 140 12% 13%;
@@ -618,7 +618,7 @@
   }
 
   /* ── Ocean Breeze preset ── */
-  [data-theme-preset='ocean-breeze'] {
+  [data-theme-preset="ocean-breeze"] {
     --background: 205 30% 96%;
     --foreground: 210 15% 12%;
     --card: 0 0% 100%;
@@ -647,8 +647,8 @@
     --sidebar-ring: 205 85% 50%;
   }
 
-  .dark[data-theme-preset='ocean-breeze'],
-  [data-theme-preset='ocean-breeze'] .dark {
+  .dark[data-theme-preset="ocean-breeze"],
+  [data-theme-preset="ocean-breeze"] .dark {
     --background: 210 20% 8%;
     --foreground: 205 25% 92%;
     --card: 210 15% 14%;
@@ -678,7 +678,7 @@
   }
 
   /* ── Lavender Dream preset ── */
-  [data-theme-preset='lavender-dream'] {
+  [data-theme-preset="lavender-dream"] {
     --background: 270 25% 96%;
     --foreground: 270 15% 12%;
     --card: 0 0% 100%;
@@ -707,8 +707,8 @@
     --sidebar-ring: 270 65% 55%;
   }
 
-  .dark[data-theme-preset='lavender-dream'],
-  [data-theme-preset='lavender-dream'] .dark {
+  .dark[data-theme-preset="lavender-dream"],
+  [data-theme-preset="lavender-dream"] .dark {
     --background: 270 15% 8%;
     --foreground: 270 20% 92%;
     --card: 270 12% 14%;
@@ -758,7 +758,8 @@
   font-family: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
 }
 .font-plus-jakarta-sans {
-  font-family: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family:
+    var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
 }
 .font-space-grotesk {
   font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
@@ -772,9 +773,9 @@
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
-    'Segoe UI',
+    "Segoe UI",
     Roboto,
-    'Helvetica Neue',
+    "Helvetica Neue",
     Arial,
     sans-serif;
 }

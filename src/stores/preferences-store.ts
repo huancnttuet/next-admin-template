@@ -1,11 +1,11 @@
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-export type ThemeMode = 'light' | 'dark' | 'system'
-export type ContentLayout = 'centered' | 'full-width'
-export type NavbarStyle = 'sticky' | 'scroll'
-export type SidebarVariant = 'inset' | 'sidebar' | 'floating'
-export type SidebarCollapsible = 'icon' | 'offcanvas'
+export type ThemeMode = 'light' | 'dark' | 'system';
+export type ContentLayout = 'centered' | 'full-width';
+export type NavbarStyle = 'sticky' | 'scroll';
+export type SidebarVariant = 'inset' | 'sidebar' | 'floating';
+export type SidebarCollapsible = 'icon' | 'offcanvas';
 export type FontKey =
   | 'inter'
   | 'manrope'
@@ -13,9 +13,9 @@ export type FontKey =
   | 'plus-jakarta-sans'
   | 'space-grotesk'
   | 'dm-sans'
-  | 'system'
-export type ScaleKey = 'normal' | 'xs' | 'lg'
-export type RadiusKey = 'normal' | 'sm' | 'md' | 'lg' | 'xl'
+  | 'system';
+export type ScaleKey = 'normal' | 'xs' | 'lg';
+export type RadiusKey = 'normal' | 'sm' | 'md' | 'lg' | 'xl';
 
 export const PREFERENCE_DEFAULTS = {
   themeMode: 'light' as ThemeMode,
@@ -27,34 +27,36 @@ export const PREFERENCE_DEFAULTS = {
   navbarStyle: 'sticky' as NavbarStyle,
   sidebarVariant: 'inset' as SidebarVariant,
   sidebarCollapsible: 'icon' as SidebarCollapsible,
-}
+};
 
 export type PreferencesState = {
-  themeMode: ThemeMode
-  themePreset: string
-  font: FontKey
-  scale: ScaleKey
-  radius: RadiusKey
-  contentLayout: ContentLayout
-  navbarStyle: NavbarStyle
-  sidebarVariant: SidebarVariant
-  sidebarCollapsible: SidebarCollapsible
-}
+  themeMode: ThemeMode;
+  themePreset: string;
+  font: FontKey;
+  scale: ScaleKey;
+  radius: RadiusKey;
+  contentLayout: ContentLayout;
+  navbarStyle: NavbarStyle;
+  sidebarVariant: SidebarVariant;
+  sidebarCollapsible: SidebarCollapsible;
+};
 
 type PreferencesActions = {
-  setThemeMode: (mode: ThemeMode) => void
-  setThemePreset: (preset: string) => void
-  setFont: (font: FontKey) => void
-  setScale: (scale: ScaleKey) => void
-  setRadius: (radius: RadiusKey) => void
-  setContentLayout: (layout: ContentLayout) => void
-  setNavbarStyle: (style: NavbarStyle) => void
-  setSidebarVariant: (variant: SidebarVariant) => void
-  setSidebarCollapsible: (mode: SidebarCollapsible) => void
-  resetPreferences: () => void
-}
+  setThemeMode: (mode: ThemeMode) => void;
+  setThemePreset: (preset: string) => void;
+  setFont: (font: FontKey) => void;
+  setScale: (scale: ScaleKey) => void;
+  setRadius: (radius: RadiusKey) => void;
+  setContentLayout: (layout: ContentLayout) => void;
+  setNavbarStyle: (style: NavbarStyle) => void;
+  setSidebarVariant: (variant: SidebarVariant) => void;
+  setSidebarCollapsible: (mode: SidebarCollapsible) => void;
+  resetPreferences: () => void;
+};
 
-export const usePreferencesStore = create<PreferencesState & PreferencesActions>()(
+export const usePreferencesStore = create<
+  PreferencesState & PreferencesActions
+>()(
   persist(
     (set) => ({
       ...PREFERENCE_DEFAULTS,
@@ -71,6 +73,6 @@ export const usePreferencesStore = create<PreferencesState & PreferencesActions>
     }),
     {
       name: 'preferences-storage',
-    }
-  )
-)
+    },
+  ),
+);

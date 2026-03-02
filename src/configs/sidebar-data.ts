@@ -18,13 +18,13 @@ import {
   UserX,
   Users,
   Wrench,
-} from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { type SidebarData } from '@/types/sidebar'
-import { IIGIIcon } from '@/components/icons/iig-icon'
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { type SidebarData } from '@/types/sidebar';
+import { IIGIIcon } from '@/components/icons/iig-icon';
 
 export function useSidebarData(): SidebarData {
-  const t = useTranslations('sidebar')
+  const t = useTranslations('sidebar');
 
   return {
     user: {
@@ -87,7 +87,11 @@ export function useSidebarData(): SidebarData {
             title: t('errors'),
             icon: Bug,
             items: [
-              { title: t('unauthorized'), url: '/errors/unauthorized', icon: Lock },
+              {
+                title: t('unauthorized'),
+                url: '/errors/unauthorized',
+                icon: Lock,
+              },
               { title: t('forbidden'), url: '/errors/forbidden', icon: UserX },
               { title: t('notFound'), url: '/errors/not-found', icon: FileX },
               {
@@ -95,7 +99,11 @@ export function useSidebarData(): SidebarData {
                 url: '/errors/internal-server-error',
                 icon: ServerOff,
               },
-              { title: t('maintenance'), url: '/errors/maintenance', icon: Construction },
+              {
+                title: t('maintenance'),
+                url: '/errors/maintenance',
+                icon: Construction,
+              },
             ],
           },
         ],
@@ -109,8 +117,16 @@ export function useSidebarData(): SidebarData {
             items: [
               { title: t('profile'), url: '/settings', icon: UserCog },
               { title: t('account'), url: '/settings/account', icon: Wrench },
-              { title: t('appearance'), url: '/settings/appearance', icon: Palette },
-              { title: t('notifications'), url: '/settings/notifications', icon: Bell },
+              {
+                title: t('appearance'),
+                url: '/settings/appearance',
+                icon: Palette,
+              },
+              {
+                title: t('notifications'),
+                url: '/settings/notifications',
+                icon: Bell,
+              },
               { title: t('display'), url: '/settings/display', icon: Monitor },
             ],
           },
@@ -122,5 +138,5 @@ export function useSidebarData(): SidebarData {
         ],
       },
     ],
-  }
+  };
 }

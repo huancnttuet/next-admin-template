@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
 
 export default function ForbiddenPage() {
-  const t = useTranslations('errors')
-  const tCommon = useTranslations('common')
+  const t = useTranslations('errors');
+  const tCommon = useTranslations('common');
 
   return (
     <div className='flex min-h-svh flex-col items-center justify-center gap-6 p-6 text-center'>
@@ -19,5 +19,5 @@ export default function ForbiddenPage() {
         <Link href='/'>{tCommon('goToDashboard')}</Link>
       </Button>
     </div>
-  )
+  );
 }

@@ -25,7 +25,9 @@ This is an admin dashboard for an e-learning platform, built with:
 ### When creating new features:
 
 - Create service files following the pattern: `services/<domain>/<domain>.type.ts`, `.api.ts`, `.query.ts`
-- Use the Axios client from `@/lib/api-client`
+- API base URLs are centralized in `src/configs/endpoints.ts`
+- Default client: `import apiClient from '@/lib/api-client'` (primary API)
+- Additional APIs: `import { createApiClient } from '@/lib/api-client'` → `createApiClient('<key>')`
 - Create TanStack Query hooks for data fetching
 - Use Zustand only for client-only state (preferences, UI state)
 

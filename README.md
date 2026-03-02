@@ -59,11 +59,11 @@ src/
 │   ├── layout/             # All layout & toolbar components (sidebar, header, nav, main, search, theme-switch, profile-dropdown, language-switcher, layout-controls, preferences-applier)
 │   ├── providers/          # React providers (theme, query, preferences)
 │   └── ui/                 # shadcn/ui primitives
-├── configs/                # App configuration (routes, sidebar navigation data)
+├── configs/                # App configuration (routes, sidebar navigation data, API endpoints)
 ├── containers/             # Feature containers (dashboard components)
 ├── hooks/                  # Custom React hooks
 ├── i18n/                   # Internationalization config + messages/ translations
-├── lib/                    # Utilities (auth, API client, helpers)
+├── lib/                    # Utilities (auth, API client factory, helpers)
 ├── stores/                 # Zustand stores (preferences, sidebar)
 └── types/                  # Shared TypeScript types (sidebar, etc.)
 ```
@@ -108,11 +108,13 @@ pnpm format
 
 ### Environment Variables
 
-| Variable              | Description           | Default                     |
-| --------------------- | --------------------- | --------------------------- |
-| `NEXTAUTH_URL`        | Auth callback URL     | `http://localhost:3000`     |
-| `NEXTAUTH_SECRET`     | JWT encryption secret | —                           |
-| `NEXT_PUBLIC_API_URL` | Backend API base URL  | `http://localhost:8000/api` |
+| Variable              | Description             | Default                     |
+| --------------------- | ----------------------- | --------------------------- |
+| `NEXTAUTH_URL`        | Auth callback URL       | `http://localhost:3000`     |
+| `NEXTAUTH_SECRET`     | JWT encryption secret   | —                           |
+| `NEXT_PUBLIC_API_URL` | Primary backend API URL | `http://localhost:8080/api` |
+
+> **Multiple APIs:** Add `NEXT_PUBLIC_<NAME>_API_URL` env variables and register them in `src/configs/endpoints.ts`. See `src/lib/api-client.ts` for the `createApiClient()` factory.
 
 ## 🎛️ Layout Preferences
 

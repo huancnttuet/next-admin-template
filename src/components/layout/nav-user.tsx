@@ -1,9 +1,16 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import Link from 'next/link';
+import {
+  BadgeCheck,
+  Bell,
+  ChevronsUpDown,
+  CreditCard,
+  LogOut,
+  Sparkles,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,25 +19,25 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@/components/ui/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@/components/ui/sidebar'
+} from '@/components/ui/sidebar';
 
 type NavUserProps = {
   user: {
-    name: string
-    email: string
-    avatar: string
-  }
-}
+    name: string;
+    email: string;
+    avatar: string;
+  };
+};
 
 export function NavUser({ user }: NavUserProps) {
-  const { isMobile } = useSidebar()
-  const t = useTranslations('sidebar')
+  const { isMobile } = useSidebar();
+  const t = useTranslations('sidebar');
 
   return (
     <SidebarMenu>
@@ -119,5 +126,5 @@ export function NavUser({ user }: NavUserProps) {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

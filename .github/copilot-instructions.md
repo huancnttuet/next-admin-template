@@ -32,7 +32,7 @@ This is an e-learning admin dashboard built with Next.js 16 (App Router), TypeSc
 - `components/icons/` — Custom icon components (e.g., `iig-icon.tsx`)
 - `components/layout/` — All layout & toolbar components: sidebar, header, main, main-logo, nav-group, nav-user, top-nav, search, theme-switch, profile-dropdown, language-switcher, layout-controls, preferences-applier. Barrel-exported via `index.ts`.
 - `components/providers/` — React context providers (theme, query, preferences)
-- `configs/` — App configuration (routes, sidebar navigation data)
+- `configs/` — App configuration (routes, sidebar navigation data, API endpoints)
 - `types/` — Shared TypeScript types (sidebar types, etc.)
 
 ### Adding a New API Integration
@@ -41,6 +41,12 @@ This is an e-learning admin dashboard built with Next.js 16 (App Router), TypeSc
 2. Create `src/services/<domain>/<domain>.api.ts` for API calls using `@/lib/api-client`
 3. Create `src/services/<domain>/<domain>.query.ts` for TanStack Query hooks
 4. Create `src/services/<domain>/index.ts` barrel file
+
+### Adding a New API Endpoint
+
+1. Add `NEXT_PUBLIC_<NAME>_API_URL` env variable to `.env.*` files
+2. Add a new entry in `src/configs/endpoints.ts`
+3. Create a client via `createApiClient('<key>')` from `@/lib/api-client`
 
 ### Adding a New Translation
 

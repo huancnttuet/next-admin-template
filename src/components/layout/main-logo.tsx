@@ -1,17 +1,21 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { ChevronsUpDown } from 'lucide-react'
+import * as React from 'react';
+import { ChevronsUpDown } from 'lucide-react';
 
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/components/ui/sidebar';
 
 type Props = {
   info: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }
-}
+    name: string;
+    logo: React.ElementType;
+    plan: string;
+  };
+};
 
 export function MainLogo({ info }: Props) {
   return (
@@ -31,5 +35,5 @@ export function MainLogo({ info }: Props) {
         </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

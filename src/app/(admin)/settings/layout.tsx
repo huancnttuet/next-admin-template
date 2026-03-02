@@ -1,21 +1,25 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { Header } from '@/components/layout/header'
-import { Main } from '@/components/layout/main'
-import { Search } from '@/components/layout/search'
-import { ThemeSwitch } from '@/components/layout/theme-switch'
-import { ProfileDropdown } from '@/components/layout/profile-dropdown'
-import { LayoutControls } from '@/components/layout/layout-controls'
-import { LanguageSwitcher } from '@/components/layout/language-switcher'
-import { Separator } from '@/components/ui/separator'
-import { cn } from '@/lib/utils'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Header } from '@/components/layout/header';
+import { Main } from '@/components/layout/main';
+import { Search } from '@/components/layout/search';
+import { ThemeSwitch } from '@/components/layout/theme-switch';
+import { ProfileDropdown } from '@/components/layout/profile-dropdown';
+import { LayoutControls } from '@/components/layout/layout-controls';
+import { LanguageSwitcher } from '@/components/layout/language-switcher';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 
-export default function SettingsLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-  const t = useTranslations('settings')
+export default function SettingsLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const t = useTranslations('settings');
 
   const sidebarNavItems = [
     { title: t('profile'), href: '/settings' },
@@ -23,7 +27,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
     { title: t('appearance'), href: '/settings/appearance' },
     { title: t('notifications'), href: '/settings/notifications' },
     { title: t('display'), href: '/settings/display' },
-  ]
+  ];
 
   return (
     <>
@@ -54,7 +58,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                       'inline-flex items-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
                       pathname === item.href
                         ? 'bg-accent text-accent-foreground'
-                        : 'text-muted-foreground'
+                        : 'text-muted-foreground',
                     )}
                   >
                     {item.title}
@@ -67,5 +71,5 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
         </div>
       </Main>
     </>
-  )
+  );
 }

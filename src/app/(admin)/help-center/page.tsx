@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { Header } from '@/components/layout/header'
-import { Main } from '@/components/layout/main'
-import { Search } from '@/components/layout/search'
-import { ThemeSwitch } from '@/components/layout/theme-switch'
-import { ProfileDropdown } from '@/components/layout/profile-dropdown'
-import { LayoutControls } from '@/components/layout/layout-controls'
-import { LanguageSwitcher } from '@/components/layout/language-switcher'
+import { useTranslations } from 'next-intl';
+import { Header } from '@/components/layout/header';
+import { Main } from '@/components/layout/main';
+import { Search } from '@/components/layout/search';
+import { ThemeSwitch } from '@/components/layout/theme-switch';
+import { ProfileDropdown } from '@/components/layout/profile-dropdown';
+import { LayoutControls } from '@/components/layout/layout-controls';
+import { LanguageSwitcher } from '@/components/layout/language-switcher';
 
 export default function HelpCenterPage() {
-  const t = useTranslations('pages')
+  const t = useTranslations('pages');
 
   return (
     <>
@@ -25,12 +25,14 @@ export default function HelpCenterPage() {
       </Header>
       <Main>
         <div className='mb-2 flex items-center justify-between space-y-2'>
-          <h1 className='text-2xl font-bold tracking-tight'>{t('helpCenter')}</h1>
+          <h1 className='text-2xl font-bold tracking-tight'>
+            {t('helpCenter')}
+          </h1>
         </div>
         <div className='flex items-center justify-center rounded-lg border border-dashed py-32'>
           <p className='text-muted-foreground'>{t('helpCenterComingSoon')}</p>
         </div>
       </Main>
     </>
-  )
+  );
 }

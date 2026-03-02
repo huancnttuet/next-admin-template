@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import Link from 'next/link';
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Card,
   CardContent,
@@ -13,17 +13,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 
 export default function SignUpPage() {
-  const t = useTranslations('auth')
-  const [isLoading, setIsLoading] = useState(false)
+  const t = useTranslations('auth');
+  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
     // TODO: Implement sign-up logic
-    setTimeout(() => setIsLoading(false), 1000)
+    setTimeout(() => setIsLoading(false), 1000);
   }
 
   return (
@@ -106,5 +106,5 @@ export default function SignUpPage() {
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

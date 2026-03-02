@@ -11,8 +11,8 @@ applyTo: '**/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css'
 - **Top-level folders:**
   - `app/` — Routing, layouts, pages, and route handlers
   - `public/` — Static assets
-  - `lib/` — Shared utilities, API clients, and logic
-  - `configs/` — Application-wide configuration constants (routes, sidebar navigation data)
+  - `lib/` — Shared utilities, API client factory, and logic
+  - `configs/` — Application-wide configuration constants (routes, sidebar navigation data, API endpoints)
   - `components/` — Reusable, generic UI components (ui primitives, layout shell, providers)
   - `containers/` — Feature/page-level smart components grouped by domain
   - `services/` — API logic and TanStack Query hooks, grouped by domain:
@@ -65,22 +65,36 @@ applyTo: '**/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css'
 
 ## 7. API Integration Pattern
 
+API base URLs are centralized in `configs/endpoints.ts`. The default client uses `ApiEndpoints.main`.
+
 ```typescript
+// configs/endpoints.ts — register all API base URLs here
+export const ApiEndpoints = {
+  main: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api',
+  // media: process.env.NEXT_PUBLIC_MEDIA_API_URL || 'http://localhost:8082/api',
+};
+
 // services/users/users.type.ts
 export interface User {
-  id: string
-  name: string
-  email: string
+  id: string;
+  name: string;
+  email: string;
 }
 
-// services/users/users.api.ts
-import { apiClient } from '@/lib/api-client'
-export const getUsers = () => apiClient.get<User[]>('/users')
+// services/users/users.api.ts — default client (main API)
+import apiClient from '@/lib/api-client';
+export const getUsers = () => apiClient.get<User[]>('/users');
+
+// services/media/media.api.ts — additional API client
+import { createApiClient } from '@/lib/api-client';
+const mediaClient = createApiClient('media');
+export const uploadFile = (data: FormData) => mediaClient.post('/upload', data);
 
 // services/users/users.query.ts
-import { useQuery } from '@tanstack/react-query'
-import { getUsers } from './users.api'
-export const useUsers = () => useQuery({ queryKey: ['users'], queryFn: getUsers })
+import { useQuery } from '@tanstack/react-query';
+import { getUsers } from './users.api';
+export const useUsers = () =>
+  useQuery({ queryKey: ['users'], queryFn: getUsers });
 ```
 
 ## 8. Authentication

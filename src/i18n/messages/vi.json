@@ -160,6 +160,7 @@
   "preferences": {
     "themePreset": "Chủ đề",
     "fonts": "Phông chữ",
+    "language": "Ngôn ngữ",
     "themeMode": "Chế độ giao diện",
     "light": "Sáng",
     "dark": "Tối",

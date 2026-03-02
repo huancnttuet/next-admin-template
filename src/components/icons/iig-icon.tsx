@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
 export const IIGIIcon = () => {
   return (
@@ -9,5 +9,5 @@ export const IIGIIcon = () => {
       height={32}
       className='rounded-sm'
     />
-  )
-}
+  );
+};

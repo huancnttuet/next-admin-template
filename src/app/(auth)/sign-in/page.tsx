@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import Link from 'next/link';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Card,
   CardContent,
@@ -15,37 +15,37 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 
 export default function SignInPage() {
-  const router = useRouter()
-  const t = useTranslations('auth')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const router = useRouter();
+  const t = useTranslations('auth');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
 
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
 
     const result = await signIn('credentials', {
       email,
       password,
       redirect: false,
-    })
+    });
 
-    setIsLoading(false)
+    setIsLoading(false);
 
     if (result?.error) {
-      setError(t('invalidCredentials'))
-      return
+      setError(t('invalidCredentials'));
+      return;
     }
 
-    router.push('/')
+    router.push('/');
   }
 
   return (
@@ -57,7 +57,9 @@ export default function SignInPage() {
       <CardContent>
         <form onSubmit={onSubmit} className='space-y-4'>
           {error && (
-            <div className='rounded-md bg-destructive/15 p-3 text-sm text-destructive'>{error}</div>
+            <div className='rounded-md bg-destructive/15 p-3 text-sm text-destructive'>
+              {error}
+            </div>
           )}
           <div className='space-y-2'>
             <Label htmlFor='email'>{t('email')}</Label>
@@ -106,5 +108,5 @@ export default function SignInPage() {
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

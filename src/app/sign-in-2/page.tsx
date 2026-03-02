@@ -1,43 +1,43 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import Link from 'next/link';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 export default function SignIn2Page() {
-  const router = useRouter()
-  const t = useTranslations('auth')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const router = useRouter();
+  const t = useTranslations('auth');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
 
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
 
     const result = await signIn('credentials', {
       email,
       password,
       redirect: false,
-    })
+    });
 
-    setIsLoading(false)
+    setIsLoading(false);
 
     if (result?.error) {
-      setError(t('invalidCredentials'))
-      return
+      setError(t('invalidCredentials'));
+      return;
     }
 
-    router.push('/')
+    router.push('/');
   }
 
   return (
@@ -45,14 +45,18 @@ export default function SignIn2Page() {
       <div className='hidden flex-1 items-center justify-center bg-muted lg:flex'>
         <div className='max-w-md space-y-4 px-8 text-center'>
           <h2 className='text-3xl font-bold'>{t('elearningAdmin')}</h2>
-          <p className='text-lg text-muted-foreground'>{t('elearningDescription')}</p>
+          <p className='text-lg text-muted-foreground'>
+            {t('elearningDescription')}
+          </p>
         </div>
       </div>
       <div className='flex flex-1 items-center justify-center p-6 md:p-10'>
         <div className='w-full max-w-sm space-y-6'>
           <div className='text-center'>
             <h1 className='text-2xl font-bold'>{t('welcomeBack')}</h1>
-            <p className='text-sm text-muted-foreground'>{t('signInToAdmin')}</p>
+            <p className='text-sm text-muted-foreground'>
+              {t('signInToAdmin')}
+            </p>
           </div>
           <form onSubmit={onSubmit} className='space-y-4'>
             {error && (
@@ -106,5 +110,5 @@ export default function SignIn2Page() {
         </div>
       </div>
     </div>
-  )
+  );
 }

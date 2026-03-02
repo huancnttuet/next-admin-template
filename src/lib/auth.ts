@@ -1,5 +1,5 @@
-import type { NextAuthOptions } from 'next-auth'
-import CredentialsProvider from 'next-auth/providers/credentials'
+import type { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -11,15 +11,18 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         // TODO: Replace with actual API call
-        if (credentials?.email === 'admin@example.com' && credentials?.password === 'password') {
+        if (
+          credentials?.email === 'admin@example.com' &&
+          credentials?.password === 'password'
+        ) {
           return {
             id: '1',
             name: 'Admin User',
             email: 'admin@example.com',
             image: '/avatars/01.png',
-          }
+          };
         }
-        return null
+        return null;
       },
     }),
   ],
@@ -33,27 +36,27 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
+        token.id = user.id;
       }
-      return token
+      return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string
+        session.user.id = token.id as string;
       }
-      return session
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-}
+};
 
 declare module 'next-auth' {
   interface Session {
     user: {
-      id: string
-      name?: string | null
-      email?: string | null
-      image?: string | null
-    }
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
   }
 }
