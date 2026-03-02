@@ -55,7 +55,6 @@ import {
   ThemeSwitch,
   ProfileDropdown,
 } from '@/components/layout'
-
 ;<>
   <Header>
     <Search />
