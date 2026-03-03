@@ -1,3 +1,5 @@
+// ---------- API response types ----------
+
 export interface QuestionnaireGroup {
   id: string;
   name: string;
@@ -9,8 +11,4 @@ export interface GetQuestionnaireGroupsParams {
   Page?: number;
   PageSize?: number;
   Keyword?: string;
-}
-
-export interface CreateQuestionnaireGroupRequest {
-  name: string;
 }

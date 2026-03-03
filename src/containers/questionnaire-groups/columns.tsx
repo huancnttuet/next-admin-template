@@ -17,6 +17,7 @@ import type { QuestionnaireGroup } from '@/services/questionnaire-groups';
 export const getQuestionnaireGroupColumns = (
   t: (key: string) => string,
   onView?: (id: string) => void,
+  onEdit?: (id: string) => void,
 ): ColumnDef<QuestionnaireGroup>[] => [
   {
     id: 'select',
@@ -133,7 +134,7 @@ export const getQuestionnaireGroupColumns = (
               {t('actionView')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => console.log('edit', group.id)}>
+            <DropdownMenuItem onClick={() => onEdit?.(group.id)}>
               <Pencil className='mr-2 h-4 w-4' />
               {t('actionEdit')}
             </DropdownMenuItem>

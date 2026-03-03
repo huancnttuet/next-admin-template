@@ -32,9 +32,7 @@ export interface ApiProblemDetails {
  * Returns `null` when the error is not an Axios response with a
  * recognisable problem-details body.
  */
-export function getApiProblemDetails(
-  error: unknown,
-): ApiProblemDetails | null {
+export function getApiProblemDetails(error: unknown): ApiProblemDetails | null {
   if (!axios.isAxiosError(error)) return null;
 
   const data = error.response?.data;
@@ -58,19 +56,58 @@ export function getValidationErrors(error: unknown): ValidationError[] {
 }
 
 /**
+ * Mutable store for translated status messages.
+ *
+ * Call `setTranslatedStatusMessages()` from a React component/hook
+ * (e.g. `useApiErrorMessages`) so that non-React code like Axios
+ * interceptors can read translated messages without calling hooks.
+ */
+let _translatedStatusMessages: Record<number, string> = {};
+
+export function setTranslatedStatusMessages(
+  messages: Record<number, string>,
+): void {
+  _translatedStatusMessages = messages;
+}
+
+export function getTranslatedStatusMessages(): Record<number, string> {
+  return _translatedStatusMessages;
+}
+
+export interface GetErrorMessageOptions {
+  /** Fallback message when nothing else matches. */
+  fallback?: string;
+  /** Override status-code messages (e.g. with translated strings). */
+  statusMessages?: Record<number, string>;
+}
+
+/**
  * Get a single, human-readable error message from an API error.
  *
  * Priority:
  *  1. First validation error message (most specific)
  *  2. `detail` from problem details
  *  3. `title` from problem details
- *  4. Axios message
- *  5. Generic fallback
+ *  4. Status-code-based message (translated if `statusMessages` provided)
+ *  5. Axios message
+ *  6. Generic fallback
  */
 export function getErrorMessage(
   error: unknown,
-  fallback = 'An unexpected error occurred.',
+  fallbackOrOptions:
+    | string
+    | GetErrorMessageOptions = 'An unexpected error occurred.',
 ): string {
+  const opts: GetErrorMessageOptions =
+    typeof fallbackOrOptions === 'string'
+      ? { fallback: fallbackOrOptions }
+      : fallbackOrOptions;
+  const fallback = opts.fallback ?? 'An unexpected error occurred.';
+  const statusMessages = {
+    ..._translatedStatusMessages,
+    ...opts.statusMessages,
+  };
+
   const problem = getApiProblemDetails(error);
 
   if (problem) {
@@ -82,7 +119,12 @@ export function getErrorMessage(
     if (problem.title) return problem.title;
   }
 
+  // Status-code-based message
   if (axios.isAxiosError(error)) {
+    const status = error.response?.status;
+    if (status && statusMessages[status]) {
+      return statusMessages[status];
+    }
     return error.message;
   }
 
@@ -100,9 +142,7 @@ export function getErrorMessage(
  * Property names are lowercased to match typical camelCase form fields
  * (backend returns PascalCase property names).
  */
-export function getFieldErrors(
-  error: unknown,
-): Record<string, string> {
+export function getFieldErrors(error: unknown): Record<string, string> {
   const validationErrors = getValidationErrors(error);
   const fieldErrors: Record<string, string> = {};
 

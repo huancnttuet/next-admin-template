@@ -11,14 +11,21 @@ import { usePagedQuestionnaireGroups } from '@/services/questionnaire-groups';
 import type { QuestionnaireGroup } from '@/services/questionnaire-groups';
 import { getQuestionnaireGroupColumns } from './columns';
 import { CreateQuestionnaireGroupDialog } from './create-questionnaire-group-dialog';
+import { EditQuestionnaireGroupDialog } from './edit-questionnaire-group-dialog';
 import { QuestionnaireGroupsTableActionBar } from './questionnaire-groups-table-action-bar';
 import { ViewQuestionnaireGroupSheet } from './view-questionnaire-group-sheet';
 
 export function QuestionnaireGroupsTable() {
   const t = useTranslations('questionnaireGroups');
   const [viewId, setViewId] = useState<string | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
   const columns = useMemo(
-    () => getQuestionnaireGroupColumns(t, (id) => setViewId(id)),
+    () =>
+      getQuestionnaireGroupColumns(
+        t,
+        (id) => setViewId(id),
+        (id) => setEditId(id),
+      ),
     [t],
   );
 
@@ -73,6 +80,13 @@ export function QuestionnaireGroupsTable() {
         open={viewId !== null}
         onOpenChange={(open) => {
           if (!open) setViewId(null);
+        }}
+      />
+      <EditQuestionnaireGroupDialog
+        id={editId}
+        open={editId !== null}
+        onOpenChange={(open) => {
+          if (!open) setEditId(null);
         }}
       />
     </>

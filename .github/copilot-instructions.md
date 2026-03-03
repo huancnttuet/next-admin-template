@@ -11,6 +11,7 @@ This is an e-learning admin dashboard built with Next.js 16 (App Router), TypeSc
 - **Styling:** Tailwind CSS + shadcn/ui
 - **Auth:** NextAuth v4 (SSO via IIG KAPI OAuth2 + credentials fallback, JWT)
 - **State:** Zustand 5 (client) + TanStack Query 5 (server)
+- **Forms:** AutoForm (Zod → auto-generated forms) + React Hook Form + Zod
 - **HTTP:** Axios
 - **i18n:** next-intl
 - **Theme:** next-themes
@@ -36,10 +37,11 @@ This is an e-learning admin dashboard built with Next.js 16 (App Router), TypeSc
 
 ### Adding a New API Integration
 
-1. Create `src/services/<domain>/<domain>.type.ts` for types
-2. Create `src/services/<domain>/<domain>.api.ts` for API calls using `@/lib/api-client`
-3. Create `src/services/<domain>/<domain>.query.ts` for TanStack Query hooks
-4. Create `src/services/<domain>/index.ts` barrel file
+1. Create `src/services/<domain>/<domain>.type.ts` for API response types
+2. Create `src/services/<domain>/<domain>.schema.ts` for Zod form schemas (AutoForm)
+3. Create `src/services/<domain>/<domain>.api.ts` for API calls using `@/lib/api-client`
+4. Create `src/services/<domain>/<domain>.query.ts` for TanStack Query hooks
+5. Create `src/services/<domain>/index.ts` barrel file
 
 ### Adding a New API Endpoint
 
@@ -52,6 +54,16 @@ This is an e-learning admin dashboard built with Next.js 16 (App Router), TypeSc
 1. Add keys to `src/i18n/messages/en.json`
 2. Add corresponding keys to `src/i18n/messages/vi.json`
 3. Use `useTranslations()` in components
+
+### Adding a Create/Edit Form (AutoForm)
+
+Forms are auto-generated from Zod schemas via [AutoForm](https://github.com/vantezzen/autoform).
+
+1. Define a schema function in `services/<domain>/<domain>.schema.ts` that accepts `t` (i18n translator)
+2. Use `fieldConfig()` from `@/lib/autoform` with `.superRefine()` on each field for labels/placeholders
+3. In the dialog component, wrap the schema with `new ZodProvider(schema)` and pass to `<AutoForm>`
+4. Use `children` of `<AutoForm>` for custom submit buttons
+5. For edit dialogs, pass `defaultValues` prop with existing data
 
 ## Code Style
 

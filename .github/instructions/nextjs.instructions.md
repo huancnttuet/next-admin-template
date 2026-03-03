@@ -16,10 +16,11 @@ applyTo: '**/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css'
   - `components/` — Reusable, generic UI components (ui primitives, layout shell, providers)
   - `containers/` — Feature/page-level smart components grouped by domain
   - `services/` — API logic and TanStack Query hooks, grouped by domain:
-    - `services/<domain>/<domain>.type.ts` — TypeScript types/interfaces
-    - `services/<domain>/<domain>.api.ts` — Axios API functions
-    - `services/<domain>/<domain>.query.ts` — TanStack Query hooks
-    - `services/<domain>/index.ts` — Barrel file
+  - `services/<domain>/<domain>.type.ts` — TypeScript API response types/interfaces
+  - `services/<domain>/<domain>.schema.ts` — Zod form schemas for AutoForm
+  - `services/<domain>/<domain>.api.ts` — Axios API functions
+  - `services/<domain>/<domain>.query.ts` — TanStack Query hooks
+  - `services/<domain>/index.ts` — Barrel file
   - `stores/` — Zustand stores
   - `hooks/` — Common reusable React hooks (NOT API query hooks)
   - `types/` — Shared/global TypeScript types
@@ -68,6 +69,19 @@ applyTo: '**/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css'
 API base URLs are centralized in `configs/endpoints.ts`. The default client uses `ApiEndpoints.main`.
 
 ```typescript
+// services/users/users.schema.ts — Zod form schemas
+import { z } from 'zod';
+import { fieldConfig } from '@/lib/autoform';
+export function createUserSchema(t: (key: string) => string) {
+  return z.object({
+    name: z
+      .string()
+      .min(1)
+      .superRefine(fieldConfig({ label: t('name') })),
+  });
+}
+export type CreateUserInput = z.infer<ReturnType<typeof createUserSchema>>;
+
 // configs/endpoints.ts — register all API base URLs here
 export const ApiEndpoints = {
   main: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api',
@@ -117,7 +131,19 @@ export const useUsers = () =>
 - Use `useTranslations()` hook for translations
 - Always add keys to ALL language files
 
-## 10. Styling
+## 10. Forms (AutoForm)
+
+- Forms are auto-generated from Zod schemas via [AutoForm](https://github.com/vantezzen/autoform)
+- Centralized `fieldConfig` re-exported in `src/lib/autoform.ts` from `@autoform/zod` (typed to project `FieldTypes`)
+- AutoForm shadcn/ui registry components in `components/ui/autoform/`
+- Define schemas in `services/<domain>/<domain>.schema.ts` (separate from `<domain>.type.ts`)
+- Schema functions accept `t` (i18n translator) for labels, placeholders, and validation messages
+- Use `fieldConfig()` from `@/lib/autoform` with `.superRefine()` on Zod fields
+- Wrap schema with `new ZodProvider(schema)` from `@autoform/zod` before passing to `<AutoForm>`
+- Use `children` to render custom submit buttons (not `withSubmit` — it only renders "Submit")
+- For edit dialogs, pass `defaultValues` with existing data
+
+## 11. Styling
 
 - Tailwind CSS utility classes only
 - CSS variables in `globals.css` for theming
@@ -125,13 +151,13 @@ export const useUsers = () =>
 - Mobile-first responsive design
 - Dark mode via CSS variables and next-themes
 
-## 11. Code Quality
+## 12. Code Quality
 
 - TypeScript strict mode
 - Prettier: single quotes, no semicolons, 100 char width, tailwind plugin
 - ESLint: Next.js recommended config
 - Handle loading and error states in all data-fetching components
 
-## 12. Avoid Unnecessary Files
+## 13. Avoid Unnecessary Files
 
 Do not create example/demo files unless the user specifically requests them. Keep the repository clean and production-focused.

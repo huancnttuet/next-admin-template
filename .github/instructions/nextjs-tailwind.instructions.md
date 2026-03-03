@@ -15,6 +15,7 @@ Instructions for the elearning-admin-v2 project built with Next.js 16 (App Route
 - NextAuth v4 for authentication (JWT strategy)
 - Zustand 5 for client state management
 - TanStack Query 5 for server state
+- AutoForm (Zod → auto-generated forms) + React Hook Form + Zod
 - Axios for HTTP requests
 - next-intl for internationalization
 - next-themes for dark mode
@@ -115,6 +116,18 @@ Use `<Main fixed>` for pages that need a fixed-height scrollable layout (e.g., c
 - SSO tokens are auto-refreshed in the NextAuth JWT callback
 - Protect API routes with session validation
 - Auth config is in `src/lib/auth.ts`
+
+### Forms (AutoForm)
+
+- Forms are auto-generated from Zod schemas via [AutoForm](https://github.com/vantezzen/autoform)
+- Centralized `fieldConfig` re-exported in `src/lib/autoform.ts` from `@autoform/zod` (typed to project `FieldTypes`)
+- AutoForm shadcn/ui registry components in `components/ui/autoform/`
+- Define schemas in `services/<domain>/<domain>.schema.ts` (separate from `<domain>.type.ts`)
+- Schema functions accept `t` (i18n translator) for labels, placeholders, and validation messages
+- Use `fieldConfig()` from `@/lib/autoform` with `.superRefine()` on Zod fields
+- Wrap schema with `new ZodProvider(schema)` from `@autoform/zod` before passing to `<AutoForm>`
+- Use `children` to render custom submit buttons (not `withSubmit` — it only renders "Submit")
+- For edit dialogs, pass `defaultValues` with existing data
 
 ### Layout Preferences
 
