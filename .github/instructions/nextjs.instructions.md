@@ -99,10 +99,13 @@ export const useUsers = () =>
 
 ## 8. Authentication
 
-- NextAuth v4 with credentials provider (JWT strategy)
-- Config in `src/lib/auth.ts`
+- NextAuth v4 with two providers: **SSO** (IIG KAPI OAuth2) + **Credentials** (fallback)
+- SSO config: `src/configs/sso.ts` — all SSO URLs, client ID, scopes
+- SSO service: `src/services/sso/` — token exchange, user profile, refresh
+- Auth config: `src/lib/auth.ts` — NextAuth options, JWT callbacks, token refresh
 - Use `getServerSession()` in Server Components
 - Use `useSession()` in Client Components
+- Check `session.provider === 'sso'` for SSO-specific behavior (logout redirect, change password)
 - Protect API routes with session validation
 
 ## 9. Internationalization (next-intl)

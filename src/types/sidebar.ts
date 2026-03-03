@@ -34,7 +34,6 @@ type NavGroup = {
 };
 
 type SidebarData = {
-  user: User;
   info: Info;
   navGroups: NavGroup[];
 };

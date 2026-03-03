@@ -7,7 +7,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { useSidebarData } from '@/configs/sidebar-data';
+import { useSidebarData } from '@/configs/sidebar';
 import { usePreferencesStore } from '@/stores/preferences-store';
 import { NavGroup } from './nav-group';
 import { NavUser } from './nav-user';
@@ -29,7 +29,7 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

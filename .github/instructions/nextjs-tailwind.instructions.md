@@ -43,31 +43,19 @@ Instructions for the elearning-admin-v2 project built with Next.js 16 (App Route
 
 ### Admin Page Pattern
 
-Every admin page MUST follow this structure:
+The `AppHeader` (Search, LayoutControls, LanguageSwitcher, ThemeSwitch, ProfileDropdown) is rendered once in the `(admin)/layout.tsx` — individual pages do NOT include their own Header.
+
+Every admin page only needs to render its content inside `<Main>`:
 
 ```tsx
-import {
-  Header,
-  Main,
-  Search,
-  LayoutControls,
-  LanguageSwitcher,
-  ThemeSwitch,
-  ProfileDropdown,
-} from '@/components/layout';
-<>
-  <Header>
-    <Search />
-    <div className='ml-auto flex items-center gap-2'>
-      <LayoutControls />
-      <LanguageSwitcher />
-      <ThemeSwitch />
-      <ProfileDropdown />
-    </div>
-  </Header>
-  <Main>{/* Page-specific content */}</Main>
-</>;
+import { Main } from '@/components/layout/main';
+
+export default function ExamplePage() {
+  return <Main>{/* Page-specific content */}</Main>;
+}
 ```
+
+Use `<Main fixed>` for pages that need a fixed-height scrollable layout (e.g., chats).
 
 ## Development Standards
 
@@ -118,8 +106,13 @@ import {
 
 ### Authentication
 
+- NextAuth v4 with two providers: SSO (IIG KAPI OAuth2) + Credentials (fallback)
+- SSO config is centralized in `configs/sso.ts`, SSO service in `services/sso/`
 - Use `getServerSession()` in Server Components for auth checks
 - Use `useSession()` in Client Components
+- Check `session.provider === 'sso'` to determine auth method
+- SSO sign-out redirects to the KAPI logout page (`SSOConfig.logoutPage`)
+- SSO tokens are auto-refreshed in the NextAuth JWT callback
 - Protect API routes with session validation
 - Auth config is in `src/lib/auth.ts`
 

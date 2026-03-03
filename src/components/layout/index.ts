@@ -11,3 +11,4 @@ export { PreferencesApplier } from './preferences-applier';
 export { ProfileDropdown } from './profile-dropdown';
 export { Search } from './search';
 export { ThemeSwitch } from './theme-switch';
+export { AppHeader } from './app-header';

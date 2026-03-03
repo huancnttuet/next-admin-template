@@ -9,7 +9,7 @@ This is an e-learning admin dashboard built with Next.js 16 (App Router), TypeSc
 - **Framework:** Next.js 16 (App Router, Turbopack default)
 - **Language:** TypeScript (strict mode)
 - **Styling:** Tailwind CSS + shadcn/ui
-- **Auth:** NextAuth v4 (credentials, JWT)
+- **Auth:** NextAuth v4 (SSO via IIG KAPI OAuth2 + credentials fallback, JWT)
 - **State:** Zustand 5 (client) + TanStack Query 5 (server)
 - **HTTP:** Axios
 - **i18n:** next-intl
@@ -21,10 +21,9 @@ This is an e-learning admin dashboard built with Next.js 16 (App Router), TypeSc
 
 1. Add route constant to `src/configs/routes.ts`
 2. Create page at `src/app/(admin)/<route>/page.tsx`
-3. Use the standard page template with Header + Main
-4. Import layout & toolbar components from `@/components/layout/` (barrel export available)
-5. Add sidebar entry in `src/configs/sidebar-data.ts` (uses `useSidebarData()` hook with i18n)
-6. Add translation keys to both `en.json` and `vi.json`
+3. Wrap page content in `<Main>` from `@/components/layout/main` (Header is already in the admin layout)
+4. Add sidebar entry in `src/configs/sidebar-data.ts` (uses `useSidebarData()` hook with i18n)
+5. Add translation keys to both `en.json` and `vi.json`
 
 ### Component Organization
 
@@ -32,7 +31,7 @@ This is an e-learning admin dashboard built with Next.js 16 (App Router), TypeSc
 - `components/icons/` — Custom icon components (e.g., `iig-icon.tsx`)
 - `components/layout/` — All layout & toolbar components: sidebar, header, main, main-logo, nav-group, nav-user, top-nav, search, theme-switch, profile-dropdown, language-switcher, layout-controls, preferences-applier. Barrel-exported via `index.ts`.
 - `components/providers/` — React context providers (theme, query, preferences)
-- `configs/` — App configuration (routes, sidebar navigation data, API endpoints)
+- `configs/` — App configuration (routes, sidebar navigation data, API endpoints, SSO config)
 - `types/` — Shared TypeScript types (sidebar types, etc.)
 
 ### Adding a New API Integration

@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/app-sidebar';
 import { cn } from '@/lib/utils';
+import { AppHeader } from '@/components/layout';
 
 export default async function AdminLayout({
   children,
@@ -15,6 +16,8 @@ export default async function AdminLayout({
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <SidebarInset className={cn('flex min-h-svh flex-col')}>
+        <AppHeader />
+
         {children}
       </SidebarInset>
     </SidebarProvider>
