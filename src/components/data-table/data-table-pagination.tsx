@@ -41,10 +41,10 @@ export function DataTablePagination<TData>({
       {...props}
     >
       <div className='flex-1 whitespace-nowrap text-sm text-muted-foreground'>
-        {t('selectedRows', {
+        {/* {t('selectedRows', {
           selected: table.getFilteredSelectedRowModel().rows.length,
           total: table.getFilteredRowModel().rows.length,
-        })}
+        })} */}
       </div>
       <div className='flex flex-col-reverse items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8'>
         <div className='flex items-center space-x-2'>

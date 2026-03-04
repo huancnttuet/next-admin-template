@@ -1,9 +1,12 @@
 import proxyClient from '@/lib/apis/proxy-client';
 import type {
-  CreateQuestionnaireGroupRequest,
   GetQuestionnaireGroupsParams,
   QuestionnaireGroup,
 } from './questionnaire-groups.type';
+import type {
+  CreateQuestionnaireGroupInput,
+  EditQuestionnaireGroupInput,
+} from './questionnaire-groups.schema';
 import { PagedList } from '@/types/api';
 
 export const getPagedQuestionnaireGroups = async (
@@ -26,10 +29,21 @@ export const getQuestionnaireGroupDetail = async (
 };
 
 export const createQuestionnaireGroup = async (
-  data: CreateQuestionnaireGroupRequest,
+  data: CreateQuestionnaireGroupInput,
 ): Promise<QuestionnaireGroup> => {
   const res = await proxyClient.post<QuestionnaireGroup>(
     '/questionnaire-groups',
+    data,
+  );
+  return res.data;
+};
+
+export const updateQuestionnaireGroup = async (
+  id: string,
+  data: EditQuestionnaireGroupInput,
+): Promise<QuestionnaireGroup> => {
+  const res = await proxyClient.put<QuestionnaireGroup>(
+    `/questionnaire-groups/${id}`,
     data,
   );
   return res.data;

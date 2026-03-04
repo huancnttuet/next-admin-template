@@ -745,6 +745,11 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Reset browser default <a> color so sidebar/nav links inherit their
+     parent's text color instead of showing browser-default blue. */
+  a {
+    color: inherit;
+  }
 }
 
 /* ── Font families ── */

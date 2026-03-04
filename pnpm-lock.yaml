@@ -8,6 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@autoform/react':
+        specifier: ^4.0.0
+        version: 4.0.0(@hookform/resolvers@5.2.2(react-hook-form@7.71.2(react@19.2.4)))(react-hook-form@7.71.2(react@19.2.4))(react@19.2.4)
+      '@autoform/zod':
+        specifier: ^5.0.0
+        version: 5.0.0(zod@3.25.76)
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.71.2(react@19.2.4))
       '@radix-ui/react-avatar':
         specifier: ^1.1.10
         version: 1.1.11(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -44,6 +53,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.4(@types/react@19.2.14)(react@19.2.4)
+      '@radix-ui/react-switch':
+        specifier: ^1.2.6
+        version: 1.2.6(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@radix-ui/react-tabs':
         specifier: ^1.1.11
         version: 1.1.13(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -56,6 +68,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.7
         version: 1.2.8(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@radix-ui/react-visually-hidden':
+        specifier: ^1.2.4
+        version: 1.2.4(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@tanstack/react-query':
         specifier: ^5.64.0
         version: 5.90.21(react@19.2.4)
@@ -65,6 +80,9 @@ importers:
       axios:
         specifier: ^1.7.9
         version: 1.13.5
+      chrono-node:
+        specifier: ^2.9.0
+        version: 2.9.0
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -168,6 +186,12 @@ importers:
       prettier:
         specifier: ^3.4.2
         version: 3.8.1
+      prettier-plugin-classnames:
+        specifier: ^0.9.0
+        version: 0.9.0(prettier@3.8.1)
+      prettier-plugin-merge:
+        specifier: ^0.10.0
+        version: 0.10.0(prettier@3.8.1)
       prettier-plugin-tailwindcss:
         specifier: ^0.6.9
         version: 0.6.14(prettier@3.8.1)
@@ -183,6 +207,21 @@ packages:
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+
+  '@autoform/core@3.0.0':
+    resolution: {integrity: sha512-wBBJgqhw2lDc8VCf4Om/ONZH7RyvaLoqkAcNaU+c8Qo+U5kfY7Fke1mltW6CV0njoWMLarQ+0ZKnWdPRulDpgA==}
+
+  '@autoform/react@4.0.0':
+    resolution: {integrity: sha512-OVYRY7u+KnNxEZY6RF4tOmKgO3R68Y0amqyourU9vrFL/mi/4bW/6mi6hkWK8HwHK6a8C7clSm73/4nGQPSuaw==}
+    peerDependencies:
+      '@hookform/resolvers': ^3.9.0
+      react: ^16.8.0 || ^17 || ^18 || ^19
+      react-hook-form: ^7
+
+  '@autoform/zod@5.0.0':
+    resolution: {integrity: sha512-n9mxQAVbaPS3uP6Laxn/36lDv74pmkoRS4nIOKEohFg5me3nLFXrnOnrSk4aENjYpolhB5JuGWUMIwgEzRK8fg==}
+    peerDependencies:
+      zod: ^3.25.0 || ^4.0.0
 
   '@babel/code-frame@7.29.0':
     resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
@@ -334,6 +373,11 @@ packages:
 
   '@formatjs/intl-localematcher@0.8.1':
     resolution: {integrity: sha512-xwEuwQFdtSq1UKtQnyTZWC+eHdv7Uygoa+H2k/9uzBVQjDyp9r20LNDNKedWXll7FssT3GRHvqsdJGYSUWqYFA==}
+
+  '@hookform/resolvers@5.2.2':
+    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
+    peerDependencies:
+      react-hook-form: ^7.55.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1445,6 +1489,19 @@ packages:
       '@types/react-dom':
         optional: true
 
+  '@radix-ui/react-visually-hidden@1.2.4':
+    resolution: {integrity: sha512-kaeiyGCe844dkb9AVF+rb4yTyb1LiLN/e3es3nLiRyN4dC8AduBYPMnnNlDjX2VDOcvDEiPnRNMJeWCfsX0txg==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
   '@radix-ui/rect@1.1.1':
     resolution: {integrity: sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==}
 
@@ -1456,6 +1513,9 @@ packages:
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
+
+  '@standard-schema/utils@0.3.0':
+    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@swc/core-darwin-arm64@1.15.18':
     resolution: {integrity: sha512-+mIv7uBuSaywN3C9LNuWaX1jJJ3SKfiJuE6Lr3bd+/1Iv8oMU7oLBjYMluX1UrEPzwN2qCdY6Io0yVicABoCwQ==}
@@ -1935,6 +1995,10 @@ packages:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
 
+  chrono-node@2.9.0:
+    resolution: {integrity: sha512-glI4YY2Jy6JII5l3d5FN6rcrIbKSQqKPhWsIRYPK2IK8Mm4Q1ZZFdYIaDqglUNf7gNwG+kWIzTn0omzzE0VkvQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
   class-variance-authority@0.7.1:
     resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
 
@@ -2100,6 +2164,10 @@ packages:
 
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
+
+  diff@5.2.2:
+    resolution: {integrity: sha512-vtcDfH3TOjP8UekytvnHH1o1P4FcUdt4eQ1Y+Abap1tk/OB2MWQvcwS2ClCd1zuIhc3JKOx6p3kod8Vfys3E+A==}
+    engines: {node: '>=0.3.1'}
 
   dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
@@ -3012,6 +3080,28 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
+  prettier-plugin-classnames@0.9.0:
+    resolution: {integrity: sha512-xTTKf/us7YMcY4tuoQq0/WaFJzc/ZA0pPpWGphV1noLHX19mIMAJgqmy6ByX6ksVPtmcPDuAF36XVGr3DZYh4g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@prettier/plugin-oxc': '*'
+      prettier: ^3
+      prettier-plugin-astro: '*'
+      prettier-plugin-svelte: '*'
+    peerDependenciesMeta:
+      '@prettier/plugin-oxc':
+        optional: true
+      prettier-plugin-astro:
+        optional: true
+      prettier-plugin-svelte:
+        optional: true
+
+  prettier-plugin-merge@0.10.0:
+    resolution: {integrity: sha512-OWF0lOnjH16U2iiviF5+6s77n863c6Wff8hAcCNH2bDgOxr+HlPEM6xsVnnaHd7xCrscgJxhMcBaYot/6D/o3g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      prettier: ^3
+
   prettier-plugin-tailwindcss@0.6.14:
     resolution: {integrity: sha512-pi2e/+ZygeIqntN+vC573BcW5Cve8zUB0SSAGxqpB4f96boZF4M3phPVoOFCeypwkpRYdi7+jQ5YJJUwrkGUAg==}
     engines: {node: '>=14.21.3'}
@@ -3541,6 +3631,9 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
+  zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
@@ -3568,6 +3661,19 @@ packages:
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
+
+  '@autoform/core@3.0.0': {}
+
+  '@autoform/react@4.0.0(@hookform/resolvers@5.2.2(react-hook-form@7.71.2(react@19.2.4)))(react-hook-form@7.71.2(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@autoform/core': 3.0.0
+      '@hookform/resolvers': 5.2.2(react-hook-form@7.71.2(react@19.2.4))
+      react: 19.2.4
+      react-hook-form: 7.71.2(react@19.2.4)
+
+  '@autoform/zod@5.0.0(zod@3.25.76)':
+    dependencies:
+      zod: 3.25.76
 
   '@babel/code-frame@7.29.0':
     dependencies:
@@ -3778,6 +3884,11 @@ snapshots:
     dependencies:
       '@formatjs/fast-memoize': 3.1.0
       tslib: 2.8.1
+
+  '@hookform/resolvers@5.2.2(react-hook-form@7.71.2(react@19.2.4))':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.71.2(react@19.2.4)
 
   '@humanfs/core@0.19.1': {}
 
@@ -4817,6 +4928,15 @@ snapshots:
       '@types/react': 19.2.14
       '@types/react-dom': 19.2.3(@types/react@19.2.14)
 
+  '@radix-ui/react-visually-hidden@1.2.4(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+    dependencies:
+      '@radix-ui/react-primitive': 2.1.4(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+    optionalDependencies:
+      '@types/react': 19.2.14
+      '@types/react-dom': 19.2.3(@types/react@19.2.14)
+
   '@radix-ui/rect@1.1.1': {}
 
   '@rtsao/scc@1.1.0': {}
@@ -4824,6 +4944,8 @@ snapshots:
   '@schummar/icu-type-parser@1.21.5': {}
 
   '@standard-schema/spec@1.0.0': {}
+
+  '@standard-schema/utils@0.3.0': {}
 
   '@swc/core-darwin-arm64@1.15.18':
     optional: true
@@ -5289,6 +5411,8 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
+  chrono-node@2.9.0: {}
+
   class-variance-authority@0.7.1:
     dependencies:
       clsx: 2.1.1
@@ -5432,6 +5556,8 @@ snapshots:
   detect-node-es@1.1.0: {}
 
   didyoumean@1.2.2: {}
+
+  diff@5.2.2: {}
 
   dlv@1.1.3: {}
 
@@ -6450,6 +6576,16 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
+  prettier-plugin-classnames@0.9.0(prettier@3.8.1):
+    dependencies:
+      prettier: 3.8.1
+      zod: 3.22.4
+
+  prettier-plugin-merge@0.10.0(prettier@3.8.1):
+    dependencies:
+      diff: 5.2.2
+      prettier: 3.8.1
+
   prettier-plugin-tailwindcss@0.6.14(prettier@3.8.1):
     dependencies:
       prettier: 3.8.1
@@ -7139,6 +7275,8 @@ snapshots:
   zod-validation-error@4.0.2(zod@4.3.6):
     dependencies:
       zod: 4.3.6
+
+  zod@3.22.4: {}
 
   zod@3.25.76: {}
 

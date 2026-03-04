@@ -5,6 +5,7 @@ import { ThemeProvider } from 'next-themes';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Toaster } from 'sonner';
 import { QueryProvider } from './query-provider';
+import { ApiErrorMessagesSync } from './api-error-messages-sync';
 import { PreferencesApplier } from '@/components/layout/preferences-applier';
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -19,6 +20,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         >
           <NuqsAdapter>
             <PreferencesApplier />
+            <ApiErrorMessagesSync />
             {children}
             <Toaster richColors closeButton position='top-right' />
           </NuqsAdapter>

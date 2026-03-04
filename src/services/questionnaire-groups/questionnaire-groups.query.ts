@@ -8,11 +8,13 @@ import {
   createQuestionnaireGroup,
   getPagedQuestionnaireGroups,
   getQuestionnaireGroupDetail,
+  updateQuestionnaireGroup,
 } from './questionnaire-groups.api';
+import type { GetQuestionnaireGroupsParams } from './questionnaire-groups.type';
 import type {
-  CreateQuestionnaireGroupRequest,
-  GetQuestionnaireGroupsParams,
-} from './questionnaire-groups.type';
+  CreateQuestionnaireGroupInput,
+  EditQuestionnaireGroupInput,
+} from './questionnaire-groups.schema';
 
 export const QUESTIONNAIRE_GROUP_QUERY_KEY = 'questionnaire-groups';
 
@@ -35,8 +37,26 @@ export const useQuestionnaireGroupDetail = (id: string) =>
 export const useCreateQuestionnaireGroup = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: CreateQuestionnaireGroupRequest) =>
+    mutationFn: (data: CreateQuestionnaireGroupInput) =>
       createQuestionnaireGroup(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUESTIONNAIRE_GROUP_QUERY_KEY],
+      });
+    },
+  });
+};
+
+export const useUpdateQuestionnaireGroup = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: string;
+      data: EditQuestionnaireGroupInput;
+    }) => updateQuestionnaireGroup(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUESTIONNAIRE_GROUP_QUERY_KEY],
