@@ -11,9 +11,9 @@ export const NumberField: React.FC<AutoFormFieldProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;
-    // Coerce to number so Zod receives the correct type.
-    // Pass NaN for empty string — RHF will treat it as an invalid value.
-    onChange?.(raw === '' ? undefined : Number(raw));
+    // Pass the raw string value; z.preprocess in the schema handles coercion
+    // and converts empty / NaN to undefined before Zod validates.
+    onChange?.(raw);
   };
 
   return (

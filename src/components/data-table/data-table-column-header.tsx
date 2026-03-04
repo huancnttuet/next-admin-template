@@ -40,7 +40,7 @@ export function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         className={cn(
           '-ml-1.5 flex h-8 items-center gap-1.5 rounded-md px-2 py-1.5 hover:bg-accent focus:outline-none focus:ring-1 focus:ring-ring data-[state=open]:bg-accent [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground',
@@ -58,7 +58,7 @@ export function DataTableColumnHeader<TData, TValue>({
             <ChevronsUpDown />
           ))}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='start' className='w-28'>
+      <DropdownMenuContent align='start' className=''>
         {column.getCanSort() && (
           <>
             <DropdownMenuCheckboxItem
@@ -67,7 +67,7 @@ export function DataTableColumnHeader<TData, TValue>({
               onClick={() => column.toggleSorting(false)}
             >
               <ChevronUp />
-              {t('asc')}
+              <span className='ml-2 mt-1'>{t('asc')}</span>
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
               className='relative pl-2 pr-8 [&>span:first-child]:left-auto [&>span:first-child]:right-2 [&_svg]:text-muted-foreground'
@@ -75,15 +75,15 @@ export function DataTableColumnHeader<TData, TValue>({
               onClick={() => column.toggleSorting(true)}
             >
               <ChevronDown />
-              {t('desc')}
+              <span className='ml-2 mt-1'>{t('desc')}</span>
             </DropdownMenuCheckboxItem>
             {column.getIsSorted() && (
               <DropdownMenuItem
                 className='pl-2 [&_svg]:text-muted-foreground'
                 onClick={() => column.clearSorting()}
               >
-                <X />
-                {t('reset')}
+                <X size={24} />
+                <span className='ml-2 mt-1'>{t('reset')}</span>
               </DropdownMenuItem>
             )}
           </>
@@ -94,8 +94,8 @@ export function DataTableColumnHeader<TData, TValue>({
             checked={!column.getIsVisible()}
             onClick={() => column.toggleVisibility(false)}
           >
-            <EyeOff size={18} />
-           <span className='ml-2 mt-0.5'> {t('hide')}</span>
+            <EyeOff size={20} />
+            <span className='ml-3 mt-1'> {t('hide')}</span>
           </DropdownMenuCheckboxItem>
         )}
       </DropdownMenuContent>

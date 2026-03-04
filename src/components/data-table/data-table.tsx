@@ -50,8 +50,8 @@ export function DataTable<TData>({
           tableContainerClassName,
         )}
       >
-        <Table wrapperClassName='overflow-visible'>
-          <TableHeader className='sticky top-0 z-10 bg-background after:absolute after:inset-x-0 after:bottom-0 after:border-b after:content-[""]'>
+        <Table wrapperClassName='overflow-visible' className='table-fixed'>
+          <TableHeader className='sticky top-0 z-10 bg-muted after:absolute after:inset-x-0 after:bottom-0 after:border-b after:content-[""]'>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -64,6 +64,7 @@ export function DataTable<TData>({
                         withBorder: true,
                       }),
                       zIndex: header.column.getIsPinned() ? 20 : undefined,
+                      background: 'hsl(var(--muted))',
                     }}
                   >
                     {header.isPlaceholder
@@ -94,10 +95,12 @@ export function DataTable<TData>({
                         }),
                       }}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      <div className='overflow-hidden'>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </div>
                     </TableCell>
                   ))}
                 </TableRow>
