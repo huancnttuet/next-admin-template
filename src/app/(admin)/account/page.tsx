@@ -16,7 +16,6 @@ export default function SettingsAccountPage() {
   const userName = session?.user?.name || '—';
   const userEmail = session?.user?.email || '—';
   const userId = session?.user?.id || '—';
-  const isSSO = session?.provider === 'sso';
 
   return (
     <Main className='space-y-6'>
@@ -66,9 +65,7 @@ export default function SettingsAccountPage() {
                 {t('provider')}
               </span>
               <div>
-                <Badge variant={isSSO ? 'default' : 'secondary'}>
-                  {isSSO ? t('providerSSO') : t('providerCredentials')}
-                </Badge>
+                <Badge variant='secondary'>{t('providerCredentials')}</Badge>
               </div>
             </div>
           </div>

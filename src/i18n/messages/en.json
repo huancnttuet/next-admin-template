@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "ELearning Admin",
+    "appName": "Next Admin Template",
     "search": "Search",
     "settings": "Settings",
     "signOut": "Sign out",
@@ -79,17 +79,7 @@
     "rememberPassword": "Remember your password?",
     "welcomeBack": "Welcome back",
     "signInToAdmin": "Sign in to your admin account",
-    "elearningAdmin": "E-Learning Admin",
-    "elearningDescription": "Manage your courses, students, and learning content with our powerful admin dashboard.",
-    "createAccount": "Create Account",
-    "ssoLogin": "Sign in with SSO",
-    "ssoLoggingIn": "Redirecting to SSO...",
-    "ssoCallbackInitializing": "Completing sign in...",
-    "ssoCallbackExchanging": "Exchanging credentials...",
-    "ssoError": "SSO authentication failed. Please try again.",
-    "ssoUserNotFound": "Your SSO account is not registered in this system. Please contact your administrator.",
-    "orContinueWith": "Or continue with",
-    "ssoChangePassword": "Change Password (SSO)"
+    "createAccount": "Create Account"
   },
   "sidebar": {
     "unknownUser": "Unknown User",

@@ -1,4 +1,4 @@
-# Copilot Instructions for elearning-admin-v2
+# Copilot Instructions for next-admin-template
 
 ## Project Overview
 

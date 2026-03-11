@@ -26,8 +26,8 @@ const spaceGrotesk = Space_Grotesk({
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans' });
 
 export const metadata: Metadata = {
-  title: 'ELearning Admin',
-  description: 'ELearning Administration Dashboard',
+  title: 'Next Admin Template',
+  description: 'Administration Dashboard',
 };
 
 export default async function RootLayout({

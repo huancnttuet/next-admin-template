@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { type SidebarData } from '@/types/sidebar';
-import { IIGIIcon } from '@/components/icons/iig-icon';
+import { LogoIcon } from '@/components/icons/logo-icon';
 import { AppRoutes } from './routes';
 
 export function useSidebarData(): SidebarData {
@@ -21,9 +21,9 @@ export function useSidebarData(): SidebarData {
 
   return {
     info: {
-      name: 'ELearning Admin',
-      logo: IIGIIcon,
-      plan: 'IIG Vietnam',
+      name: 'Next Admin Template',
+      logo: LogoIcon,
+      plan: 'Next Admin Template',
     },
     navGroups: [
       {

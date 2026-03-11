@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "ELearning Admin",
+    "appName": "Next Admin Template",
     "search": "Tìm kiếm",
     "settings": "Cài đặt",
     "signOut": "Đăng xuất",
@@ -79,17 +79,7 @@
     "rememberPassword": "Nhớ mật khẩu?",
     "welcomeBack": "Chào mừng trở lại",
     "signInToAdmin": "Đăng nhập vào tài khoản quản trị",
-    "elearningAdmin": "E-Learning Admin",
-    "elearningDescription": "Quản lý khóa học, học viên và nội dung học tập với bảng điều khiển quản trị mạnh mẽ.",
-    "createAccount": "Tạo tài khoản",
-    "ssoLogin": "Đăng nhập bằng SSO",
-    "ssoLoggingIn": "Đang chuyển hướng đến SSO...",
-    "ssoCallbackInitializing": "Đang hoàn tất đăng nhập...",
-    "ssoCallbackExchanging": "Đang xác thực thông tin...",
-    "ssoError": "Xác thực SSO thất bại. Vui lòng thử lại.",
-    "ssoUserNotFound": "Tài khoản SSO của bạn chưa được đăng ký trong hệ thống. Vui lòng liên hệ quản trị viên.",
-    "orContinueWith": "Hoặc tiếp tục với",
-    "ssoChangePassword": "Đổi mật khẩu (SSO)"
+    "createAccount": "Tạo tài khoản"
   },
   "sidebar": {
     "unknownUser": "Người dùng không xác định",

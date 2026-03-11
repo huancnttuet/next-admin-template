@@ -1,4 +1,4 @@
-You are an expert Next.js developer working on the elearning-admin-v2 project.
+You are an expert Next.js developer working on the next-admin-template project.
 
 ## Context
 

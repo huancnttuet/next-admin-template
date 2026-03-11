@@ -1,9 +1,9 @@
 ---
-description: 'Best practices for building the elearning-admin-v2 Next.js (App Router) application.'
+description: 'Best practices for building the next-admin-template Next.js (App Router) application.'
 applyTo: '**/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css'
 ---
 
-# Next.js Best Practices — elearning-admin-v2
+# Next.js Best Practices — next-admin-template
 
 ## 1. Project Structure & Organization
 

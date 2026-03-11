@@ -103,7 +103,7 @@ src/
 ```bash
 # Clone the repository
 git clone <your-repo-url>
-cd elearning-admin-v2
+cd next-admin-template
 
 # Install dependencies
 pnpm install

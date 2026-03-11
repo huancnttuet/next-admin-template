@@ -1,7 +1,6 @@
 import { Settings, UserCircle, type LucideIcon } from 'lucide-react';
-import { KeyRound, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { AppRoutes } from '@/configs/routes';
-import { SSOConfig } from '@/configs/sso';
 
 export interface ProfileMenuItem {
   /** i18n key under the 'sidebar' namespace */
@@ -14,8 +13,6 @@ export interface ProfileMenuItem {
   externalHref?: string;
   /** Keyboard shortcut label (e.g. '⇧⌘P') */
   shortcut?: string;
-  /** Show only when the user is authenticated via SSO */
-  ssoOnly?: boolean;
   /** Marks this item as the sign-out action */
   isSignOut?: boolean;
 }
@@ -38,16 +35,6 @@ export const userMenuGroups: ProfileMenuGroup[] = [
         href: AppRoutes.Account,
       },
       { labelKey: 'settings', icon: Settings, href: AppRoutes.Settings },
-    ],
-  },
-  {
-    items: [
-      {
-        labelKey: 'changePassword',
-        icon: KeyRound,
-        externalHref: SSOConfig.changePasswordPage,
-        ssoOnly: true,
-      },
     ],
   },
   {

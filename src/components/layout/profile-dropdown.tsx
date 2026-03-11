@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { buildSSOLogoutUrl } from '@/configs/sso';
 import { AppRoutes } from '@/configs/routes';
 import { userMenuGroups, type ProfileMenuItem } from '@/configs/user-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -22,16 +21,9 @@ import {
 export function ProfileDropdown() {
   const { data: session } = useSession();
   const t = useTranslations('sidebar');
-  const isSSO = session?.provider === 'sso';
 
-  const handleSignOut = async () => {
-    if (isSSO) {
-      await signOut({ redirect: false });
-      // eslint-disable-next-line react-hooks/immutability -- intentional full-page redirect for SSO logout
-      window.location.href = buildSSOLogoutUrl();
-    } else {
-      signOut({ callbackUrl: AppRoutes.SignIn });
-    }
+  const handleSignOut = () => {
+    signOut({ callbackUrl: AppRoutes.SignIn });
   };
 
   const userName = session?.user?.name || '';
@@ -64,9 +56,7 @@ export function ProfileDropdown() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {userMenuGroups.map((group, groupIndex) => {
-          const visibleItems = group.items.filter(
-            (item) => !item.ssoOnly || isSSO,
-          );
+          const visibleItems = group.items;
           if (visibleItems.length === 0) return null;
 
           return (

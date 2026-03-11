@@ -3,14 +3,11 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { LogIn } from 'lucide-react';
-import { buildSSOAuthUrl } from '@/configs/sso';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 import {
   Card,
   CardContent,
@@ -22,26 +19,9 @@ import {
 
 export default function SignInPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const t = useTranslations('auth');
   const [isLoading, setIsLoading] = useState(false);
-  const [isSSOLoading, setIsSSOLoading] = useState(false);
   const [error, setError] = useState('');
-
-  // Show SSO error if redirected back with an error
-  const authError = searchParams.get('error');
-
-  function getAuthErrorMessage(code: string | null): string {
-    if (!code) return '';
-    switch (code) {
-      case 'User.NotFound':
-        return t('ssoUserNotFound');
-      case 'CredentialsSignin':
-        return t('ssoError');
-      default:
-        return t('ssoError');
-    }
-  }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -68,15 +48,6 @@ export default function SignInPage() {
     router.push('/');
   }
 
-  async function handleSSOLogin() {
-    setIsSSOLoading(true);
-    setError('');
-    // Redirect directly to KAPI authorization page.
-    // After authentication, KAPI redirects to /user/login?code=xxx
-    // which then calls signIn('sso', { code }) to create the session.
-    window.location.href = buildSSOAuthUrl();
-  }
-
   return (
     <Card>
       <CardHeader className='text-center'>
@@ -85,32 +56,14 @@ export default function SignInPage() {
       </CardHeader>
       <CardContent>
         <div className='space-y-4'>
-          {(error || authError) && (
-            <div className='rounded-md bg-destructive/15 p-3 text-sm text-destructive'>
-              {error || getAuthErrorMessage(authError)}
+          {error && (
+            <div
+              className='rounded-md bg-destructive/15 p-3 text-sm
+                text-destructive'
+            >
+              {error}
             </div>
           )}
-
-          {/* SSO Login Button */}
-          <Button
-            type='button'
-            variant='outline'
-            className='w-full'
-            disabled={isSSOLoading || isLoading}
-            onClick={handleSSOLogin}
-          >
-            <LogIn className='mr-2 size-4' />
-            {isSSOLoading ? t('ssoLoggingIn') : t('ssoLogin')}
-          </Button>
-
-          {/* Divider */}
-          <div className='relative flex items-center gap-3'>
-            <Separator className='flex-1' />
-            <span className='text-xs uppercase text-muted-foreground'>
-              {t('orContinueWith')}
-            </span>
-            <Separator className='flex-1' />
-          </div>
 
           {/* Credentials Form */}
           <form onSubmit={onSubmit} className='space-y-4'>
@@ -122,7 +75,7 @@ export default function SignInPage() {
                 type='email'
                 placeholder='admin@example.com'
                 required
-                disabled={isLoading || isSSOLoading}
+                disabled={isLoading}
               />
             </div>
             <div className='space-y-2'>
@@ -130,7 +83,8 @@ export default function SignInPage() {
                 <Label htmlFor='password'>{t('password')}</Label>
                 <Link
                   href='/forgot-password'
-                  className='text-sm text-muted-foreground underline-offset-4 hover:underline'
+                  className='text-sm text-muted-foreground underline-offset-4
+                    hover:underline'
                 >
                   {t('forgotPasswordLink')}
                 </Link>
@@ -141,14 +95,10 @@ export default function SignInPage() {
                 type='password'
                 placeholder='••••••••'
                 required
-                disabled={isLoading || isSSOLoading}
+                disabled={isLoading}
               />
             </div>
-            <Button
-              type='submit'
-              className='w-full'
-              disabled={isLoading || isSSOLoading}
-            >
+            <Button type='submit' className='w-full' disabled={isLoading}>
               {isLoading ? t('signingIn') : t('signIn')}
             </Button>
           </form>
@@ -159,7 +109,8 @@ export default function SignInPage() {
           {t('noAccount')}{' '}
           <Link
             href='/sign-up'
-            className='font-medium text-primary underline-offset-4 hover:underline'
+            className='font-medium text-primary underline-offset-4
+              hover:underline'
           >
             {t('signUp')}
           </Link>

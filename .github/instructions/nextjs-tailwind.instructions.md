@@ -1,11 +1,11 @@
 ---
-description: 'Next.js + Tailwind development standards and instructions for elearning-admin-v2'
+description: 'Next.js + Tailwind development standards and instructions for next-admin-template'
 applyTo: '**/*.tsx, **/*.ts, **/*.jsx, **/*.js, **/*.css'
 ---
 
 # Next.js + Tailwind Development Instructions
 
-Instructions for the elearning-admin-v2 project built with Next.js 16 (App Router), Tailwind CSS, TypeScript, and shadcn/ui.
+Instructions for the next-admin-template project built with Next.js 16 (App Router), Tailwind CSS, TypeScript, and shadcn/ui.
 
 ## Project Context
 
