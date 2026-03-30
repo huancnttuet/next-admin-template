@@ -20,7 +20,7 @@ export type RadiusKey = 'normal' | 'sm' | 'md' | 'lg' | 'xl';
 export const PREFERENCE_DEFAULTS = {
   themeMode: 'light' as ThemeMode,
   themePreset: 'default' as string,
-  font: 'inter' as FontKey,
+  font: 'nunito' as FontKey,
   scale: 'normal' as ScaleKey,
   radius: 'normal' as RadiusKey,
   contentLayout: 'centered' as ContentLayout,

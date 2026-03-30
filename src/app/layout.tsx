@@ -41,7 +41,9 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${manrope.variable} ${nunito.variable} ${plusJakartaSans.variable} ${spaceGrotesk.variable} ${dmSans.variable} font-inter min-h-screen antialiased`}
+        className={`${inter.variable} ${manrope.variable} ${nunito.variable}
+          ${plusJakartaSans.variable} ${spaceGrotesk.variable}
+          ${dmSans.variable} font-nunito min-h-screen antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
           <Providers>{children}</Providers>

@@ -1,7 +1,7 @@
-import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
-import { authOptions } from '@/lib/auth';
 import { ApiEndpoints } from '@/configs/endpoints';
+import { getToken } from 'next-auth/jwt';
+import axios from 'axios';
 
 /**
  * Authenticated API Proxy
@@ -9,54 +9,64 @@ import { ApiEndpoints } from '@/configs/endpoints';
  * Forwards requests to the backend with the session accessToken injected.
  * The client never needs to handle the token directly.
  *
- * Usage (client): GET/POST/... /api/proxy/users/paged-list
+ * Usage (client): GET/POST/... /api/admin-proxy/users/paged-list
  *   → forwards to: NEXT_PUBLIC_API_URL/users/paged-list
  *   → with header: Authorization: Bearer <accessToken>
  */
-
-const BACKEND_BASE = ApiEndpoints.main.replace(/\/$/, '');
 
 async function handler(
   req: NextRequest,
   { params }: { params: Promise<{ path: string[] }> },
 ) {
-  const session = await getServerSession(authOptions);
+  const token = await getToken({ req });
 
-  if (!session?.accessToken) {
+  if (!token || !token.accessToken) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const targetService = req.headers.get('x-target-service') || 'main';
 
-  const { path } = await params;
-  const backendUrl = new URL(`${BACKEND_BASE}/${path.join('/')}`);
+  const pathArray = (await params).path || [];
+  const path = pathArray.join('/');
+  const searchParams = new URL(req.url).search;
+  const targetUrl = `${ApiEndpoints[targetService as keyof typeof ApiEndpoints]}/${path}${searchParams}`;
 
-  // Forward query string
-  req.nextUrl.searchParams.forEach((value, key) => {
-    backendUrl.searchParams.set(key, value);
-  });
-
-  // Forward request body for non-GET methods
-  let body: string | undefined;
+  let body = undefined;
   if (req.method !== 'GET' && req.method !== 'HEAD') {
-    body = await req.text();
+    const arrayBuffer = await req.arrayBuffer();
+    body = arrayBuffer.byteLength ? Buffer.from(arrayBuffer) : undefined;
   }
 
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${session.accessToken}`,
-  };
-
-  const backendRes = await fetch(backendUrl.toString(), {
+  const response = await axios({
     method: req.method,
-    headers,
-    body: body || undefined,
-    cache: 'no-store',
+    url: targetUrl,
+    data: body,
+    headers: {
+      Authorization: `Bearer ${token.accessToken}`,
+      'Content-Type': req.headers.get('content-type') || 'application/json',
+    },
+    responseType: 'arraybuffer',
+    validateStatus: () => true,
   });
 
-  const data = await backendRes.text();
+  const responseHeaders = new Headers();
 
-  return new NextResponse(data, {
-    status: backendRes.status,
-    headers: { 'Content-Type': 'application/json' },
+  const contentType = response.headers['content-type'];
+  if (contentType) responseHeaders.set('Content-Type', contentType);
+
+  const contentDisposition = response.headers['content-disposition'];
+  if (contentDisposition)
+    responseHeaders.set('Content-Disposition', contentDisposition);
+
+  if (response.status === 204 || req.method === 'HEAD') {
+    return new NextResponse(null, {
+      status: response.status,
+      headers: responseHeaders,
+    });
+  }
+
+  return new NextResponse(response.data, {
+    status: response.status,
+    headers: responseHeaders,
   });
 }
 

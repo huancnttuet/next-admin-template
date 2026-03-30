@@ -13,8 +13,7 @@ import {
 import { usePreferencesStore } from '@/stores/preferences-store';
 
 const THEME_PRESETS = [
-  { label: 'Default', value: 'default', color: 'bg-zinc-900 dark:bg-zinc-100' },
-  { label: 'Blue', value: 'blue', color: 'bg-blue-600' },
+  { label: 'Default', value: 'default', color: 'bg-blue-600' },
   { label: 'Green', value: 'green', color: 'bg-green-600' },
   { label: 'Orange', value: 'orange', color: 'bg-orange-500' },
   { label: 'Tangerine', value: 'tangerine', color: 'bg-orange-400' },
