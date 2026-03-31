@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb';
 import type { PagedList } from '@/types/api';
-import type { User } from '@/services/users';
+import type { User } from '@/features/users';
 import { getUsersCollection } from './collection';
 import { mapUserDocument } from './mapper';
 import type { UserPagedParams } from './types';

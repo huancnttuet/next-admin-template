@@ -27,6 +27,8 @@ export const MultiSelectField: React.FC<AutoFormFieldProps> = ({
     field.fieldConfig?.customData?.options ??
     field.options?.map(([v]) => v) ??
     [];
+  const placeholder =
+    field.fieldConfig?.customData?.placeholder ?? 'Select options…';
   const options = rawOptions.map((v) => ({
     value: v,
     label: v.charAt(0).toUpperCase() + v.slice(1),
@@ -66,7 +68,7 @@ export const MultiSelectField: React.FC<AutoFormFieldProps> = ({
         >
           <div className='flex flex-wrap gap-1'>
             {selectedLabels.length === 0 ? (
-              <span className='text-muted-foreground'>Select options…</span>
+              <span className='text-muted-foreground'>{placeholder}</span>
             ) : (
               selectedLabels.map(({ value: v, label: l }) => (
                 <Badge key={v} variant='secondary' className='gap-1 pr-1'>
@@ -76,7 +78,8 @@ export const MultiSelectField: React.FC<AutoFormFieldProps> = ({
                     tabIndex={0}
                     onClick={(e) => remove(v, e)}
                     onKeyDown={(e) => e.key === 'Enter' && remove(v, e as any)}
-                    className='cursor-pointer rounded-sm opacity-70 hover:opacity-100'
+                    className='cursor-pointer rounded-sm opacity-70
+                      hover:opacity-100'
                   >
                     <X className='size-3' />
                   </span>
@@ -98,7 +101,8 @@ export const MultiSelectField: React.FC<AutoFormFieldProps> = ({
               <label
                 key={optValue}
                 htmlFor={cbId}
-                className='flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent'
+                className='flex cursor-pointer items-center gap-2 rounded-sm
+                  px-2 py-1.5 text-sm hover:bg-accent'
               >
                 <Checkbox
                   id={cbId}

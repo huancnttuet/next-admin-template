@@ -6,8 +6,10 @@ import {
   HelpCircle,
   LayoutDashboard,
   Lock,
+  Package,
   ServerOff,
   ShieldCheck,
+  Tags,
   UserX,
   Users,
 } from 'lucide-react';
@@ -34,11 +36,15 @@ export function useSidebarData(): SidebarData {
             url: AppRoutes.Dashboard,
             icon: LayoutDashboard,
           },
-
           {
-            title: t('questionnaireGroups'),
-            url: AppRoutes.QuestionnaireGroups,
-            icon: ClipboardList,
+            title: t('products'),
+            url: AppRoutes.Products,
+            icon: Package,
+          },
+          {
+            title: t('categories'),
+            url: AppRoutes.Categories,
+            icon: Tags,
           },
 
           {

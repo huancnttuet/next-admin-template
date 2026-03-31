@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { Main } from '@/components/layout';
-import { UsersTable } from '@/containers/users/users-table';
+import { UsersTable } from '@/features/users/';
 
 export default async function UsersPage() {
   const t = await getTranslations('users');

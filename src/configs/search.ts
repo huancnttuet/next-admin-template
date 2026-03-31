@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Lock,
   ServerOff,
+  Package,
   Settings,
   ShieldCheck,
   UserCircle,
@@ -40,14 +41,13 @@ export const searchItems: SearchItem[] = [
     groupLabelKey: 'general',
     keywords: ['home', 'overview'],
   },
-
   {
-    labelKey: 'questionnaireGroups',
-    icon: ClipboardList,
-    url: AppRoutes.QuestionnaireGroups,
+    labelKey: 'products',
+    icon: Package,
+    url: AppRoutes.Products,
     group: 'general',
     groupLabelKey: 'general',
-    keywords: ['questionnaire', 'quiz', 'group', 'exam'],
+    keywords: ['product', 'inventory', 'catalog', 'sku'],
   },
   {
     labelKey: 'roles',

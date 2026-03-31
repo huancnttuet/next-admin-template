@@ -58,7 +58,6 @@ export const authOptions: NextAuthOptions = {
         session.user.permissions =
           (token.permissions as string[] | undefined) || [];
       }
-      session.accessToken = token.accessToken as string | undefined;
       return session;
     },
   },

@@ -1,19 +1,18 @@
 'use client';
 
 import { AutoFormFieldProps } from '@autoform/react';
-import { FileIcon, ImageIcon, Trash2, UploadCloudIcon } from 'lucide-react';
+import {
+  FileIcon,
+  Loader2,
+  Trash2,
+  UploadCloudIcon,
+  VideoIcon,
+} from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { uploadFileToCloudinary } from '@/lib/cloudinary';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-interface FilePreview {
-  file: File;
-  objectUrl: string;
-  isImage: boolean;
-}
 
 /**
  * customData options:
@@ -29,6 +28,15 @@ interface FileUploadCustomData {
   maxFiles?: number;
 }
 
+type UploadedFileValue = string;
+
+interface PendingUploadItem {
+  id: string;
+  name: string;
+  previewUrl?: string;
+  isVideo: boolean;
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export const FileUploadField: React.FC<AutoFormFieldProps> = ({
@@ -36,10 +44,11 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
   error,
   id,
 }) => {
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch, getValues } = useFormContext();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [sizeError, setSizeError] = useState<string | null>(null);
+  const [pendingUploads, setPendingUploads] = useState<PendingUploadItem[]>([]);
 
   const customData = (field.fieldConfig?.customData ??
     {}) as FileUploadCustomData;
@@ -47,12 +56,20 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
   const maxSizeMB = customData.maxSizeMB ?? 5;
   const multiple = customData.multiple ?? false;
   const maxFiles = customData.maxFiles ?? 5;
+  const isVideoField = accept.includes('video');
 
-  // RHF stores File[] so the parent form can read them on submit
-  const currentFiles: FilePreview[] =
-    (watch(id) as FilePreview[] | undefined) ?? [];
+  const currentValues = (
+    (watch(id) as UploadedFileValue[] | undefined) ?? []
+  ).filter(Boolean);
+  const currentCount = currentValues.length + pendingUploads.length;
 
-  const processFiles = (incoming: FileList | File[]) => {
+  const currentFiles = currentValues.map((value) => ({
+    value,
+    isVideo: isVideoField,
+    isImage: !isVideoField,
+  }));
+
+  const processFiles = async (incoming: FileList | File[]) => {
     setSizeError(null);
     const files = Array.from(incoming);
     const oversized = files.find((f) => f.size > maxSizeMB * 1024 * 1024);
@@ -61,23 +78,75 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
       return;
     }
 
-    const previews: FilePreview[] = files.map((f) => ({
-      file: f,
-      objectUrl: URL.createObjectURL(f),
-      isImage: f.type.startsWith('image/'),
-    }));
+    const existingValues = (
+      (getValues(id) as UploadedFileValue[] | undefined) ?? []
+    ).filter(Boolean);
+    const availableSlots = multiple
+      ? Math.max(maxFiles - existingValues.length - pendingUploads.length, 0)
+      : existingValues.length === 0 && pendingUploads.length === 0
+        ? 1
+        : 0;
 
-    const current = (watch(id) as FilePreview[] | undefined) ?? [];
-    const next = multiple
-      ? [...current, ...previews].slice(0, maxFiles)
-      : previews.slice(0, 1);
+    if (availableSlots <= 0) {
+      setSizeError(
+        multiple
+          ? `Maximum of ${maxFiles} files reached.`
+          : 'Only one file can be selected.',
+      );
+      return;
+    }
 
-    setValue(id, next, { shouldValidate: true, shouldDirty: true });
+    const filesToUpload = files.slice(0, availableSlots);
+    const pendingItems: PendingUploadItem[] = filesToUpload.map(
+      (file, index) => ({
+        id: `${Date.now()}-${index}-${file.name}`,
+        name: file.name,
+        previewUrl: file.type.startsWith('image/')
+          ? URL.createObjectURL(file)
+          : undefined,
+        isVideo: file.type.startsWith('video/'),
+      }),
+    );
+
+    setPendingUploads((current) =>
+      multiple ? [...current, ...pendingItems] : pendingItems.slice(0, 1),
+    );
+
+    try {
+      const uploadedUrls: string[] = [];
+
+      for (const pendingItem of pendingItems) {
+        const file = filesToUpload.find(
+          (candidate) => candidate.name === pendingItem.name,
+        );
+        if (!file) continue;
+
+        const uploadedUrl = await uploadFileToCloudinary(file);
+        uploadedUrls.push(uploadedUrl);
+
+        setValue(
+          id,
+          multiple ? [...existingValues, ...uploadedUrls] : [uploadedUrl],
+          { shouldValidate: true, shouldDirty: true },
+        );
+
+        setPendingUploads((current) =>
+          current.filter((item) => item.id !== pendingItem.id),
+        );
+        if (pendingItem.previewUrl) URL.revokeObjectURL(pendingItem.previewUrl);
+      }
+    } finally {
+      setPendingUploads((current) => {
+        current.forEach((item) => {
+          if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
+        });
+        return [];
+      });
+    }
   };
 
   const removeFile = (index: number) => {
-    const updated = currentFiles.filter((_, i) => i !== index);
-    URL.revokeObjectURL(currentFiles[index].objectUrl);
+    const updated = currentValues.filter((_, i) => i !== index);
     setValue(id, updated, { shouldValidate: true, shouldDirty: true });
     setSizeError(null);
   };
@@ -91,17 +160,15 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
   const onDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    if (e.dataTransfer.files.length) processFiles(e.dataTransfer.files);
+    if (e.dataTransfer.files.length) void processFiles(e.dataTransfer.files);
   };
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length) processFiles(e.target.files);
+    if (e.target.files?.length) void processFiles(e.target.files);
     // Reset input so the same file can be re-selected
     e.target.value = '';
   };
 
-  const canAddMore = multiple
-    ? currentFiles.length < maxFiles
-    : currentFiles.length === 0;
+  const canAddMore = multiple ? currentCount < maxFiles : currentCount === 0;
 
   return (
     <div className='space-y-3'>
@@ -117,18 +184,23 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
           onDragLeave={onDragLeave}
           onDrop={onDrop}
           className={cn(
-            'flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-6 text-center transition-colors',
-            isDragging
-              ? 'border-primary bg-primary/5'
-              : error
-                ? 'border-destructive bg-destructive/5'
-                : 'border-border hover:border-primary/60 hover:bg-muted/40',
+            `flex cursor-pointer flex-col items-center justify-center gap-2
+            rounded-lg border-2 border-dashed p-6 text-center transition-colors`,
+            pendingUploads.length > 0
+              ? 'cursor-wait border-primary/60 bg-primary/5'
+              : isDragging
+                ? 'border-primary bg-primary/5'
+                : error
+                  ? 'border-destructive bg-destructive/5'
+                  : 'border-border hover:border-primary/60 hover:bg-muted/40',
           )}
         >
           <UploadCloudIcon className='size-8 text-muted-foreground' />
           <div>
             <p className='text-sm font-medium'>
-              Drag &amp; drop or{' '}
+              {pendingUploads.length > 0
+                ? 'Uploading...'
+                : 'Drag &amp; drop or'}{' '}
               <span className='text-primary underline-offset-2 hover:underline'>
                 browse
               </span>
@@ -159,37 +231,90 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
       {/* Size error */}
       {sizeError && <p className='text-xs text-destructive'>{sizeError}</p>}
 
+      {/* Pending uploads */}
+      {pendingUploads.length > 0 && (
+        <ul className='space-y-2'>
+          {pendingUploads.map((item) => (
+            <li
+              key={item.id}
+              className='flex items-center gap-3 rounded-md border bg-muted/30
+                p-2'
+            >
+              {item.previewUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={item.previewUrl}
+                  alt={item.name}
+                  className='size-10 shrink-0 rounded object-cover'
+                />
+              ) : item.isVideo ? (
+                <div
+                  className='flex size-10 shrink-0 items-center justify-center
+                    rounded bg-muted'
+                >
+                  <VideoIcon className='size-5 text-muted-foreground' />
+                </div>
+              ) : (
+                <div
+                  className='flex size-10 shrink-0 items-center justify-center
+                    rounded bg-muted'
+                >
+                  <FileIcon className='size-5 text-muted-foreground' />
+                </div>
+              )}
+
+              <div className='min-w-0 flex-1'>
+                <p className='truncate text-sm font-medium'>{item.name}</p>
+                <p
+                  className='flex items-center gap-1 text-xs
+                    text-muted-foreground'
+                >
+                  <Loader2 className='size-3 animate-spin' /> Uploading...
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
       {/* Preview list */}
       {currentFiles.length > 0 && (
         <ul className='space-y-2'>
           {currentFiles.map((fp, idx) => (
             <li
-              key={fp.objectUrl}
-              className='flex items-center gap-3 rounded-md border bg-muted/30 p-2'
+              key={`${fp.value}-${idx}`}
+              className='flex items-center gap-3 rounded-md border bg-muted/30
+                p-2'
             >
               {/* Thumbnail / icon */}
               {fp.isImage ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={fp.objectUrl}
-                  alt={fp.file.name}
+                  src={fp.value}
+                  alt={`Uploaded file ${idx + 1}`}
                   className='size-10 shrink-0 rounded object-cover'
                 />
+              ) : fp.isVideo ? (
+                <div
+                  className='flex size-10 shrink-0 items-center justify-center
+                    rounded bg-muted'
+                >
+                  <VideoIcon className='size-5 text-muted-foreground' />
+                </div>
               ) : (
-                <div className='flex size-10 shrink-0 items-center justify-center rounded bg-muted'>
-                  {fp.file.type === 'application/pdf' ? (
-                    <FileIcon className='size-5 text-red-500' />
-                  ) : (
-                    <ImageIcon className='size-5 text-muted-foreground' />
-                  )}
+                <div
+                  className='flex size-10 shrink-0 items-center justify-center
+                    rounded bg-muted'
+                >
+                  <FileIcon className='size-5 text-muted-foreground' />
                 </div>
               )}
 
               {/* File name & size */}
               <div className='min-w-0 flex-1'>
-                <p className='truncate text-sm font-medium'>{fp.file.name}</p>
+                <p className='truncate text-sm font-medium'>{fp.value}</p>
                 <p className='text-xs text-muted-foreground'>
-                  {(fp.file.size / 1024).toFixed(0)} KB
+                  Uploaded to Cloudinary
                 </p>
               </div>
 
@@ -198,9 +323,11 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
                 type='button'
                 variant='ghost'
                 size='icon'
-                className='size-7 shrink-0 text-muted-foreground hover:text-destructive'
+                className='size-7 shrink-0 text-muted-foreground
+                  hover:text-destructive'
                 onClick={() => removeFile(idx)}
-                aria-label={`Remove ${fp.file.name}`}
+                aria-label={`Remove uploaded file ${idx + 1}`}
+                disabled={pendingUploads.length > 0}
               >
                 <Trash2 className='size-4' />
               </Button>

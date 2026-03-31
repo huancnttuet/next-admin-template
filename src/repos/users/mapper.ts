@@ -1,4 +1,4 @@
-import type { User } from '@/services/users';
+import type { User } from '@/features/users';
 import type { UserDocument } from './types';
 
 export function mapUserDocument(doc: UserDocument): User {

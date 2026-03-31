@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { Main } from '@/components/layout';
-import { RolesTable } from '@/containers/roles/roles-table';
+import { RolesTable } from '@/features/roles';
 
 export default async function RolesPage() {
   const t = await getTranslations('roles');

@@ -1,7 +1,10 @@
 export const AppRoutes = {
   // Dashboard
   Dashboard: '/',
-  QuestionnaireGroups: '/questionnaire-groups',
+  Products: '/products',
+  Categories: '/categories',
+  ProductCreate: '/products/create',
+  ProductEdit: (id: string) => `/products/${id}/edit`,
   HelpCenter: '/help-center',
 
   // Auth
