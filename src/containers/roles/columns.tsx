@@ -13,13 +13,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header';
-import type { User } from '@/services/users';
+import type { Role } from '@/services/roles';
 
-export const getUserColumns = (
+export const getRoleColumns = (
   t: (key: string) => string,
-  onEdit: (user: User) => void,
-  onDelete: (user: User) => void,
-): ColumnDef<User>[] => [
+  onEdit: (role: Role) => void,
+  onDelete: (role: Role) => void,
+): ColumnDef<Role>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -59,16 +59,16 @@ export const getUserColumns = (
     enableHiding: false,
   },
   {
-    id: 'fullName',
-    accessorKey: 'fullName',
+    id: 'name',
+    accessorKey: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} label={t('colFullName')} />
+      <DataTableColumnHeader column={column} label={t('colName')} />
     ),
     cell: ({ row }) => (
-      <span className='font-medium'>{row.getValue('fullName')}</span>
+      <span className='font-medium'>{row.getValue('name')}</span>
     ),
     meta: {
-      label: t('colFullName'),
+      label: t('colName'),
       placeholder: t('search'),
       variant: 'text' as const,
     },
@@ -76,82 +76,38 @@ export const getUserColumns = (
     enableSorting: false,
   },
   {
-    id: 'userName',
-    accessorKey: 'userName',
+    id: 'code',
+    accessorKey: 'code',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} label={t('colUserName')} />
+      <DataTableColumnHeader column={column} label={t('colCode')} />
     ),
     cell: ({ row }) => (
-      <span className='text-muted-foreground'>{row.getValue('userName')}</span>
+      <span className='font-mono text-muted-foreground'>
+        {row.getValue('code')}
+      </span>
     ),
     meta: {
-      label: t('colUserName'),
-    },
-    enableColumnFilter: true,
-    enableSorting: false,
-  },
-  {
-    id: 'email',
-    accessorKey: 'email',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} label={t('colEmail')} />
-    ),
-    cell: ({ row }) => (
-      <span className='text-muted-foreground'>{row.getValue('email')}</span>
-    ),
-    meta: {
-      label: t('colEmail'),
+      label: t('colCode'),
     },
     enableSorting: false,
   },
   {
-    id: 'isVerify',
-    accessorKey: 'isVerify',
+    id: 'userCount',
+    accessorKey: 'userCount',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} label={t('colVerified')} />
+      <DataTableColumnHeader column={column} label={t('colUsers')} />
     ),
     cell: ({ row }) => {
-      const isVerify = row.getValue('isVerify') as boolean;
+      const count = row.getValue('userCount') as number;
       return (
-        <Badge variant={isVerify ? 'default' : 'secondary'}>
-          {isVerify ? t('verified') : t('unverified')}
+        <Badge variant='secondary'>
+          {count} {t('usersLabel')}
         </Badge>
       );
     },
     meta: {
-      label: t('colVerified'),
-      variant: 'select' as const,
-      options: [
-        { label: t('verified'), value: 'true' },
-        { label: t('unverified'), value: 'false' },
-      ],
+      label: t('colUsers'),
     },
-    enableColumnFilter: true,
-    enableSorting: false,
-  },
-  {
-    id: 'isLock',
-    accessorKey: 'isLock',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} label={t('colStatus')} />
-    ),
-    cell: ({ row }) => {
-      const isLock = row.getValue('isLock') as boolean;
-      return (
-        <Badge variant={isLock ? 'destructive' : 'outline'}>
-          {isLock ? t('locked') : t('active')}
-        </Badge>
-      );
-    },
-    meta: {
-      label: t('colStatus'),
-      variant: 'select' as const,
-      options: [
-        { label: t('active'), value: 'false' },
-        { label: t('locked'), value: 'true' },
-      ],
-    },
-    enableColumnFilter: true,
     enableSorting: false,
   },
   {
@@ -160,7 +116,7 @@ export const getUserColumns = (
       <span className='text-muted-foreground'>{t('colActions')}</span>
     ),
     cell: ({ row }) => {
-      const user = row.original;
+      const role = row.original;
       return (
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
@@ -170,14 +126,14 @@ export const getUserColumns = (
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
-            <DropdownMenuItem onClick={() => onEdit(user)}>
+            <DropdownMenuItem onClick={() => onEdit(role)}>
               <Pencil className='mr-2 h-4 w-4' />
               {t('actionEdit')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className='text-destructive focus:text-destructive'
-              onClick={() => onDelete(user)}
+              onClick={() => onDelete(role)}
             >
               <Trash2 className='mr-2 h-4 w-4' />
               {t('actionDelete')}

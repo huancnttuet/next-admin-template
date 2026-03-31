@@ -49,6 +49,14 @@ export const searchItems: SearchItem[] = [
     groupLabelKey: 'general',
     keywords: ['questionnaire', 'quiz', 'group', 'exam'],
   },
+  {
+    labelKey: 'roles',
+    icon: ShieldCheck,
+    url: AppRoutes.Roles,
+    group: 'general',
+    groupLabelKey: 'general',
+    keywords: ['role', 'permission', 'access'],
+  },
   // ── Settings ───────────────────────────────────────────
   {
     labelKey: 'account',

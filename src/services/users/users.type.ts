@@ -14,3 +14,13 @@ export interface GetUsersParams {
   IsVerify?: boolean;
   IsLock?: boolean;
 }
+
+export interface CreateUserPayload {
+  fullName: string;
+  userName: string;
+  email: string;
+  isVerify?: boolean;
+  isLock?: boolean;
+}
+
+export type UpdateUserPayload = Partial<CreateUserPayload>;

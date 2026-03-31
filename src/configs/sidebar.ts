@@ -46,6 +46,11 @@ export function useSidebarData(): SidebarData {
             url: AppRoutes.Users,
             icon: Users,
           },
+          {
+            title: t('roles'),
+            url: AppRoutes.Roles,
+            icon: ShieldCheck,
+          },
         ],
       },
       {

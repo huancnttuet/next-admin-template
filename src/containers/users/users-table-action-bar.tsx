@@ -4,7 +4,6 @@ import * as React from 'react';
 import type { Table } from '@tanstack/react-table';
 import { Trash2, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 import {
   ActionBar,
   ActionBarSelection,
@@ -17,9 +16,15 @@ import type { User } from '@/services/users';
 
 interface UsersTableActionBarProps {
   table: Table<User>;
+  onDeleteSelected: () => void;
+  isDeleting?: boolean;
 }
 
-export function UsersTableActionBar({ table }: UsersTableActionBarProps) {
+export function UsersTableActionBar({
+  table,
+  onDeleteSelected,
+  isDeleting = false,
+}: UsersTableActionBarProps) {
   const t = useTranslations('users');
   const rows = table.getFilteredSelectedRowModel().rows;
 
@@ -42,12 +47,13 @@ export function UsersTableActionBar({ table }: UsersTableActionBarProps) {
         <ActionBarItem
           variant='destructive'
           size='sm'
+          disabled={isDeleting}
           onSelect={() => {
-            toast.info(`${t('actionDelete')}: ${rows.length} ${t('selected')}`);
+            onDeleteSelected();
           }}
         >
           <Trash2 />
-          {t('actionDelete')} ({rows.length})
+          {isDeleting ? t('deleting') : `${t('actionDelete')} (${rows.length})`}
         </ActionBarItem>
       </ActionBarGroup>
       <ActionBarSeparator />

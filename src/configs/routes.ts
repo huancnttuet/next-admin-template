@@ -15,6 +15,7 @@ export const AppRoutes = {
 
   // User
   Users: '/users',
+  Roles: '/roles',
 
   // Settings
   Settings: '/settings',
