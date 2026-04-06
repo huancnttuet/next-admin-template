@@ -176,7 +176,10 @@ export function createProductFormSchema(t: (key: string) => string) {
       .superRefine(
         fieldConfig({
           label: t('fieldDescription'),
-          fieldType: 'textarea',
+          fieldType: 'rich-text',
+          customData: {
+            className: 'col-span-3',
+          },
           inputProps: { placeholder: t('fieldDescriptionPlaceholder') },
         }),
       ),
