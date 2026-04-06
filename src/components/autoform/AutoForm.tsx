@@ -22,9 +22,11 @@ import { ComboboxField } from './components/ComboboxField';
 import { SliderField } from './components/SliderField';
 import { FileUploadField } from './components/FileUploadField';
 import { AsyncComboboxField } from './components/AsyncComboboxField';
+import { InfiniteComboboxField } from './components/InfiniteComboboxField';
 import { ObjectWrapper } from './components/ObjectWrapper';
 import { ArrayWrapper } from './components/ArrayWrapper';
 import { ArrayElementWrapper } from './components/ArrayElementWrapper';
+import { TreeSelectField } from './components/TreeSelectField';
 
 const ShadcnUIComponents: AutoFormUIComponents = {
   Form,
@@ -51,6 +53,8 @@ export const ShadcnAutoFormFieldComponents = {
   slider: SliderField,
   'file-upload': FileUploadField,
   'async-combobox': AsyncComboboxField,
+  'infinite-combobox': InfiniteComboboxField,
+  'tree-select': TreeSelectField,
 } as const;
 export type FieldTypes = keyof typeof ShadcnAutoFormFieldComponents;
 

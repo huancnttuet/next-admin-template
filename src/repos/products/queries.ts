@@ -8,9 +8,33 @@ export async function findProductsPaged({
   page,
   pageSize,
   keyword,
+  isActive,
+  category,
+  categories,
+  isFeatured,
 }: ProductPagedParams): Promise<PagedList<Product>> {
   const collection = await getProductsCollection();
   const filter: Record<string, unknown> = {};
+
+  if (typeof isActive === 'boolean') {
+    filter.isActive = isActive;
+  }
+
+  if (typeof isFeatured === 'boolean') {
+    filter.isFeatured = isFeatured;
+  }
+
+  if (typeof category === 'string' && category.trim().length > 0) {
+    filter.categories = category.trim();
+  }
+
+  if (Array.isArray(categories) && categories.length > 0) {
+    filter.categories = {
+      $in: categories
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0),
+    };
+  }
 
   if (keyword) {
     filter.$or = [

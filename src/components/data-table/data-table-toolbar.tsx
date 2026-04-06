@@ -7,6 +7,7 @@ import * as React from 'react';
 
 import { DataTableDateFilter } from '@/components/data-table/data-table-date-filter';
 import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter';
+import { DataTableInfiniteComboboxFilter } from '@/components/data-table/data-table-infinite-combobox-filter';
 import { DataTableSliderFilter } from '@/components/data-table/data-table-slider-filter';
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options';
 import { Button } from '@/components/ui/button';
@@ -138,6 +139,27 @@ function DataTableToolbarFilter<TData>({
               title={columnMeta.label ?? column.id}
               options={columnMeta.options ?? []}
               multiple={columnMeta.variant === 'multiSelect'}
+            />
+          );
+
+        case 'infiniteCombobox':
+          if (!columnMeta.infiniteCombobox) return null;
+          return (
+            <DataTableInfiniteComboboxFilter
+              column={column}
+              title={columnMeta.label ?? column.id}
+              queryKey={columnMeta.infiniteCombobox.queryKey}
+              queryFn={columnMeta.infiniteCombobox.queryFn}
+              mapOption={columnMeta.infiniteCombobox.mapOption}
+              staticParams={columnMeta.infiniteCombobox.staticParams}
+              multiple={columnMeta.infiniteCombobox.multiple}
+              pageSize={columnMeta.infiniteCombobox.pageSize}
+              debounceMs={columnMeta.infiniteCombobox.debounceMs}
+              searchPlaceholder={columnMeta.infiniteCombobox.searchPlaceholder}
+              emptyText={columnMeta.infiniteCombobox.emptyText}
+              clearText={columnMeta.infiniteCombobox.clearText}
+              selectedText={columnMeta.infiniteCombobox.selectedText}
+              popoverClassName={columnMeta.infiniteCombobox.popoverClassName}
             />
           );
 

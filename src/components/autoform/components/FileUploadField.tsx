@@ -200,7 +200,7 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
             <p className='text-sm font-medium'>
               {pendingUploads.length > 0
                 ? 'Uploading...'
-                : 'Drag &amp; drop or'}{' '}
+                : 'Drag drop or'}{' '}
               <span className='text-primary underline-offset-2 hover:underline'>
                 browse
               </span>

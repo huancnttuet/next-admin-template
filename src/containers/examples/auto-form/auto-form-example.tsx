@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { ZodProvider } from '@autoform/zod';
 import { toast } from 'sonner';
-import { AutoForm } from '@/components/ui/autoform';
+import { AutoForm } from '@/components/autoform';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -35,7 +35,7 @@ import {
   type FileUploadInput,
   type AsyncComboboxInput,
 } from './form-example.schema';
-import type { AsyncComboboxOption } from '@/components/ui/autoform/components/AsyncComboboxField';
+import type { AsyncComboboxOption } from '@/components/autoform/components/AsyncComboboxField';
 
 // ── Mock API fetch functions ──────────────────────────────────────────────────
 // Defined at module level so the references are stable — no useCallback needed.
@@ -847,10 +847,16 @@ function FieldTypeReference() {
                         {type}
                       </Badge>
                     </td>
-                    <td className='py-2 pr-4 font-mono text-xs text-muted-foreground'>
+                    <td
+                      className='py-2 pr-4 font-mono text-xs
+                        text-muted-foreground'
+                    >
                       {inferred}
                     </td>
-                    <td className='py-2 pr-4 font-mono text-xs text-muted-foreground'>
+                    <td
+                      className='py-2 pr-4 font-mono text-xs
+                        text-muted-foreground'
+                    >
                       {zod}
                     </td>
                     <td className='py-2 pr-4 font-mono text-xs'>{component}</td>

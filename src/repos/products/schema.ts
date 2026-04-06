@@ -9,7 +9,7 @@ export const createProductSchema = z.object({
   originalPrice: z.coerce.number().nonnegative().optional(),
   quantity: z.coerce.number().int().nonnegative().default(0),
   image: z.string().optional().default(''),
-  images: z.array(z.string()).optional().default([]),
+  detailImages: z.array(z.string()).optional().default([]),
   videoUrl: z.string().optional().default(''),
   isActive: z.boolean().optional().default(true),
   isFeatured: z.boolean().optional().default(false),

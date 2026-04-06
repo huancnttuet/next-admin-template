@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import type { CreateRolePayload, Role } from '@/features/roles';
+import { FormMode } from '@/types/form';
 
 interface UserOption {
   id: string;
@@ -25,7 +26,7 @@ interface UserOption {
 
 interface RoleFormDialogProps {
   open: boolean;
-  mode: 'create' | 'edit';
+  mode: FormMode;
   role?: Role | null;
   userOptions: UserOption[];
   isPending: boolean;
@@ -51,6 +52,21 @@ function getInitialState(role?: Role | null): FormState {
   };
 }
 
+const modeConfig = {
+  create: {
+    title: 'createTitle',
+    description: 'createDescription',
+    idleSubmitText: 'createNew',
+    busySubmitText: 'creating',
+  },
+  edit: {
+    title: 'editTitle',
+    description: 'editDescription',
+    idleSubmitText: 'save',
+    busySubmitText: 'saving',
+  },
+} as const;
+
 export function RoleFormDialog({
   open,
   mode,
@@ -62,27 +78,37 @@ export function RoleFormDialog({
 }: RoleFormDialogProps) {
   const t = useTranslations('roles');
   const [form, setForm] = useState<FormState>(getInitialState(role));
+  const currentModeConfig = modeConfig[mode];
 
-  const title = mode === 'create' ? t('createTitle') : t('editTitle');
-  const description =
-    mode === 'create' ? t('createDescription') : t('editDescription');
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      setForm(getInitialState(role));
+    }
+    onOpenChange(nextOpen);
+  };
 
-  const submitText =
-    mode === 'create'
-      ? isPending
-        ? t('creating')
-        : t('createNew')
-      : isPending
-        ? t('saving')
-        : t('save');
+  const updateField = <K extends keyof FormState>(
+    field: K,
+    value: FormState[K],
+  ) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
 
-  const handleToggleUser = (userId: string, checked: boolean) => {
+  const toggleListField = (
+    field: 'userIds' | 'permissions',
+    value: string,
+    checked: boolean,
+  ) => {
     setForm((prev) => ({
       ...prev,
-      userIds: checked
-        ? Array.from(new Set([...prev.userIds, userId]))
-        : prev.userIds.filter((id) => id !== userId),
+      [field]: checked
+        ? Array.from(new Set([...prev[field], value]))
+        : prev[field].filter((item) => item !== value),
     }));
+  };
+
+  const handleToggleUser = (userId: string, checked: boolean) => {
+    toggleListField('userIds', userId, checked);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -97,20 +123,17 @@ export function RoleFormDialog({
   };
 
   const handleTogglePermission = (permission: string, checked: boolean) => {
-    setForm((prev) => ({
-      ...prev,
-      permissions: checked
-        ? Array.from(new Set([...prev.permissions, permission]))
-        : prev.permissions.filter((item) => item !== permission),
-    }));
+    toggleListField('permissions', permission, checked);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className='sm:max-w-lg'>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogTitle>{t(currentModeConfig.title)}</DialogTitle>
+          <DialogDescription>
+            {t(currentModeConfig.description)}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
@@ -119,9 +142,7 @@ export function RoleFormDialog({
             <Input
               id='name'
               value={form.name}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, name: e.target.value }))
-              }
+              onChange={(event) => updateField('name', event.target.value)}
               placeholder={t('fieldNamePlaceholder')}
               required
               disabled={isPending}
@@ -133,9 +154,7 @@ export function RoleFormDialog({
             <Input
               id='code'
               value={form.code}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, code: e.target.value }))
-              }
+              onChange={(event) => updateField('code', event.target.value)}
               placeholder={t('fieldCodePlaceholder')}
               required
               disabled={isPending}
@@ -147,8 +166,8 @@ export function RoleFormDialog({
             <Textarea
               id='description'
               value={form.description}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, description: e.target.value }))
+              onChange={(event) =>
+                updateField('description', event.target.value)
               }
               placeholder={t('fieldDescriptionPlaceholder')}
               disabled={isPending}
@@ -226,7 +245,9 @@ export function RoleFormDialog({
               {t('cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
-              {submitText}
+              {isPending
+                ? t(currentModeConfig.busySubmitText)
+                : t(currentModeConfig.idleSubmitText)}
             </Button>
           </div>
         </form>

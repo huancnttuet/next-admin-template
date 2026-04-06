@@ -1,6 +1,36 @@
 import type { ColumnSort, Row, RowData } from '@tanstack/react-table';
 import type { DataTableConfig } from '@/configs/data-table';
+import type { PagedList } from '@/types/api';
 import type { FilterItemSchema } from '@/lib/parsers';
+
+export interface DataTableInfiniteComboboxOption {
+  label: string;
+  value: string;
+}
+
+export interface DataTableInfiniteComboboxQueryParams {
+  Page: number;
+  PageSize: number;
+  Keyword?: string;
+}
+
+export interface DataTableInfiniteComboboxMeta {
+  queryKey: unknown[];
+  queryFn: (
+    params: DataTableInfiniteComboboxQueryParams & Record<string, unknown>,
+  ) => Promise<PagedList<unknown>>;
+  mapOption: (item: unknown) => DataTableInfiniteComboboxOption;
+  staticParams?: Record<string, unknown>;
+  multiple?: boolean;
+  pageSize?: number;
+  debounceMs?: number;
+  searchPlaceholder?: string;
+  emptyText?: string;
+  loadingText?: string;
+  clearText?: string;
+  selectedText?: string;
+  popoverClassName?: string;
+}
 
 declare module '@tanstack/react-table' {
   // biome-ignore lint/correctness/noUnusedVariables: TData is used in the TableMeta interface
@@ -16,6 +46,7 @@ declare module '@tanstack/react-table' {
     placeholder?: string;
     variant?: FilterVariant;
     options?: Option[];
+    infiniteCombobox?: DataTableInfiniteComboboxMeta;
     range?: [number, number];
     unit?: string;
     icon?: React.FC<React.SVGProps<SVGSVGElement>>;

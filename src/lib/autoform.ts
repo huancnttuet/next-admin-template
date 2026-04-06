@@ -17,7 +17,7 @@
  *   })
  */
 import { fieldConfig as _fieldConfig } from '@autoform/zod';
-import type { FieldTypes } from '@/components/ui/autoform';
+import type { FieldTypes } from '@/components/autoform';
 
 // Re-export typed to our project's FieldTypes so callers get proper autocomplete.
 // AdditionalRenderable = null (no extra render types), FieldTypes = our union.

@@ -1,63 +1,30 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { PlusCircle } from 'lucide-react';
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs';
-import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 import { DataTable } from '@/components/data-table/data-table';
-import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { useDataTable } from '@/hooks/use-data-table';
-import { getErrorMessage } from '@/lib/apis/api-error';
-import {
-  useCreateCategory,
-  useDeleteCategory,
-  usePagedCategories,
-  useUpdateCategory,
-} from '../categories.query';
-import type { Category, CreateCategoryPayload } from '../categories.type';
-import { getCategoryColumns } from './columns';
+import { usePagedCategories } from '../categories.query';
+import type { Category } from '../categories.type';
+import { useCategoryColumns } from './columns';
 import { CategoryFormDialog } from './category-form-dialog';
+import { CategoriesTableActionBar } from './categories-table-action-bar';
 
 export function CategoriesTable() {
-  const t = useTranslations('categories');
-  const [createOpen, setCreateOpen] = useState(false);
-  const [editCategory, setEditCategory] = useState<Category | null>(null);
-  const [deleteCategory, setDeleteCategory] = useState<Category | null>(null);
-
-  const columns = useMemo(
-    () =>
-      getCategoryColumns(
-        t,
-        (category) => setEditCategory(category),
-        (category) => setDeleteCategory(category),
-      ),
-    [t],
-  );
+  const columns = useCategoryColumns();
 
   const [page] = useQueryState('page', parseAsInteger.withDefault(1));
   const [perPage] = useQueryState('perPage', parseAsInteger.withDefault(10));
-  const [keyword] = useQueryState('keyword', parseAsString.withDefault(''));
+  const [keyword] = useQueryState('name', parseAsString.withDefault(''));
+  const [isActive] = useQueryState('isActive', parseAsString);
 
   const { data, isLoading, isFetching } = usePagedCategories({
     Page: page,
     PageSize: perPage,
     Keyword: keyword || undefined,
+    IsActive:
+      isActive === null ? undefined : isActive === 'true' ? true : false,
   });
-
-  const createMutation = useCreateCategory();
-  const updateMutation = useUpdateCategory();
-  const deleteMutation = useDeleteCategory();
 
   const { table } = useDataTable<Category>({
     data: data?.items ?? [],
@@ -70,116 +37,19 @@ export function CategoriesTable() {
     getRowId: (row) => row.id,
   });
 
-  const handleCreateSubmit = async (payload: CreateCategoryPayload) => {
-    await createMutation.mutateAsync(payload);
-    toast.success(t('createSuccess'));
-    setCreateOpen(false);
-  };
-
-  const handleEditSubmit = async (payload: CreateCategoryPayload) => {
-    if (!editCategory) return;
-    await updateMutation.mutateAsync({ id: editCategory.id, payload });
-    toast.success(t('editSuccess'));
-    setEditCategory(null);
-  };
-
-  const handleDelete = async () => {
-    if (!deleteCategory) return;
-
-    try {
-      await deleteMutation.mutateAsync(deleteCategory.id);
-      toast.success(t('deleteSuccess'));
-      setDeleteCategory(null);
-    } catch (error) {
-      toast.error(getErrorMessage(error, t('deleteError')));
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <DataTableSkeleton
-        columnCount={6}
-        rowCount={10}
-        filterCount={1}
-        withPagination
-        withViewOptions
-      />
-    );
-  }
-
   return (
     <>
       <DataTable
         table={table}
         tableContainerClassName='max-h-[calc(100dvh-20rem)] min-w-[860px]'
+        actionBar={<CategoriesTableActionBar table={table} />}
         isFetching={isFetching}
+        isLoading={isLoading}
       >
         <DataTableToolbar table={table}>
-          <Button size='sm' onClick={() => setCreateOpen(true)}>
-            <PlusCircle className='mr-2 size-4' />
-            {t('createNew')}
-          </Button>
+          <CategoryFormDialog mode='create' />
         </DataTableToolbar>
       </DataTable>
-
-      <CategoryFormDialog
-        key={createOpen ? 'create-open' : 'create-closed'}
-        open={createOpen}
-        mode='create'
-        isPending={createMutation.isPending}
-        onOpenChange={(open) => {
-          setCreateOpen(open);
-          if (!open) createMutation.reset();
-        }}
-        onSubmit={handleCreateSubmit}
-      />
-
-      <CategoryFormDialog
-        key={editCategory?.id ?? 'edit-closed'}
-        open={editCategory !== null}
-        mode='edit'
-        category={editCategory}
-        isPending={updateMutation.isPending}
-        onOpenChange={(open) => {
-          if (!open) {
-            setEditCategory(null);
-            updateMutation.reset();
-          }
-        }}
-        onSubmit={handleEditSubmit}
-      />
-
-      <Dialog
-        open={deleteCategory !== null}
-        onOpenChange={(open) => {
-          if (!open) setDeleteCategory(null);
-        }}
-      >
-        <DialogContent className='sm:max-w-md'>
-          <DialogHeader>
-            <DialogTitle>{t('deleteTitle')}</DialogTitle>
-            <DialogDescription>
-              {t('deleteDescriptionSingle')}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant='outline'
-              onClick={() => setDeleteCategory(null)}
-              disabled={deleteMutation.isPending}
-            >
-              {t('cancel')}
-            </Button>
-            <Button
-              variant='destructive'
-              onClick={handleDelete}
-              disabled={deleteMutation.isPending}
-            >
-              {deleteMutation.isPending ? t('deleting') : t('actionDelete')}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

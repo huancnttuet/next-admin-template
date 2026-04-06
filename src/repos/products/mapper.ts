@@ -16,7 +16,7 @@ export function mapProductDocument(doc: ProductDocument): Product {
       typeof doc.originalPrice === 'number' ? doc.originalPrice : null,
     quantity: doc.quantity,
     image: doc.image ?? '',
-    images: doc.images ?? [],
+    detailImages: doc.detailImages ?? doc.images ?? [],
     videoUrl: doc.videoUrl ?? '',
     isActive: doc.isActive,
     isFeatured: doc.isFeatured,

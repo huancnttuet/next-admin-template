@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import type * as React from 'react';
 
 import { DataTablePagination } from '@/components/data-table/data-table-pagination';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -21,6 +22,10 @@ interface DataTableProps<TData> extends React.ComponentProps<'div'> {
   actionBar?: React.ReactNode;
   tableContainerClassName?: string;
   isFetching?: boolean;
+  isLoading?: boolean;
+  rowCount?: number;
+  hidePagination?: boolean;
+  onRowClick?: (row: TData) => void;
 }
 
 export function DataTable<TData>({
@@ -30,6 +35,10 @@ export function DataTable<TData>({
   className,
   tableContainerClassName,
   isFetching,
+  isLoading,
+  rowCount = 10,
+  hidePagination,
+  onRowClick,
   ...props
 }: DataTableProps<TData>) {
   const t = useTranslations('dataTable');
@@ -46,12 +55,16 @@ export function DataTable<TData>({
       {children}
       <div
         className={cn(
-          'scrollbar-thin overflow-auto rounded-md border',
+          `scrollbar-thin max-h-[calc(100dvh-20rem)] overflow-auto rounded-md
+          border`,
           tableContainerClassName,
         )}
       >
         <Table wrapperClassName='overflow-visible' className='table-fixed'>
-          <TableHeader className='sticky top-0 z-10 bg-muted after:absolute after:inset-x-0 after:bottom-0 after:border-b after:content-[""]'>
+          <TableHeader
+            className='sticky top-0 z-[9] bg-muted after:absolute
+              after:inset-x-0 after:bottom-0 after:border-b after:content-[""]'
+          >
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -79,11 +92,27 @@ export function DataTable<TData>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              Array.from({ length: rowCount }).map((_, i) => (
+                <TableRow key={i} className='hover:bg-transparent'>
+                  {table.getVisibleLeafColumns().map((col) => (
+                    <TableCell key={col.id}>
+                      <Skeleton className='h-6 w-full' />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  onClick={() => onRowClick?.(row.original)}
+                  className={cn(
+                    onRowClick
+                      ? 'cursor-pointer transition-colors hover:bg-muted/50'
+                      : '',
+                  )}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -95,12 +124,10 @@ export function DataTable<TData>({
                         }),
                       }}
                     >
-                      <div className='overflow-hidden'>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </div>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -119,7 +146,7 @@ export function DataTable<TData>({
         </Table>
       </div>
       <div className='flex flex-col gap-2.5'>
-        <DataTablePagination table={table} />
+        {!hidePagination && <DataTablePagination table={table} />}
         {actionBar &&
           table.getFilteredSelectedRowModel().rows.length > 0 &&
           actionBar}

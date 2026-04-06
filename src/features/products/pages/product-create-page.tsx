@@ -7,7 +7,7 @@ import { AppRoutes } from '@/configs/routes';
 import { getErrorMessage } from '@/lib/apis/api-error';
 import { useCreateProduct } from '../products.query';
 import type { CreateProductPayload } from '../products.type';
-import { ProductFormPage } from '../components/product-form-page';
+import { ProductForm } from '@/features/products';
 
 export function ProductCreatePage() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export function ProductCreatePage() {
   };
 
   return (
-    <ProductFormPage
+    <ProductForm
       mode='create'
       isPending={createMutation.isPending}
       onSubmit={handleSubmit}

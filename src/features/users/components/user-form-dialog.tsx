@@ -14,10 +14,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { CreateUserPayload, User } from '@/features/users';
+import { FormMode } from '@/types/form';
 
 interface UserFormDialogProps {
   open: boolean;
-  mode: 'create' | 'edit';
+  mode: FormMode;
   user?: User | null;
   isPending: boolean;
   onOpenChange: (open: boolean) => void;
@@ -31,6 +32,21 @@ interface FormState {
   isVerify: boolean;
   isLock: boolean;
 }
+
+const modeConfig = {
+  create: {
+    title: 'createTitle',
+    description: 'createDescription',
+    idleSubmitText: 'createNew',
+    busySubmitText: 'creating',
+  },
+  edit: {
+    title: 'editTitle',
+    description: 'editDescription',
+    idleSubmitText: 'save',
+    busySubmitText: 'saving',
+  },
+} as const;
 
 function getInitialState(user?: User | null): FormState {
   return {
@@ -52,19 +68,21 @@ export function UserFormDialog({
 }: UserFormDialogProps) {
   const t = useTranslations('users');
   const [form, setForm] = useState<FormState>(getInitialState(user));
+  const currentModeConfig = modeConfig[mode];
 
-  const title = mode === 'create' ? t('createTitle') : t('editTitle');
-  const description =
-    mode === 'create' ? t('createDescription') : t('editDescription');
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      setForm(getInitialState(user));
+    }
+    onOpenChange(nextOpen);
+  };
 
-  const submitText =
-    mode === 'create'
-      ? isPending
-        ? t('creating')
-        : t('createNew')
-      : isPending
-        ? t('saving')
-        : t('save');
+  const updateField = <K extends keyof FormState>(
+    field: K,
+    value: FormState[K],
+  ) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,11 +96,13 @@ export function UserFormDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogTitle>{t(currentModeConfig.title)}</DialogTitle>
+          <DialogDescription>
+            {t(currentModeConfig.description)}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
@@ -91,9 +111,7 @@ export function UserFormDialog({
             <Input
               id='fullName'
               value={form.fullName}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, fullName: e.target.value }))
-              }
+              onChange={(event) => updateField('fullName', event.target.value)}
               placeholder={t('fieldFullNamePlaceholder')}
               disabled={isPending}
               required
@@ -105,9 +123,7 @@ export function UserFormDialog({
             <Input
               id='userName'
               value={form.userName}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, userName: e.target.value }))
-              }
+              onChange={(event) => updateField('userName', event.target.value)}
               placeholder={t('fieldUserNamePlaceholder')}
               disabled={isPending}
               required
@@ -120,9 +136,7 @@ export function UserFormDialog({
               id='email'
               type='email'
               value={form.email}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, email: e.target.value }))
-              }
+              onChange={(event) => updateField('email', event.target.value)}
               placeholder={t('fieldEmailPlaceholder')}
               disabled={isPending}
               required
@@ -134,7 +148,7 @@ export function UserFormDialog({
               <Checkbox
                 checked={form.isVerify}
                 onCheckedChange={(checked) =>
-                  setForm((prev) => ({ ...prev, isVerify: checked === true }))
+                  updateField('isVerify', checked === true)
                 }
                 disabled={isPending}
               />
@@ -145,7 +159,7 @@ export function UserFormDialog({
               <Checkbox
                 checked={form.isLock}
                 onCheckedChange={(checked) =>
-                  setForm((prev) => ({ ...prev, isLock: checked === true }))
+                  updateField('isLock', checked === true)
                 }
                 disabled={isPending}
               />
@@ -163,7 +177,9 @@ export function UserFormDialog({
               {t('cancel')}
             </Button>
             <Button type='submit' disabled={isPending}>
-              {submitText}
+              {isPending
+                ? t(currentModeConfig.busySubmitText)
+                : t(currentModeConfig.idleSubmitText)}
             </Button>
           </div>
         </form>

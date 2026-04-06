@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { ZodProvider } from '@autoform/zod';
 import { PlusCircle } from 'lucide-react';
 import { toast } from 'sonner';
-import { AutoForm } from '@/components/ui/autoform';
+import { AutoForm } from '@/components/autoform';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -23,6 +23,7 @@ export function CreateQuestionnaireGroupDialog() {
   const t = useTranslations('questionnaireGroups');
   const [open, setOpen] = useState(false);
   const mutation = useCreateQuestionnaireGroup();
+  const submitText = mutation.isPending ? t('creating') : t('createNew');
 
   const schema = createQuestionnaireGroupSchema(t);
   const schemaProvider = new ZodProvider(schema);
@@ -62,7 +63,7 @@ export function CreateQuestionnaireGroupDialog() {
         >
           <div className='flex justify-end'>
             <Button type='submit' disabled={mutation.isPending}>
-              {mutation.isPending ? t('creating') : t('createNew')}
+              {submitText}
             </Button>
           </div>
         </AutoForm>

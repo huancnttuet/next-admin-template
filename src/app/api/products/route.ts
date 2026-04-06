@@ -23,11 +23,46 @@ export async function GET(req: NextRequest) {
     );
     const keyword =
       searchParams.get('Keyword') || searchParams.get('keyword') || undefined;
+    const category =
+      searchParams.get('Category') || searchParams.get('category') || undefined;
+    const categoriesFromParams = [
+      ...searchParams.getAll('Categories'),
+      ...searchParams.getAll('categories'),
+    ]
+      .flatMap((value) => value.split(','))
+      .map((value) => value.trim())
+      .filter((value) => value.length > 0);
+    const categories =
+      categoriesFromParams.length > 0 ? categoriesFromParams : undefined;
+    const isActiveRaw =
+      searchParams.get('IsActive') || searchParams.get('isActive');
+    const isActive =
+      isActiveRaw === null
+        ? undefined
+        : isActiveRaw === 'true'
+          ? true
+          : isActiveRaw === 'false'
+            ? false
+            : undefined;
+    const isFeaturedRaw =
+      searchParams.get('IsFeatured') || searchParams.get('isFeatured');
+    const isFeatured =
+      isFeaturedRaw === null
+        ? undefined
+        : isFeaturedRaw === 'true'
+          ? true
+          : isFeaturedRaw === 'false'
+            ? false
+            : undefined;
 
     const result = await findProductsPaged({
       page: Number.isFinite(page) && page > 0 ? page : 1,
       pageSize: Number.isFinite(pageSize) && pageSize > 0 ? pageSize : 10,
       keyword,
+      category,
+      categories,
+      isActive,
+      isFeatured,
     });
 
     return NextResponse.json(result);

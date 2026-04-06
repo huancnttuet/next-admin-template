@@ -1,9 +1,4 @@
-import {
-  keepPreviousData,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createProduct,
   deleteProduct,
@@ -23,7 +18,6 @@ export const usePagedProducts = (params: GetProductsParams) =>
   useQuery({
     queryKey: [PRODUCT_QUERY_KEY, params],
     queryFn: () => getPagedProducts(params),
-    placeholderData: keepPreviousData,
   });
 
 export const useProductById = (id: string) =>

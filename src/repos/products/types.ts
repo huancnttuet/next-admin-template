@@ -10,7 +10,8 @@ export interface ProductDocument {
   originalPrice?: number;
   quantity: number;
   image?: string;
-  images: string[];
+  detailImages: string[];
+  images?: string[];
   videoUrl?: string;
   isActive: boolean;
   isFeatured: boolean;
@@ -28,7 +29,7 @@ export interface Product {
   originalPrice: number | null;
   quantity: number;
   image: string;
-  images: string[];
+  detailImages: string[];
   videoUrl: string;
   isActive: boolean;
   isFeatured: boolean;
@@ -38,4 +39,8 @@ export interface ProductPagedParams {
   page: number;
   pageSize: number;
   keyword?: string;
+  isActive?: boolean;
+  category?: string;
+  categories?: string[];
+  isFeatured?: boolean;
 }

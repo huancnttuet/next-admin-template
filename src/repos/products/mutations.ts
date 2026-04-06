@@ -26,9 +26,9 @@ export async function insertProduct(
     originalPrice: input.originalPrice,
     quantity: input.quantity,
     image: (input.image || '').trim(),
-    images: Array.from(
+    detailImages: Array.from(
       new Set(
-        (input.images || []).map((image) => image.trim()).filter(Boolean),
+        (input.detailImages || []).map((image) => image.trim()).filter(Boolean),
       ),
     ),
     videoUrl: (input.videoUrl || '').trim(),
@@ -75,9 +75,9 @@ export async function updateProductById(
   if (patch.originalPrice === null) nextPatch.originalPrice = null;
   if (typeof patch.quantity === 'number') nextPatch.quantity = patch.quantity;
   if (typeof patch.image === 'string') nextPatch.image = patch.image.trim();
-  if (Array.isArray(patch.images)) {
-    nextPatch.images = Array.from(
-      new Set(patch.images.map((image) => image.trim()).filter(Boolean)),
+  if (Array.isArray(patch.detailImages)) {
+    nextPatch.detailImages = Array.from(
+      new Set(patch.detailImages.map((image) => image.trim()).filter(Boolean)),
     );
   }
   if (typeof patch.videoUrl === 'string')

@@ -11,15 +11,15 @@ import {
   ActionBarGroup,
   ActionBarClose,
 } from '@/components/ui/action-bar';
-import type { Product } from '@/features/products';
-import { DeleteProductsDialog } from './delete-products-dialog';
+import { DeleteCategoriesDialog } from './delete-categories-dialog';
+import { Category } from '../categories.type';
 
-interface ProductsTableActionBarProps {
-  table: Table<Product>;
+interface Props {
+  table: Table<Category>;
 }
 
-export function ProductsTableActionBar({ table }: ProductsTableActionBarProps) {
-  const t = useTranslations('products');
+export function CategoriesTableActionBar({ table }: Props) {
+  const t = useTranslations('categories');
   const rows = table.getFilteredSelectedRowModel().rows;
 
   const onOpenChange = React.useCallback(
@@ -38,7 +38,7 @@ export function ProductsTableActionBar({ table }: ProductsTableActionBarProps) {
       </ActionBarSelection>
       <ActionBarSeparator />
       <ActionBarGroup>
-        <DeleteProductsDialog rows={rows.map((row) => row.original)} />
+        <DeleteCategoriesDialog rows={rows.map((row) => row.original)} />
       </ActionBarGroup>
       <ActionBarSeparator />
       <ActionBarClose asChild>

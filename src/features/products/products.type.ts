@@ -5,10 +5,10 @@ export interface Product {
   description: string;
   categories: string[];
   price: number;
-  originalPrice: number | null;
+  originalPrice?: number;
   quantity: number;
   image: string;
-  images: string[];
+  detailImages: string[];
   videoUrl: string;
   isActive: boolean;
   isFeatured: boolean;
@@ -18,6 +18,10 @@ export interface GetProductsParams {
   Page?: number;
   PageSize?: number;
   Keyword?: string;
+  IsActive?: boolean;
+  Category?: string;
+  Categories?: string;
+  IsFeatured?: boolean;
 }
 
 export interface CreateProductPayload {
@@ -29,7 +33,7 @@ export interface CreateProductPayload {
   originalPrice?: number;
   quantity?: number;
   image?: string;
-  images?: string[];
+  detailImages?: string[];
   videoUrl?: string;
   isActive?: boolean;
   isFeatured?: boolean;

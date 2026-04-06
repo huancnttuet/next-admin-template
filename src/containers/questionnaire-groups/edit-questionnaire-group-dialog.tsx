@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { ZodProvider } from '@autoform/zod';
 import { toast } from 'sonner';
-import { AutoForm } from '@/components/ui/autoform';
+import { AutoForm } from '@/components/autoform';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -33,6 +33,7 @@ export function EditQuestionnaireGroupDialog({
   const t = useTranslations('questionnaireGroups');
   const mutation = useUpdateQuestionnaireGroup();
   const { data: group } = useQuestionnaireGroupDetail(id ?? '');
+  const submitText = mutation.isPending ? t('saving') : t('save');
 
   const schema = editQuestionnaireGroupSchema(t);
   const schemaProvider = new ZodProvider(schema);
@@ -75,7 +76,7 @@ export function EditQuestionnaireGroupDialog({
               disabled={mutation.isPending}
               className='w-full'
             >
-              {mutation.isPending ? t('saving') : t('save')}
+              {submitText}
             </Button>
           </AutoForm>
         )}

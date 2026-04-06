@@ -1,21 +1,20 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { ZodProvider } from '@autoform/zod';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { AutoForm } from '@/components/autoform';
 import { Button } from '@/components/ui/button';
 import {
-  createProductFormSchema,
+  useCreateProductFormSchema,
   type CreateProductFormInput,
-} from '../products.schema';
-import type { CreateProductPayload, Product } from '../products.type';
+} from '@/features/products';
+import type { CreateProductPayload, Product } from '@/features/products';
 import { FormMode } from '@/types/form';
 
-interface ProductFormPageProps {
+interface Props {
   mode: FormMode;
-  product?: Product | null;
+  product?: Product;
   isPending: boolean;
   onSubmit: (payload: CreateProductPayload) => void | Promise<void>;
   onCancel: () => void;
@@ -48,40 +47,19 @@ function normalizeUrls(value: unknown): string[] {
   );
 }
 
-export function ProductFormPage({
+export function ProductForm({
   mode,
   product,
   isPending,
   onSubmit,
   onCancel,
-}: ProductFormPageProps) {
+}: Props) {
   const t = useTranslations('products');
   const [isUploading, setIsUploading] = useState(false);
   const currentModeConfig = modeConfig[mode];
 
-  const schema = useMemo(
-    () => new ZodProvider(createProductFormSchema(t)),
-    [t],
-  );
+  const schema = useCreateProductFormSchema();
   const isBusy = isPending || isUploading;
-
-  const defaultValues = useMemo(
-    () => ({
-      name: product?.name ?? '',
-      sku: product?.sku ?? '',
-      description: product?.description ?? '',
-      categories: product?.categories ?? [],
-      price: product?.price ?? 0,
-      originalPrice: product?.originalPrice ?? undefined,
-      quantity: product?.quantity ?? 0,
-      mainImageFiles: product?.image ? [product.image] : [],
-      detailImageFiles: product?.detailImages ?? [],
-      videoFiles: [] as string[],
-      isActive: product?.isActive ?? true,
-      isFeatured: product?.isFeatured ?? false,
-    }),
-    [product],
-  );
 
   const handleSubmit = async (values: CreateProductFormInput) => {
     setIsUploading(true);
@@ -127,7 +105,7 @@ export function ProductFormPage({
   };
 
   return (
-    <div className='grid gap-6 lg:grid-cols-[1.15fr_0.85fr]'>
+    <div className='grid gap-6'>
       <div className='space-y-4'>
         <div>
           <h1 className='text-2xl font-bold tracking-tight'>
@@ -138,66 +116,21 @@ export function ProductFormPage({
           </p>
         </div>
 
-        {product && (
-          <div className='rounded-lg border bg-muted/20 p-4'>
-            <h3 className='mb-3 text-sm font-medium'>{t('currentMedia')}</h3>
-            <div className='grid gap-4 md:grid-cols-2'>
-              <div className='space-y-2'>
-                <p
-                  className='text-xs font-medium uppercase
-                    text-muted-foreground'
-                >
-                  {t('fieldImage')}
-                </p>
-                {product.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className='h-36 w-full rounded-md border object-cover'
-                  />
-                ) : (
-                  <div
-                    className='flex h-36 items-center justify-center rounded-md
-                      border border-dashed text-sm text-muted-foreground'
-                  >
-                    {t('noMedia')}
-                  </div>
-                )}
-              </div>
-              <div className='space-y-2'>
-                <p
-                  className='text-xs font-medium uppercase
-                    text-muted-foreground'
-                >
-                  {t('fieldVideo')}
-                </p>
-                {product.videoUrl ? (
-                  <video
-                    controls
-                    className='h-36 w-full rounded-md border object-cover'
-                    src={product.videoUrl}
-                  />
-                ) : (
-                  <div
-                    className='flex h-36 items-center justify-center rounded-md
-                      border border-dashed text-sm text-muted-foreground'
-                  >
-                    {t('noMedia')}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
         <AutoForm
           key={product?.id ?? mode}
           schema={schema}
-          defaultValues={defaultValues}
+          defaultValues={{
+            ...product,
+            mainImageFiles: [...(product?.image ? [product.image] : [])],
+            detailImageFiles: [...(product?.detailImages ?? [])],
+            videoFiles: [...(product?.videoUrl ? [product.videoUrl] : [])],
+          }}
           onSubmit={handleSubmit}
+          formProps={{
+            className: 'grid gap-4 grid-cols-3',
+          }}
         >
-          <div className='flex justify-end gap-2 pt-2'>
+          <div className='col-span-full flex justify-end gap-2 pt-2'>
             <Button
               type='button'
               variant='outline'

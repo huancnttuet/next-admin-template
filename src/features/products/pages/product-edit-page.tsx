@@ -5,9 +5,12 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { AppRoutes } from '@/configs/routes';
 import { getErrorMessage } from '@/lib/apis/api-error';
-import { useProductById, useUpdateProduct } from '../products.query';
-import type { CreateProductPayload } from '../products.type';
-import { ProductFormPage } from '../components/product-form-page';
+import type { CreateProductPayload } from '@/features/products';
+import {
+  ProductForm,
+  useProductById,
+  useUpdateProduct,
+} from '@/features/products';
 
 interface ProductEditPageProps {
   id: string;
@@ -41,7 +44,7 @@ export function ProductEditPage({ id }: ProductEditPageProps) {
   }
 
   return (
-    <ProductFormPage
+    <ProductForm
       mode='edit'
       product={product}
       isPending={updateMutation.isPending}

@@ -491,7 +491,7 @@ export type FileUploadInput = { avatar?: unknown; documents?: unknown };
 import {
   AsyncComboboxCustomData,
   AsyncComboboxOption,
-} from '@/components/ui/autoform/components/AsyncComboboxField';
+} from '@/components/autoform/components/AsyncComboboxField';
 
 /** Fetch functions injected at call-site so `queryFn` lives in `customData`. */
 export interface AsyncComboboxFetchFns {

@@ -32,8 +32,7 @@ export const createCategory = async (
 };
 
 export const updateCategory = async (
-  id: string,
-  payload: UpdateCategoryPayload,
+ { id, payload }: { id: string; payload: UpdateCategoryPayload },
 ): Promise<Category> => {
   const res = await axios.put<Category>(`/api/categories/${id}`, payload);
   return res.data;

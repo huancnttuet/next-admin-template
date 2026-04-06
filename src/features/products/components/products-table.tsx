@@ -1,60 +1,65 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { parseAsInteger, parseAsString, useQueryState } from 'nuqs';
+import {
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+  useQueryStates,
+} from 'nuqs';
 import { useTranslations } from 'next-intl';
 import { PlusCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
 import { DataTable } from '@/components/data-table/data-table';
-import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton';
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { ARRAY_SEPARATOR } from '@/configs/data-table';
 import { useDataTable } from '@/hooks/use-data-table';
-import { getErrorMessage } from '@/lib/apis/api-error';
-import {
-  useDeleteProduct,
-  usePagedProducts,
-  type Product,
-} from '@/features/products';
+import { usePagedProducts, type Product } from '@/features/products';
 import { AppRoutes } from '@/configs/routes';
-import { getProductColumns } from './columns';
+import { useProductColumns } from './columns';
 import { ProductsTableActionBar } from './products-table-action-bar';
 
 export function ProductsTable() {
   const t = useTranslations('products');
-  const [deleteIds, setDeleteIds] = useState<string[]>([]);
   const router = useRouter();
-
-  const columns = useMemo(
-    () =>
-      getProductColumns(
-        t,
-        (product) => router.push(AppRoutes.ProductEdit(product.id)),
-        (product) => setDeleteIds([product.id]),
-      ),
-    [router, t],
-  );
 
   const [page] = useQueryState('page', parseAsInteger.withDefault(1));
   const [perPage] = useQueryState('perPage', parseAsInteger.withDefault(10));
-  const [nameFilter] = useQueryState('name', parseAsString.withDefault(''));
+  const [filterValues] = useQueryStates({
+    name: parseAsString,
+    isActive: parseAsArrayOf(parseAsString, ARRAY_SEPARATOR),
+    categories: parseAsArrayOf(parseAsString, ARRAY_SEPARATOR),
+    isFeatured: parseAsArrayOf(parseAsString, ARRAY_SEPARATOR),
+  });
+
+  const columns = useProductColumns();
+
+  const statusFilter = filterValues.isActive?.[0];
+  const isFeaturedFilter = filterValues.isFeatured?.[0];
+  const categoryFilters = filterValues.categories;
 
   const { data, isLoading, isFetching } = usePagedProducts({
     Page: page,
     PageSize: perPage,
-    Keyword: nameFilter || undefined,
+    Keyword: filterValues.name || undefined,
+    IsActive:
+      statusFilter === undefined
+        ? undefined
+        : statusFilter === 'true'
+          ? true
+          : false,
+    Categories:
+      Array.isArray(categoryFilters) && categoryFilters.length > 0
+        ? categoryFilters.join(ARRAY_SEPARATOR)
+        : undefined,
+    IsFeatured:
+      isFeaturedFilter === undefined
+        ? undefined
+        : isFeaturedFilter === 'true'
+          ? true
+          : false,
   });
-
-  const deleteMutation = useDeleteProduct();
 
   const { table } = useDataTable<Product>({
     data: data?.items ?? [],
@@ -67,50 +72,12 @@ export function ProductsTable() {
     getRowId: (row) => row.id,
   });
 
-  const isDeleteDialogOpen = deleteIds.length > 0;
-
-  const handleOpenDeleteSelected = () => {
-    const selectedIds = table
-      .getFilteredSelectedRowModel()
-      .rows.map((row) => row.original.id);
-    if (selectedIds.length === 0) return;
-    setDeleteIds(selectedIds);
-  };
-
-  const handleDelete = async () => {
-    try {
-      await Promise.all(deleteIds.map((id) => deleteMutation.mutateAsync(id)));
-      toast.success(t('deleteSuccess'));
-      setDeleteIds([]);
-      table.toggleAllRowsSelected(false);
-    } catch (error) {
-      toast.error(getErrorMessage(error, t('deleteError')));
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <DataTableSkeleton
-        columnCount={9}
-        rowCount={10}
-        filterCount={1}
-        withPagination
-        withViewOptions
-      />
-    );
-  }
-
   return (
     <>
       <DataTable
         table={table}
-        actionBar={
-          <ProductsTableActionBar
-            table={table}
-            onDeleteSelected={handleOpenDeleteSelected}
-            isDeleting={deleteMutation.isPending}
-          />
-        }
+        isLoading={isLoading}
+        actionBar={<ProductsTableActionBar table={table} />}
         tableContainerClassName='max-h-[calc(100dvh-20rem)] min-w-[960px]'
         isFetching={isFetching}
       >
@@ -124,40 +91,6 @@ export function ProductsTable() {
           </Button>
         </DataTableToolbar>
       </DataTable>
-
-      <Dialog
-        open={isDeleteDialogOpen}
-        onOpenChange={(open) => {
-          if (!open) setDeleteIds([]);
-        }}
-      >
-        <DialogContent className='sm:max-w-md'>
-          <DialogHeader>
-            <DialogTitle>{t('deleteTitle')}</DialogTitle>
-            <DialogDescription>
-              {deleteIds.length > 1
-                ? t('deleteDescriptionBulk', { count: deleteIds.length })
-                : t('deleteDescriptionSingle')}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant='outline'
-              onClick={() => setDeleteIds([])}
-              disabled={deleteMutation.isPending}
-            >
-              {t('cancel')}
-            </Button>
-            <Button
-              variant='destructive'
-              onClick={handleDelete}
-              disabled={deleteMutation.isPending}
-            >
-              {deleteMutation.isPending ? t('deleting') : t('actionDelete')}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

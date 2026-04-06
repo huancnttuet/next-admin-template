@@ -63,6 +63,7 @@ export const dataTableConfig = {
     'boolean',
     'select',
     'multiSelect',
+    'infiniteCombobox',
   ] as const,
   operators: [
     'iLike',
