@@ -28,6 +28,7 @@ import { ArrayWrapper } from './components/ArrayWrapper';
 import { ArrayElementWrapper } from './components/ArrayElementWrapper';
 import { TreeSelectField } from './components/TreeSelectField';
 import { RichTextField } from './components/RichTextField';
+import { SubProductsField } from './components/SubProductsField';
 
 const ShadcnUIComponents: AutoFormUIComponents = {
   Form,
@@ -57,6 +58,7 @@ export const ShadcnAutoFormFieldComponents = {
   'infinite-combobox': InfiniteComboboxField,
   'tree-select': TreeSelectField,
   'rich-text': RichTextField,
+  'sub-products': SubProductsField,
 } as const;
 export type FieldTypes = keyof typeof ShadcnAutoFormFieldComponents;
 

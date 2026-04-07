@@ -1,5 +1,13 @@
 import { ObjectId } from 'mongodb';
 
+export interface SubProductDocument {
+  name: string;
+  price: number;
+  originalPrice?: number;
+  image?: string;
+  quantity: number;
+}
+
 export interface ProductDocument {
   _id?: ObjectId;
   name: string;
@@ -13,10 +21,26 @@ export interface ProductDocument {
   detailImages: string[];
   images?: string[];
   videoUrl?: string;
+  pieces?: string;
+  difficulty?: string;
+  dimensions?: string;
+  shortDescription?: string;
+  shopeeLink?: string;
+  tiktokLink?: string;
+  youtubeLink?: string;
+  subProducts?: SubProductDocument[];
   isActive: boolean;
   isFeatured: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface SubProduct {
+  name: string;
+  price: number;
+  originalPrice: number | null;
+  image: string;
+  quantity: number;
 }
 
 export interface Product {
@@ -31,6 +55,14 @@ export interface Product {
   image: string;
   detailImages: string[];
   videoUrl: string;
+  pieces: string;
+  difficulty: string;
+  dimensions: string;
+  shortDescription: string;
+  shopeeLink: string;
+  tiktokLink: string;
+  youtubeLink: string;
+  subProducts: SubProduct[];
   isActive: boolean;
   isFeatured: boolean;
 }

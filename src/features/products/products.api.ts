@@ -10,7 +10,6 @@ import type {
 export const getPagedProducts = async (
   params: GetProductsParams,
 ): Promise<PagedList<Product>> => {
-  console.log(`🚀${(new Date()).toString()} ~ getPagedProducts ~ params:`, params)
   const res = await axios.get<PagedList<Product>>('/api/products/paged-list', {
     params,
   });

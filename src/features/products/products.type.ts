@@ -1,3 +1,11 @@
+export interface SubProduct {
+  name: string;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  quantity: number;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -10,6 +18,14 @@ export interface Product {
   image: string;
   detailImages: string[];
   videoUrl: string;
+  pieces: string;
+  difficulty: string;
+  dimensions: string;
+  shortDescription: string;
+  shopeeLink: string;
+  tiktokLink: string;
+  youtubeLink: string;
+  subProducts: SubProduct[];
   isActive: boolean;
   isFeatured: boolean;
 }
@@ -35,6 +51,14 @@ export interface CreateProductPayload {
   image?: string;
   detailImages?: string[];
   videoUrl?: string;
+  pieces?: string;
+  difficulty?: string;
+  dimensions?: string;
+  shortDescription?: string;
+  shopeeLink?: string;
+  tiktokLink?: string;
+  youtubeLink?: string;
+  subProducts?: SubProduct[];
   isActive?: boolean;
   isFeatured?: boolean;
 }

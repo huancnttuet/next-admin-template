@@ -1,7 +1,7 @@
 'use client';
 
 import { type ColumnDef } from '@tanstack/react-table';
-import { Pencil } from 'lucide-react';
+import { Pencil, ScanEye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -216,6 +216,15 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
             <Button
               variant='ghost'
               size='icon'
+              onClick={() => router.push(AppRoutes.ProductPreview(product.id))}
+              aria-label={t('actionPreview')}
+            >
+              <ScanEye className='h-4 w-4' />
+            </Button>
+
+            <Button
+              variant='ghost'
+              size='icon'
               onClick={() => router.push(AppRoutes.ProductEdit(product.id))}
             >
               <Pencil className='h-4 w-4' />
@@ -225,7 +234,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
           </div>
         );
       },
-      size: 90,
+      size: 120,
       enableSorting: false,
       enableHiding: false,
     },

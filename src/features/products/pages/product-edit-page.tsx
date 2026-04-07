@@ -19,6 +19,7 @@ interface ProductEditPageProps {
 export function ProductEditPage({ id }: ProductEditPageProps) {
   const router = useRouter();
   const t = useTranslations('products');
+  const commonT = useTranslations('common');
   const { data: product, isLoading } = useProductById(id);
   const updateMutation = useUpdateProduct();
 
@@ -34,12 +35,12 @@ export function ProductEditPage({ id }: ProductEditPageProps) {
   };
 
   if (isLoading) {
-    return <div className='text-sm text-muted-foreground'>Loading...</div>;
+    return <div className='text-sm text-muted-foreground'>{commonT('loading')}</div>;
   }
 
   if (!product) {
     return (
-      <div className='text-sm text-muted-foreground'>Product not found.</div>
+      <div className='text-sm text-muted-foreground'>{commonT('notFound')}</div>
     );
   }
 

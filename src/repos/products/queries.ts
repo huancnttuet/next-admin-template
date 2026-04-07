@@ -42,6 +42,14 @@ export async function findProductsPaged({
       { sku: { $regex: keyword, $options: 'i' } },
       { categories: { $regex: keyword, $options: 'i' } },
       { description: { $regex: keyword, $options: 'i' } },
+      { shortDescription: { $regex: keyword, $options: 'i' } },
+      { pieces: { $regex: keyword, $options: 'i' } },
+      { difficulty: { $regex: keyword, $options: 'i' } },
+      { dimensions: { $regex: keyword, $options: 'i' } },
+      { shopeeLink: { $regex: keyword, $options: 'i' } },
+      { tiktokLink: { $regex: keyword, $options: 'i' } },
+      { youtubeLink: { $regex: keyword, $options: 'i' } },
+      { 'subProducts.name': { $regex: keyword, $options: 'i' } },
     ];
   }
 

@@ -7,10 +7,18 @@ import { AutoForm } from '@/components/autoform';
 import { Button } from '@/components/ui/button';
 import {
   useCreateProductFormSchema,
+  useUpdateProductFormSchema,
   type CreateProductFormInput,
 } from '@/features/products';
-import type { CreateProductPayload, Product } from '@/features/products';
+import type {
+  CreateProductPayload,
+  Product,
+  SubProduct,
+} from '@/features/products';
 import { FormMode } from '@/types/form';
+import Link from 'next/link';
+import { AppRoutes } from '@/configs/routes';
+import { ChevronLeft } from 'lucide-react';
 
 interface Props {
   mode: FormMode;
@@ -47,6 +55,20 @@ function normalizeUrls(value: unknown): string[] {
   );
 }
 
+function normalizeSubProducts(value: CreateProductFormInput['subProducts']) {
+  return (Array.isArray(value) ? value : [])
+    .map(
+      (subProduct): SubProduct => ({
+        name: subProduct.name.trim(),
+        price: subProduct.price,
+        originalPrice: subProduct.originalPrice,
+        image: (subProduct.image || '').trim(),
+        quantity: Math.floor(subProduct.quantity),
+      }),
+    )
+    .filter((subProduct) => subProduct.name.length > 0);
+}
+
 export function ProductForm({
   mode,
   product,
@@ -58,7 +80,9 @@ export function ProductForm({
   const [isUploading, setIsUploading] = useState(false);
   const currentModeConfig = modeConfig[mode];
 
-  const schema = useCreateProductFormSchema();
+  const createSchema = useCreateProductFormSchema();
+  const updateSchema = useUpdateProductFormSchema();
+  const schema = mode === 'create' ? createSchema : updateSchema;
   const isBusy = isPending || isUploading;
 
   const handleSubmit = async (values: CreateProductFormInput) => {
@@ -76,14 +100,22 @@ export function ProductForm({
       const nextMainImage = uploadedMainImages[0] ?? existingMainImage;
       const nextDetailImages =
         uploadedDetailImages.length > 0
-          ? [...existingDetailImages, ...uploadedDetailImages]
+          ? [...uploadedDetailImages]
           : existingDetailImages;
       const nextVideoUrl = uploadedVideos[0] ?? existingVideoUrl;
+      const normalizedSubProducts = normalizeSubProducts(values.subProducts);
 
       await onSubmit({
         name: values.name.trim(),
         sku: values.sku.trim(),
         description: values.description?.trim() ?? '',
+        shortDescription: values.shortDescription?.trim() ?? '',
+        pieces: values.pieces?.trim() ?? '',
+        difficulty: values.difficulty?.trim() ?? '',
+        dimensions: values.dimensions?.trim() ?? '',
+        shopeeLink: values.shopeeLink?.trim() ?? '',
+        tiktokLink: values.tiktokLink?.trim() ?? '',
+        youtubeLink: values.youtubeLink?.trim() ?? '',
         categories: values.categories,
         price: values.price,
         originalPrice:
@@ -94,6 +126,7 @@ export function ProductForm({
         image: nextMainImage,
         detailImages: nextDetailImages,
         videoUrl: nextVideoUrl || undefined,
+        subProducts: normalizedSubProducts,
         isActive: values.isActive,
         isFeatured: values.isFeatured,
       });
@@ -107,13 +140,20 @@ export function ProductForm({
   return (
     <div className='grid gap-6'>
       <div className='space-y-4'>
-        <div>
-          <h1 className='text-2xl font-bold tracking-tight'>
-            {t(currentModeConfig.title)}
-          </h1>
-          <p className='text-sm text-muted-foreground'>
-            {t(currentModeConfig.description)}
-          </p>
+        <div className='flex gap-2'>
+          <Link href={AppRoutes.Products}>
+            <Button variant='ghost' size='icon'>
+              <ChevronLeft className='h-4 w-4' />
+            </Button>
+          </Link>
+          <div>
+            <h1 className='text-2xl font-bold tracking-tight'>
+              {t(currentModeConfig.title)}
+            </h1>
+            <p className='text-sm text-muted-foreground'>
+              {t(currentModeConfig.description)}
+            </p>
+          </div>
         </div>
 
         <AutoForm
@@ -121,6 +161,9 @@ export function ProductForm({
           schema={schema}
           defaultValues={{
             ...product,
+            shopeeLink: product?.shopeeLink ?? '',
+            tiktokLink: product?.tiktokLink ?? '',
+            youtubeLink: product?.youtubeLink ?? '',
             mainImageFiles: [...(product?.image ? [product.image] : [])],
             detailImageFiles: [...(product?.detailImages ?? [])],
             videoFiles: [...(product?.videoUrl ? [product.videoUrl] : [])],

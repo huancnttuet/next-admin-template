@@ -5,6 +5,50 @@ import { mapProductDocument } from './mapper';
 import { createProductSchema, updateProductSchema } from './schema';
 import type { ProductDocument } from './types';
 
+function sanitizeSubProducts(value: unknown): ProductDocument['subProducts'] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .filter(
+      (item): item is Record<string, unknown> =>
+        !!item && typeof item === 'object',
+    )
+    .map((item) => ({
+      name: typeof item.name === 'string' ? item.name.trim() : '',
+      price:
+        typeof item.price === 'number' ? item.price : Number(item.price ?? 0),
+      originalPrice:
+        typeof item.originalPrice === 'number'
+          ? item.originalPrice
+          : item.originalPrice === undefined || item.originalPrice === null
+            ? undefined
+            : Number(item.originalPrice),
+      image: typeof item.image === 'string' ? item.image.trim() : '',
+      quantity:
+        typeof item.quantity === 'number'
+          ? item.quantity
+          : Number(item.quantity ?? 0),
+    }))
+    .filter(
+      (item) =>
+        item.name.length > 0 &&
+        Number.isFinite(item.price) &&
+        item.price >= 0 &&
+        Number.isFinite(item.quantity) &&
+        item.quantity >= 0,
+    )
+    .map((item) => ({
+      ...item,
+      price: Number(item.price),
+      quantity: Math.floor(Number(item.quantity)),
+      originalPrice:
+        typeof item.originalPrice === 'number' &&
+        Number.isFinite(item.originalPrice)
+          ? Number(item.originalPrice)
+          : undefined,
+    }));
+}
+
 export async function insertProduct(
   input: z.infer<typeof createProductSchema>,
 ) {
@@ -32,6 +76,14 @@ export async function insertProduct(
       ),
     ),
     videoUrl: (input.videoUrl || '').trim(),
+    pieces: (input.pieces || '').trim(),
+    difficulty: (input.difficulty || '').trim(),
+    dimensions: (input.dimensions || '').trim(),
+    shortDescription: (input.shortDescription || '').trim(),
+    shopeeLink: (input.shopeeLink || '').trim(),
+    tiktokLink: (input.tiktokLink || '').trim(),
+    youtubeLink: (input.youtubeLink || '').trim(),
+    subProducts: sanitizeSubProducts(input.subProducts),
     isActive: input.isActive,
     isFeatured: input.isFeatured,
     createdAt: now,
@@ -82,6 +134,22 @@ export async function updateProductById(
   }
   if (typeof patch.videoUrl === 'string')
     nextPatch.videoUrl = patch.videoUrl.trim();
+  if (typeof patch.pieces === 'string') nextPatch.pieces = patch.pieces.trim();
+  if (typeof patch.difficulty === 'string')
+    nextPatch.difficulty = patch.difficulty.trim();
+  if (typeof patch.dimensions === 'string')
+    nextPatch.dimensions = patch.dimensions.trim();
+  if (typeof patch.shortDescription === 'string')
+    nextPatch.shortDescription = patch.shortDescription.trim();
+  if (typeof patch.shopeeLink === 'string')
+    nextPatch.shopeeLink = patch.shopeeLink.trim();
+  if (typeof patch.tiktokLink === 'string')
+    nextPatch.tiktokLink = patch.tiktokLink.trim();
+  if (typeof patch.youtubeLink === 'string')
+    nextPatch.youtubeLink = patch.youtubeLink.trim();
+  if (Array.isArray(patch.subProducts)) {
+    nextPatch.subProducts = sanitizeSubProducts(patch.subProducts);
+  }
   if (typeof patch.isActive === 'boolean') nextPatch.isActive = patch.isActive;
   if (typeof patch.isFeatured === 'boolean')
     nextPatch.isFeatured = patch.isFeatured;

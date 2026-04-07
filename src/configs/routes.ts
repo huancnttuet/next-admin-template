@@ -5,6 +5,7 @@ export const AppRoutes = {
   Categories: '/categories',
   ProductCreate: '/products/create',
   ProductEdit: (id: string) => `/products/${id}/edit`,
+  ProductPreview: (id: string) => `/products/${id}/preview`,
   HelpCenter: '/help-center',
 
   // Auth
