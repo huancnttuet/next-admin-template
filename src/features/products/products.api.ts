@@ -3,6 +3,7 @@ import type { PagedList } from '@/types/api';
 import type {
   CreateProductPayload,
   GetProductsParams,
+  ImportProductsResult,
   Product,
   UpdateProductPayload,
 } from './products.type';
@@ -38,4 +39,27 @@ export const updateProduct = async (
 
 export const deleteProduct = async (id: string): Promise<void> => {
   await axios.delete(`/api/products/${id}`);
+};
+
+export const bulkDeleteProducts = async (ids: string[]): Promise<void> => {
+  await axios.post('/api/products/bulk-delete', { ids });
+};
+
+export const importProductsFromXlsx = async (
+  file: File,
+): Promise<ImportProductsResult> => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await axios.post<ImportProductsResult>(
+    '/api/products/import',
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+
+  return res.data;
 };

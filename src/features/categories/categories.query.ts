@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  bulkDeleteCategories,
   createCategory,
   deleteCategory,
   getCategoryById,
@@ -47,6 +48,16 @@ export const useDeleteCategory = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteCategory(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY] });
+    },
+  });
+};
+
+export const useBulkDeleteCategories = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (ids: string[]) => bulkDeleteCategories(ids),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [CATEGORY_QUERY_KEY] });
     },

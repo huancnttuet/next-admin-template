@@ -18,6 +18,7 @@ import { useDataTable } from '@/hooks/use-data-table';
 import { usePagedProducts, type Product } from '@/features/products';
 import { AppRoutes } from '@/configs/routes';
 import { useProductColumns } from './columns';
+import { ImportProductsButton } from './import-products-button';
 import { ProductsTableActionBar } from './products-table-action-bar';
 
 export function ProductsTable() {
@@ -89,6 +90,7 @@ export function ProductsTable() {
             <PlusCircle className='mr-2 size-4' />
             {t('createNew')}
           </Button>
+          <ImportProductsButton />
         </DataTableToolbar>
       </DataTable>
     </>

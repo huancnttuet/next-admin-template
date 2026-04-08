@@ -44,7 +44,6 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
   error,
   id,
 }) => {
-  console.log(`🚀${(new Date()).toString()} ~ FileUploadField ~ id:`, id)
   const { setValue, watch, getValues } = useFormContext();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);

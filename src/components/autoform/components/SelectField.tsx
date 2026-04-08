@@ -21,6 +21,13 @@ export const SelectField: React.FC<AutoFormFieldProps> = ({
   // Fall back to the Zod schema .default() for fields that have one.
   const selectValue = (fieldValue as string) ?? field.default ?? '';
 
+  const options = (inputProps.options ||
+    field.options?.map((option) => ({ value: option, label: option })) ||
+    []) as {
+    value: string;
+    label: string;
+  }[];
+
   return (
     <Select
       {...props}
@@ -39,8 +46,8 @@ export const SelectField: React.FC<AutoFormFieldProps> = ({
         <SelectValue placeholder='Select an option' />
       </SelectTrigger>
       <SelectContent>
-        {(field.options || []).map(([key, label]) => (
-          <SelectItem key={key} value={key}>
+        {options.map(({ value, label }) => (
+          <SelectItem key={value} value={value}>
             {label}
           </SelectItem>
         ))}

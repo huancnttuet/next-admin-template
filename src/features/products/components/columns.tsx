@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { AppRoutes } from '@/configs/routes';
 import { useTranslations } from 'next-intl';
 import { DeleteProductDialog } from './delete-product-dialog';
+import Image from 'next/image';
 
 export const useProductColumns = (): ColumnDef<Product>[] => {
   const t = useTranslations('products');
@@ -37,7 +38,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
           aria-label={t('selectRow')}
         />
       ),
-      size: 40,
+      size: 20,
       enableSorting: false,
       enableHiding: false,
     },
@@ -52,7 +53,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
           </span>
         );
       },
-      size: 52,
+      size: 30,
       enableSorting: false,
       enableHiding: false,
     },
@@ -63,11 +64,21 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
         <DataTableColumnHeader column={column} label={t('colName')} />
       ),
       cell: ({ row }) => (
-        <div>
-          <div className='font-medium'>{row.getValue('name')}</div>
-          <div className='text-xs text-muted-foreground'>
-            {row.original.sku}
+        <div className='flex justify-between gap-4'>
+          <div>
+            <div className='font-medium'>{row.getValue('name')}</div>
+            <div className='text-xs text-muted-foreground'>
+              {row.original.sku}
+            </div>
           </div>
+
+          <Image
+            src={row.original.image}
+            alt={row.getValue('name')}
+            width={80}
+            height={40}
+            className='max-h-20 w-auto min-w-32 rounded object-cover'
+          />
         </div>
       ),
       meta: {
@@ -77,6 +88,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
       },
       enableColumnFilter: true,
       enableSorting: false,
+      size: 300,
     },
     {
       id: 'categories',
@@ -111,7 +123,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
           staticParams: { IsActive: true },
           mapOption: (item) => ({
             label: (item as { name: string }).name,
-            value: (item as { name: string }).name,
+            value: (item as { slug: string }).slug,
           }),
           searchPlaceholder: t('fieldCategoriesSearchPlaceholder'),
           emptyText: t('fieldCategoriesEmpty'),
@@ -137,6 +149,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
         label: t('colPrice'),
       },
       enableSorting: false,
+      size: 80,
     },
     {
       id: 'quantity',
@@ -153,6 +166,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
         label: t('colQuantity'),
       },
       enableSorting: false,
+      size: 50,
     },
     {
       id: 'isActive',
@@ -178,6 +192,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
       },
       enableColumnFilter: true,
       enableSorting: false,
+      size: 80,
     },
     {
       id: 'isFeatured',
@@ -188,7 +203,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
       cell: ({ row }) => {
         const isFeatured = row.getValue('isFeatured') as boolean;
         return (
-          <Badge variant={isFeatured ? 'outline' : 'secondary'}>
+          <Badge variant={isFeatured ? 'default' : 'outline'}>
             {isFeatured ? t('featured') : t('normal')}
           </Badge>
         );
@@ -203,6 +218,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
       },
       enableColumnFilter: true,
       enableSorting: false,
+      size: 80,
     },
     {
       id: 'actions',

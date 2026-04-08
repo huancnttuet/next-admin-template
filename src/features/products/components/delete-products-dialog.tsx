@@ -10,7 +10,7 @@ import {
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { useDeleteProduct, Product } from '@/features/products';
+import { Product, useBulkDeleteProducts } from '@/features/products';
 import { DialogTrigger } from '@radix-ui/react-dialog';
 import { Trash2 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -23,12 +23,13 @@ type Props = {
 export function DeleteProductsDialog({ rows }: Props) {
   const t = useTranslations('products');
   const [open, setOpen] = useState(false);
-  const deleteMutation = useDeleteProduct();
+  const deleteMutation = useBulkDeleteProducts();
   const deleteIds = rows.map((row) => row.id);
 
   const handleDelete = async () => {
-    await Promise.all(deleteIds.map((id) => deleteMutation.mutateAsync(id)));
+    await deleteMutation.mutateAsync(deleteIds);
     toast.success(t('deleteSuccess'));
+    setOpen(false);
   };
 
   return (

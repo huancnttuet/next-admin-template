@@ -13,7 +13,7 @@ export function Main({ fixed, className, ...props }: MainProps) {
   return (
     <main
       className={cn(
-        'flex-1 overflow-auto px-4 py-6',
+        'flex-1 overflow-auto px-4 py-6 md:px-6 lg:px-8',
         fixed && 'flex grow flex-col overflow-hidden',
         contentLayout === 'centered' && 'mx-auto w-full max-w-screen-xl',
         className,

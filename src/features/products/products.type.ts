@@ -64,3 +64,17 @@ export interface CreateProductPayload {
 }
 
 export type UpdateProductPayload = Partial<CreateProductPayload>;
+
+export interface ImportProductFailure {
+  row: number;
+  message: string;
+  name?: string;
+  sku?: string;
+}
+
+export interface ImportProductsResult {
+  totalRows: number;
+  importedCount: number;
+  failedCount: number;
+  failures: ImportProductFailure[];
+}

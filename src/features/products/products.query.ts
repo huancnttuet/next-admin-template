@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  bulkDeleteProducts,
   createProduct,
   deleteProduct,
   getPagedProducts,
   getProductById,
+  importProductsFromXlsx,
   updateProduct,
 } from './products.api';
 import type {
@@ -60,6 +62,27 @@ export const useDeleteProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteProduct(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [PRODUCT_QUERY_KEY] });
+    },
+  });
+};
+
+export const useBulkDeleteProducts = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (ids: string[]) => bulkDeleteProducts(ids),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [PRODUCT_QUERY_KEY] });
+    },
+  });
+};
+
+export const useImportProducts = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (file: File) => importProductsFromXlsx(file),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [PRODUCT_QUERY_KEY] });
     },

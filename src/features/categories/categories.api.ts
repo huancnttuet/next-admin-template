@@ -31,13 +31,21 @@ export const createCategory = async (
   return res.data;
 };
 
-export const updateCategory = async (
- { id, payload }: { id: string; payload: UpdateCategoryPayload },
-): Promise<Category> => {
+export const updateCategory = async ({
+  id,
+  payload,
+}: {
+  id: string;
+  payload: UpdateCategoryPayload;
+}): Promise<Category> => {
   const res = await axios.put<Category>(`/api/categories/${id}`, payload);
   return res.data;
 };
 
 export const deleteCategory = async (id: string): Promise<void> => {
   await axios.delete(`/api/categories/${id}`);
+};
+
+export const bulkDeleteCategories = async (ids: string[]): Promise<void> => {
+  await axios.post('/api/categories/bulk-delete', { ids });
 };

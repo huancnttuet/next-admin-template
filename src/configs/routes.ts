@@ -2,7 +2,10 @@ export const AppRoutes = {
   // Dashboard
   Dashboard: '/',
   Products: '/products',
+  Orders: '/orders',
+  Promocodes: '/promocodes',
   Categories: '/categories',
+  Reviews: '/reviews',
   ProductCreate: '/products/create',
   ProductEdit: (id: string) => `/products/${id}/edit`,
   ProductPreview: (id: string) => `/products/${id}/preview`,

@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useTranslations } from 'next-intl';
-import { Category, useDeleteCategory } from '@/features/categories';
+import { Category, useBulkDeleteCategories } from '@/features/categories';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { Trash2 } from 'lucide-react';
@@ -23,12 +23,12 @@ type Props = {
 
 export function DeleteCategoriesDialog({ rows }: Props) {
   const t = useTranslations('categories');
-  const deleteMutation = useDeleteCategory();
+  const deleteMutation = useBulkDeleteCategories();
 
   const [open, setOpen] = useState(false);
 
   const handleDelete = async () => {
-    await Promise.all(rows.map((row) => deleteMutation.mutateAsync(row.id)));
+    await deleteMutation.mutateAsync(rows.map((row) => row.id));
     toast.success(t('deleteSuccess'));
     setOpen(false);
   };

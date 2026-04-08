@@ -87,7 +87,7 @@ export function createProductFormSchema(t: (key: string) => string) {
               IsActive: true,
             },
             dataMapper: (category: Category) => ({
-              value: category.name,
+              value: category.slug,
               label: category.name,
             }),
             pageSize: 10,
@@ -374,7 +374,7 @@ export function updateProductFormSchema(t: (key: string) => string) {
               IsActive: true,
             },
             dataMapper: (category: Category) => ({
-              value: category.name,
+              value: category.slug,
               label: category.name,
             }),
             pageSize: 10,

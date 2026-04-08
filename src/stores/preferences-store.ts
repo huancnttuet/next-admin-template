@@ -23,7 +23,7 @@ export const PREFERENCE_DEFAULTS = {
   font: 'nunito' as FontKey,
   scale: 'normal' as ScaleKey,
   radius: 'normal' as RadiusKey,
-  contentLayout: 'centered' as ContentLayout,
+  contentLayout: 'full-width' as ContentLayout,
   navbarStyle: 'sticky' as NavbarStyle,
   sidebarVariant: 'inset' as SidebarVariant,
   sidebarCollapsible: 'icon' as SidebarCollapsible,

@@ -9,6 +9,7 @@ import {
   Package,
   ServerOff,
   ShieldCheck,
+  Star,
   Tags,
   UserX,
   Users,
@@ -42,9 +43,24 @@ export function useSidebarData(): SidebarData {
             icon: Package,
           },
           {
+            title: t('orders'),
+            url: AppRoutes.Orders,
+            icon: ClipboardList,
+          },
+          {
+            title: t('promocodes'),
+            url: AppRoutes.Promocodes,
+            icon: Tags,
+          },
+          {
             title: t('categories'),
             url: AppRoutes.Categories,
             icon: Tags,
+          },
+          {
+            title: t('reviews'),
+            url: AppRoutes.Reviews,
+            icon: Star,
           },
 
           {

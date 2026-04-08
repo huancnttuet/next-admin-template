@@ -167,3 +167,28 @@ export async function deleteProductById(id: string) {
   const result = await collection.deleteOne({ _id: new ObjectId(id) });
   return result.deletedCount > 0;
 }
+
+export async function deleteProductsByIds(ids: string[]) {
+  const uniqueValidIds = Array.from(new Set(ids)).filter((id) =>
+    ObjectId.isValid(id),
+  );
+
+  if (uniqueValidIds.length === 0) {
+    return {
+      requestedCount: ids.length,
+      deletedCount: 0,
+    };
+  }
+
+  const collection = await getProductsCollection();
+  const result = await collection.deleteMany({
+    _id: {
+      $in: uniqueValidIds.map((id) => new ObjectId(id)),
+    },
+  });
+
+  return {
+    requestedCount: ids.length,
+    deletedCount: result.deletedCount,
+  };
+}

@@ -9,21 +9,20 @@ import type { Category } from '../categories.type';
 import { useCategoryColumns } from './columns';
 import { CategoryFormDialog } from './category-form-dialog';
 import { CategoriesTableActionBar } from './categories-table-action-bar';
+import { ImportCategoriesButton } from './import-categories-button';
 
 export function CategoriesTable() {
   const columns = useCategoryColumns();
-
   const [page] = useQueryState('page', parseAsInteger.withDefault(1));
   const [perPage] = useQueryState('perPage', parseAsInteger.withDefault(10));
   const [keyword] = useQueryState('name', parseAsString.withDefault(''));
-  const [isActive] = useQueryState('isActive', parseAsString);
-
+  const [isActive] = useQueryState('isActive');
   const { data, isLoading, isFetching } = usePagedCategories({
     Page: page,
     PageSize: perPage,
     Keyword: keyword || undefined,
     IsActive:
-      isActive === null ? undefined : isActive === 'true' ? true : false,
+      isActive === null ? undefined : isActive?.[0] === 'true' ? true : false,
   });
 
   const { table } = useDataTable<Category>({
@@ -48,6 +47,7 @@ export function CategoriesTable() {
       >
         <DataTableToolbar table={table}>
           <CategoryFormDialog mode='create' />
+          <ImportCategoriesButton />
         </DataTableToolbar>
       </DataTable>
     </>

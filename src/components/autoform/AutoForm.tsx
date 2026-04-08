@@ -18,7 +18,8 @@ import { SwitchField } from './components/SwitchField';
 import { RadioGroupField } from './components/RadioGroupField';
 import { MultiCheckboxField } from './components/MultiCheckboxField';
 import { MultiSelectField } from './components/MultiSelectField';
-import { ComboboxField } from './components/ComboboxField';
+import { ComboboxField } from '@/components/autoform/components/ComboboxField';
+import { AddressField } from '@/components/autoform/components/AddressField';
 import { SliderField } from './components/SliderField';
 import { FileUploadField } from './components/FileUploadField';
 import { AsyncComboboxField } from './components/AsyncComboboxField';
@@ -29,6 +30,8 @@ import { ArrayElementWrapper } from './components/ArrayElementWrapper';
 import { TreeSelectField } from './components/TreeSelectField';
 import { RichTextField } from './components/RichTextField';
 import { SubProductsField } from './components/SubProductsField';
+import { OrderItemsField } from './components/OrderItemsField';
+import { OrderTotalField } from './components/OrderTotalField';
 
 const ShadcnUIComponents: AutoFormUIComponents = {
   Form,
@@ -59,6 +62,9 @@ export const ShadcnAutoFormFieldComponents = {
   'tree-select': TreeSelectField,
   'rich-text': RichTextField,
   'sub-products': SubProductsField,
+  'order-items': OrderItemsField,
+  'order-total': OrderTotalField,
+  'address-field': AddressField,
 } as const;
 export type FieldTypes = keyof typeof ShadcnAutoFormFieldComponents;
 
