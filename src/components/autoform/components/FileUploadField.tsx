@@ -2,13 +2,17 @@
 
 import { AutoFormFieldProps } from '@autoform/react';
 import {
+  ChevronLeft,
+  ChevronRight,
   FileIcon,
   Loader2,
   Trash2,
   UploadCloudIcon,
   VideoIcon,
+  X,
+  ZoomIn,
 } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { uploadFileToCloudinary } from '@/lib/cloudinary';
 import { cn } from '@/lib/utils';
@@ -37,6 +41,97 @@ interface PendingUploadItem {
   isVideo: boolean;
 }
 
+// ── Lightbox ──────────────────────────────────────────────────────────────────
+
+interface LightboxProps {
+  images: string[];
+  initialIndex: number;
+  onClose: () => void;
+}
+
+const Lightbox: React.FC<LightboxProps> = ({ images, initialIndex, onClose }) => {
+  const [current, setCurrent] = useState(initialIndex);
+
+  const goNext = useCallback(
+    () => setCurrent((i) => (i + 1) % images.length),
+    [images.length],
+  );
+  const goPrev = useCallback(
+    () => setCurrent((i) => (i - 1 + images.length) % images.length),
+    [images.length],
+  );
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') goNext();
+      if (e.key === 'ArrowLeft') goPrev();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose, goNext, goPrev]);
+
+  return (
+    <div
+      className='fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm'
+      onClick={onClose}
+      role='dialog'
+      aria-modal='true'
+      aria-label='Image preview'
+    >
+      {/* Close */}
+      <button
+        type='button'
+        onClick={onClose}
+        className='absolute right-4 top-4 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
+        aria-label='Close preview'
+      >
+        <X className='size-5' />
+      </button>
+
+      {/* Prev */}
+      {images.length > 1 && (
+        <button
+          type='button'
+          onClick={(e) => { e.stopPropagation(); goPrev(); }}
+          className='absolute left-4 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
+          aria-label='Previous image'
+        >
+          <ChevronLeft className='size-5' />
+        </button>
+      )}
+
+      {/* Image */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={images[current]}
+        alt={`Preview ${current + 1}`}
+        className='max-h-[90vh] max-w-[90vw] rounded-lg object-contain shadow-2xl'
+        onClick={(e) => e.stopPropagation()}
+      />
+
+      {/* Next */}
+      {images.length > 1 && (
+        <button
+          type='button'
+          onClick={(e) => { e.stopPropagation(); goNext(); }}
+          className='absolute right-4 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
+          aria-label='Next image'
+        >
+          <ChevronRight className='size-5' />
+        </button>
+      )}
+
+      {/* Counter */}
+      {images.length > 1 && (
+        <p className='absolute bottom-4 text-sm text-white/70'>
+          {current + 1} / {images.length}
+        </p>
+      )}
+    </div>
+  );
+};
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export const FileUploadField: React.FC<AutoFormFieldProps> = ({
@@ -49,6 +144,7 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [sizeError, setSizeError] = useState<string | null>(null);
   const [pendingUploads, setPendingUploads] = useState<PendingUploadItem[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const customData = (field.fieldConfig?.customData ??
     {}) as FileUploadCustomData;
@@ -288,12 +384,20 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
             >
               {/* Thumbnail / icon */}
               {fp.isImage ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={fp.value}
-                  alt={`Uploaded file ${idx + 1}`}
-                  className='size-10 shrink-0 rounded object-cover'
-                />
+                <button
+                  type='button'
+                  className='group relative size-10 shrink-0 overflow-hidden rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+                  onClick={() => setLightboxIndex(idx)}
+                  aria-label={`Preview image ${idx + 1}`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={fp.value}
+                    alt={`Uploaded file ${idx + 1}`}
+                    className='size-10 rounded object-cover transition group-hover:brightness-75'
+                  />
+                  <ZoomIn className='absolute inset-0 m-auto size-4 text-white opacity-0 transition group-hover:opacity-100' />
+                </button>
               ) : fp.isVideo ? (
                 <div
                   className='flex size-10 shrink-0 items-center justify-center
@@ -342,6 +446,20 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
           Maximum of {maxFiles} files reached.
         </p>
       )}
+
+      {/* Lightbox */}
+      {lightboxIndex !== null && (() => {
+        const imageFiles = currentFiles.filter((f) => f.isImage);
+        const clickedValue = currentFiles[lightboxIndex]?.value;
+        const imgIndex = imageFiles.findIndex((f) => f.value === clickedValue);
+        return (
+          <Lightbox
+            images={imageFiles.map((f) => f.value)}
+            initialIndex={imgIndex >= 0 ? imgIndex : 0}
+            onClose={() => setLightboxIndex(null)}
+          />
+        );
+      })()}
     </div>
   );
 };
