@@ -35,16 +35,51 @@ import {
   type NavLink,
   type NavGroup as NavGroupType,
 } from '@/types/sidebar';
+import { useSession } from 'next-auth/react';
+import { hasPermission } from '@/lib/rbac';
 
 export function NavGroup({ title, items }: NavGroupType) {
   const { state, isMobile } = useSidebar();
+  const { data: session } = useSession();
   const pathname = usePathname();
+
+  const userPermissions = session?.user?.permissions;
+
+  const filterItem = (item: NavItem): NavItem | null => {
+    // If the item has a permissions field, enforce it
+    const required = (item as any).permissions;
+    if (required) {
+      const checks = Array.isArray(required) ? required : [required];
+      const allowed = checks.some((p) => hasPermission(userPermissions, p));
+      if (!allowed) return null;
+    }
+
+    if ((item as NavCollapsible).items) {
+      const coll = item as NavCollapsible;
+      const filteredSubs = coll.items.filter((sub) => {
+        const subReq = (sub as any).permissions;
+        if (!subReq) return true;
+        const subChecks = Array.isArray(subReq) ? subReq : [subReq];
+        return subChecks.some((p) => hasPermission(userPermissions, p));
+      });
+      if (!filteredSubs.length) return null;
+      return { ...coll, items: filteredSubs };
+    }
+
+    return item;
+  };
+
+  const visibleItems = items
+    .map(filterItem)
+    .filter((i): i is NavItem => i !== null);
+
+  if (!visibleItems.length) return null;
 
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => {
+        {visibleItems.map((item) => {
           const key = `${item.title}-${item.url ?? ''}`;
           if (!item.items)
             return (

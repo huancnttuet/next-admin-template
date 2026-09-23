@@ -41,7 +41,7 @@ export function OrdersTable() {
     <>
       <DataTable
         table={table}
-        tableContainerClassName='max-h-[calc(100dvh-20rem)] min-w-[1100px]'
+        tableContainerClassName='max-h-[calc(100dvh-20rem)] min-w-[960px]'
         actionBar={<OrdersTableActionBar table={table} />}
         isFetching={isFetching}
         isLoading={isLoading}

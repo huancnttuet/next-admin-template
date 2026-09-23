@@ -78,11 +78,31 @@ export function RoleFormDialog({
 }: RoleFormDialogProps) {
   const t = useTranslations('roles');
   const [form, setForm] = useState<FormState>(getInitialState(role));
+  const [userSearch, setUserSearch] = useState('');
+  const [permissionSearch, setPermissionSearch] = useState('');
   const currentModeConfig = modeConfig[mode];
+
+  const normalizedUserSearch = userSearch.trim().toLowerCase();
+  const normalizedPermissionSearch = permissionSearch.trim().toLowerCase();
+
+  const filteredUsers = userOptions.filter((user) => {
+    if (!normalizedUserSearch) return true;
+    return (
+      user.label.toLowerCase().includes(normalizedUserSearch) ||
+      user.email.toLowerCase().includes(normalizedUserSearch)
+    );
+  });
+
+  const filteredPermissions = PERMISSION_OPTIONS.filter((permission) => {
+    if (!normalizedPermissionSearch) return true;
+    return permission.label.toLowerCase().includes(normalizedPermissionSearch);
+  });
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) {
       setForm(getInitialState(role));
+      setUserSearch('');
+      setPermissionSearch('');
     }
     onOpenChange(nextOpen);
   };
@@ -128,7 +148,7 @@ export function RoleFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className='sm:max-w-lg'>
+      <DialogContent className='sm:max-w-3xl'>
         <DialogHeader>
           <DialogTitle>{t(currentModeConfig.title)}</DialogTitle>
           <DialogDescription>
@@ -174,64 +194,95 @@ export function RoleFormDialog({
             />
           </div>
 
-          <div className='space-y-2'>
-            <Label>{t('fieldUsers')}</Label>
-            <div
-              className='max-h-48 space-y-2 overflow-auto rounded-md border p-3'
-            >
-              {userOptions.length === 0 && (
-                <p className='text-sm text-muted-foreground'>
-                  {t('noUsersAvailable')}
-                </p>
-              )}
-              {userOptions.map((user) => {
-                const checked = form.userIds.includes(user.id);
-                return (
-                  <label
-                    key={user.id}
-                    className='flex items-start gap-2 text-sm'
-                  >
-                    <Checkbox
-                      checked={checked}
-                      onCheckedChange={(value) =>
-                        handleToggleUser(user.id, value === true)
-                      }
-                      disabled={isPending}
-                    />
-                    <span>
-                      <span className='block font-medium'>{user.label}</span>
-                      <span className='text-xs text-muted-foreground'>
-                        {user.email}
+          <div className='flex flex-col gap-4 sm:flex-row'>
+            <div className='flex-1 space-y-2'>
+              <Label>{t('fieldUsers')}</Label>
+              <Input
+                value={userSearch}
+                onChange={(event) => setUserSearch(event.target.value)}
+                placeholder={t('fieldUsersSearchPlaceholder')}
+                disabled={isPending}
+              />
+              <div
+                className='max-h-48 space-y-2 overflow-auto rounded-md border
+                  p-3'
+              >
+                {userOptions.length === 0 && (
+                  <p className='text-sm text-muted-foreground'>
+                    {t('noUsersAvailable')}
+                  </p>
+                )}
+                {userOptions.length > 0 && filteredUsers.length === 0 && (
+                  <p className='text-sm text-muted-foreground'>
+                    {t('noUsersMatchSearch')}
+                  </p>
+                )}
+                {filteredUsers.map((user) => {
+                  const checked = form.userIds.includes(user.id);
+                  return (
+                    <label
+                      key={user.id}
+                      className='flex items-start gap-2 text-sm'
+                    >
+                      <Checkbox
+                        checked={checked}
+                        onCheckedChange={(value) =>
+                          handleToggleUser(user.id, value === true)
+                        }
+                        disabled={isPending}
+                      />
+                      <span>
+                        <span className='block font-medium'>{user.label}</span>
+                        <span className='text-xs text-muted-foreground'>
+                          {user.email}
+                        </span>
                       </span>
-                    </span>
-                  </label>
-                );
-              })}
+                    </label>
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <div className='space-y-2'>
-            <Label>{t('fieldPermissions')}</Label>
-            <div className='space-y-2 rounded-md border p-3'>
-              {PERMISSION_OPTIONS.map((permission) => {
-                const checked = form.permissions.includes(permission.value);
+            <div className='flex-1 space-y-2'>
+              <Label>{t('fieldPermissions')}</Label>
+              <Input
+                value={permissionSearch}
+                onChange={(event) => setPermissionSearch(event.target.value)}
+                placeholder={t('fieldPermissionsSearchPlaceholder')}
+                disabled={isPending}
+              />
+              <div
+                className='max-h-48 space-y-2 overflow-auto rounded-md border
+                  p-3'
+              >
+                {filteredPermissions.length === 0 && (
+                  <p className='text-sm text-muted-foreground'>
+                    {t('noPermissionsMatchSearch')}
+                  </p>
+                )}
+                {filteredPermissions.map((permission) => {
+                  const checked = form.permissions.includes(permission.value);
 
-                return (
-                  <label
-                    key={permission.value}
-                    className='flex items-start gap-2 text-sm'
-                  >
-                    <Checkbox
-                      checked={checked}
-                      onCheckedChange={(value) =>
-                        handleTogglePermission(permission.value, value === true)
-                      }
-                      disabled={isPending}
-                    />
-                    <span className='text-sm'>{permission.label}</span>
-                  </label>
-                );
-              })}
+                  return (
+                    <label
+                      key={permission.value}
+                      className='flex items-start gap-2 text-sm'
+                    >
+                      <Checkbox
+                        checked={checked}
+                        onCheckedChange={(value) =>
+                          handleTogglePermission(
+                            permission.value,
+                            value === true,
+                          )
+                        }
+                        disabled={isPending}
+                      />
+                      <span className='text-sm'>{permission.label}</span>
+                    </label>
+                  );
+                })}
+              </div>
             </div>
           </div>
 

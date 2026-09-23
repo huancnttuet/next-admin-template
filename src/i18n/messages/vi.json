@@ -675,7 +675,11 @@
     "fieldDescriptionPlaceholder": "Mô tả phạm vi trách nhiệm của vai trò...",
     "fieldUsers": "Người dùng được gán",
     "fieldPermissions": "Quyền",
-    "noUsersAvailable": "Không có người dùng để gán."
+    "fieldUsersSearchPlaceholder": "Tìm người dùng theo tên hoặc email...",
+    "fieldPermissionsSearchPlaceholder": "Tìm quyền...",
+    "noUsersAvailable": "Không có người dùng để gán.",
+    "noUsersMatchSearch": "Không có người dùng phù hợp với từ khóa.",
+    "noPermissionsMatchSearch": "Không có quyền phù hợp với từ khóa."
   },
   "questionnaireGroups": {
     "title": "Nhóm câu hỏi",

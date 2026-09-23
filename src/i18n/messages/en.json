@@ -679,7 +679,11 @@
     "fieldDescriptionPlaceholder": "Describe the responsibilities of this role...",
     "fieldUsers": "Assigned Users",
     "fieldPermissions": "Permissions",
-    "noUsersAvailable": "No users available to assign."
+    "fieldUsersSearchPlaceholder": "Search users by name or email...",
+    "fieldPermissionsSearchPlaceholder": "Search permissions...",
+    "noUsersAvailable": "No users available to assign.",
+    "noUsersMatchSearch": "No users match the search.",
+    "noPermissionsMatchSearch": "No permissions match the search."
   },
   "questionnaireGroups": {
     "title": "Questionnaire Groups",

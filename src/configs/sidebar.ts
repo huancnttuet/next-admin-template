@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { type SidebarData } from '@/types/sidebar';
+import { Permissions } from './rbac';
 import { LogoIcon } from '@/components/icons/logo-icon';
 import { AppRoutes } from './routes';
 
@@ -41,37 +42,44 @@ export function useSidebarData(): SidebarData {
             title: t('products'),
             url: AppRoutes.Products,
             icon: Package,
+            permissions: Permissions.ProductsRead,
           },
           {
             title: t('orders'),
             url: AppRoutes.Orders,
             icon: ClipboardList,
+            permissions: Permissions.OrdersRead,
           },
           {
             title: t('promocodes'),
             url: AppRoutes.Promocodes,
             icon: Tags,
+            permissions: Permissions.PromocodesRead,
           },
           {
             title: t('categories'),
             url: AppRoutes.Categories,
             icon: Tags,
+            permissions: Permissions.CategoriesRead,
           },
           {
             title: t('reviews'),
             url: AppRoutes.Reviews,
             icon: Star,
+            permissions: Permissions.ReviewsRead,
           },
 
           {
             title: t('users'),
             url: AppRoutes.Users,
             icon: Users,
+            permissions: Permissions.UsersRead,
           },
           {
             title: t('roles'),
             url: AppRoutes.Roles,
             icon: ShieldCheck,
+            permissions: Permissions.RolesRead,
           },
         ],
       },

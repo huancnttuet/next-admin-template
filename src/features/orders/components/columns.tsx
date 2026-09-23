@@ -130,6 +130,7 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
       },
       enableColumnFilter: true,
       enableSorting: false,
+      size: 120,
     },
     {
       id: 'total',
@@ -145,6 +146,7 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
         label: t('colTotal'),
       },
       enableSorting: false,
+      size: 120,
     },
     {
       id: 'shippingCost',
@@ -160,6 +162,7 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
         label: t('colShippingCost'),
       },
       enableSorting: false,
+      size: 120,
     },
     {
       id: 'createdAt',
@@ -176,6 +179,7 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
         label: t('colCreatedAt'),
       },
       enableSorting: false,
+      size: 120,
     },
     {
       id: 'updatedAt',
@@ -192,6 +196,7 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
         label: t('colUpdatedAt'),
       },
       enableSorting: false,
+      size: 120,
     },
     {
       id: 'actions',

@@ -1,3 +1,5 @@
+import type { Permission } from '@/configs/rbac';
+
 type User = {
   name: string;
   email: string;
@@ -14,6 +16,7 @@ type BaseNavItem = {
   title: string;
   badge?: string;
   icon?: React.ElementType;
+  permissions?: Permission | Permission[];
 };
 
 type NavLink = BaseNavItem & {
