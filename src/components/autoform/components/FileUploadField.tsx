@@ -6,6 +6,7 @@ import {
   ChevronRight,
   FileIcon,
   Loader2,
+  Play,
   Trash2,
   UploadCloudIcon,
   VideoIcon,
@@ -41,24 +42,98 @@ interface PendingUploadItem {
   isVideo: boolean;
 }
 
-// ── Lightbox ──────────────────────────────────────────────────────────────────
+// ── VideoThumbnail ────────────────────────────────────────────────────────────
 
-interface LightboxProps {
-  images: string[];
+/** Transforms a Cloudinary video URL into a thumbnail image URL. */
+function getCloudinaryThumbnail(url: string): string | null {
+  // Matches: https://res.cloudinary.com/{cloud}/{resource_type}/upload/(...){ext}
+  const match = url.match(
+    /^(https:\/\/res\.cloudinary\.com\/[^/]+\/)[^/]+(\/upload\/)(.*?)(\.[^.]+)$/,
+  );
+  if (!match) return null;
+  // Replace resource_type segment with 'video', inject so_1 transform, swap extension to .jpg
+  return `${match[1]}video${match[2]}so_1,w_160,h_160,c_fill/${match[3]}.jpg`;
+}
+
+const VideoThumbnail: React.FC<{ src: string }> = ({ src }) => {
+  const [thumbnail, setThumbnail] = useState<string | null>(() =>
+    getCloudinaryThumbnail(src),
+  );
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Canvas capture fallback — only used when Cloudinary transform is not available
+  useEffect(() => {
+    if (thumbnail) return; // already resolved via Cloudinary
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
+
+    const capture = () => {
+      canvas.width = video.videoWidth || 160;
+      canvas.height = video.videoHeight || 90;
+      canvas.getContext('2d')?.drawImage(video, 0, 0, canvas.width, canvas.height);
+      setThumbnail(canvas.toDataURL('image/jpeg', 0.7));
+    };
+
+    const onSeeked = () => capture();
+    const onLoaded = () => { video.currentTime = 1; };
+
+    video.addEventListener('loadeddata', onLoaded);
+    video.addEventListener('seeked', onSeeked);
+    video.src = src;
+    video.load();
+
+    return () => {
+      video.removeEventListener('loadeddata', onLoaded);
+      video.removeEventListener('seeked', onSeeked);
+    };
+  }, [src, thumbnail]);
+
+  if (thumbnail) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={thumbnail}
+        alt='Video thumbnail'
+        className='size-full object-cover'
+      />
+    );
+  }
+
+  return (
+    <>
+      {/* Hidden video + canvas used only as canvas-capture fallback */}
+      <video ref={videoRef} className='sr-only' crossOrigin='anonymous' preload='metadata' />
+      <canvas ref={canvasRef} className='sr-only' />
+      <VideoIcon className='size-5 text-muted-foreground' />
+    </>
+  );
+};
+
+// ── MediaLightbox ─────────────────────────────────────────────────────────────
+
+interface MediaItem {
+  url: string;
+  type: 'image' | 'video';
+}
+
+interface MediaLightboxProps {
+  items: MediaItem[];
   initialIndex: number;
   onClose: () => void;
 }
 
-const Lightbox: React.FC<LightboxProps> = ({ images, initialIndex, onClose }) => {
+const MediaLightbox: React.FC<MediaLightboxProps> = ({ items, initialIndex, onClose }) => {
   const [current, setCurrent] = useState(initialIndex);
 
   const goNext = useCallback(
-    () => setCurrent((i) => (i + 1) % images.length),
-    [images.length],
+    () => setCurrent((i) => (i + 1) % items.length),
+    [items.length],
   );
   const goPrev = useCallback(
-    () => setCurrent((i) => (i - 1 + images.length) % images.length),
-    [images.length],
+    () => setCurrent((i) => (i - 1 + items.length) % items.length),
+    [items.length],
   );
 
   useEffect(() => {
@@ -71,61 +146,75 @@ const Lightbox: React.FC<LightboxProps> = ({ images, initialIndex, onClose }) =>
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose, goNext, goPrev]);
 
+  const item = items[current];
+
   return (
     <div
-      className='fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm'
+      className='fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm'
       onClick={onClose}
       role='dialog'
       aria-modal='true'
-      aria-label='Image preview'
+      aria-label='Media preview'
     >
       {/* Close */}
       <button
         type='button'
         onClick={onClose}
-        className='absolute right-4 top-4 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
+        className='absolute right-4 top-4 z-10 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
         aria-label='Close preview'
       >
         <X className='size-5' />
       </button>
 
       {/* Prev */}
-      {images.length > 1 && (
+      {items.length > 1 && (
         <button
           type='button'
           onClick={(e) => { e.stopPropagation(); goPrev(); }}
-          className='absolute left-4 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
-          aria-label='Previous image'
+          className='absolute left-4 z-10 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
+          aria-label='Previous media'
         >
           <ChevronLeft className='size-5' />
         </button>
       )}
 
-      {/* Image */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={images[current]}
-        alt={`Preview ${current + 1}`}
-        className='max-h-[90vh] max-w-[90vw] rounded-lg object-contain shadow-2xl'
-        onClick={(e) => e.stopPropagation()}
-      />
+      {/* Media */}
+      <div className='flex max-h-[90vh] max-w-[90vw] items-center justify-center' onClick={(e) => e.stopPropagation()}>
+        {item.type === 'image' ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={item.url}
+            src={item.url}
+            alt={`Preview ${current + 1}`}
+            className='max-h-[90vh] max-w-[90vw] rounded-lg object-contain shadow-2xl'
+          />
+        ) : (
+          <video
+            key={item.url}
+            src={item.url}
+            controls
+            autoPlay
+            className='max-h-[90vh] max-w-[90vw] rounded-lg shadow-2xl'
+          />
+        )}
+      </div>
 
       {/* Next */}
-      {images.length > 1 && (
+      {items.length > 1 && (
         <button
           type='button'
           onClick={(e) => { e.stopPropagation(); goNext(); }}
-          className='absolute right-4 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
-          aria-label='Next image'
+          className='absolute right-4 z-10 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
+          aria-label='Next media'
         >
           <ChevronRight className='size-5' />
         </button>
       )}
 
       {/* Counter */}
-      {images.length > 1 && (
+      {items.length > 1 && (
         <p className='absolute bottom-4 text-sm text-white/70'>
-          {current + 1} / {images.length}
+          {current + 1} / {items.length}
         </p>
       )}
     </div>
@@ -144,7 +233,7 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [sizeError, setSizeError] = useState<string | null>(null);
   const [pendingUploads, setPendingUploads] = useState<PendingUploadItem[]>([]);
-  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [mediaLightboxIndex, setMediaLightboxIndex] = useState<number | null>(null);
 
   const customData = (field.fieldConfig?.customData ??
     {}) as FileUploadCustomData;
@@ -161,8 +250,7 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
 
   const currentFiles = currentValues.map((value) => ({
     value,
-    isVideo: isVideoField,
-    isImage: !isVideoField,
+    type: (isVideoField ? 'video' : 'image') as 'image' | 'video',
   }));
 
   const processFiles = async (incoming: FileList | File[]) => {
@@ -383,11 +471,11 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
                 p-2'
             >
               {/* Thumbnail / icon */}
-              {fp.isImage ? (
+              {fp.type === 'image' ? (
                 <button
                   type='button'
                   className='group relative size-10 shrink-0 overflow-hidden rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary'
-                  onClick={() => setLightboxIndex(idx)}
+                  onClick={() => setMediaLightboxIndex(idx)}
                   aria-label={`Preview image ${idx + 1}`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -398,13 +486,18 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
                   />
                   <ZoomIn className='absolute inset-0 m-auto size-4 text-white opacity-0 transition group-hover:opacity-100' />
                 </button>
-              ) : fp.isVideo ? (
-                <div
-                  className='flex size-10 shrink-0 items-center justify-center
-                    rounded bg-muted'
+              ) : fp.type === 'video' ? (
+                <button
+                  type='button'
+                  className='group relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+                  onClick={() => setMediaLightboxIndex(idx)}
+                  aria-label={`Preview video ${idx + 1}`}
                 >
-                  <VideoIcon className='size-5 text-muted-foreground' />
-                </div>
+                  <VideoThumbnail src={fp.value} />
+                  {/* Dark overlay so Play icon is visible on any thumbnail color */}
+                  <div className='absolute inset-0 bg-black/0 transition group-hover:bg-black/45' />
+                  <Play className='absolute inset-0 m-auto size-5 fill-white text-white opacity-0 drop-shadow transition group-hover:opacity-100' />
+                </button>
               ) : (
                 <div
                   className='flex size-10 shrink-0 items-center justify-center
@@ -447,16 +540,14 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
         </p>
       )}
 
-      {/* Lightbox */}
-      {lightboxIndex !== null && (() => {
-        const imageFiles = currentFiles.filter((f) => f.isImage);
-        const clickedValue = currentFiles[lightboxIndex]?.value;
-        const imgIndex = imageFiles.findIndex((f) => f.value === clickedValue);
+      {/* MediaLightbox */}
+      {mediaLightboxIndex !== null && (() => {
+        const mediaItems = currentFiles.map((f) => ({ url: f.value, type: f.type }));
         return (
-          <Lightbox
-            images={imageFiles.map((f) => f.value)}
-            initialIndex={imgIndex >= 0 ? imgIndex : 0}
-            onClose={() => setLightboxIndex(null)}
+          <MediaLightbox
+            items={mediaItems}
+            initialIndex={mediaLightboxIndex}
+            onClose={() => setMediaLightboxIndex(null)}
           />
         );
       })()}
