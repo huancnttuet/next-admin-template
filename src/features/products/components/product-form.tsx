@@ -138,24 +138,53 @@ export function ProductForm({
   };
 
   return (
-    <div className='grid gap-6'>
-      <div className='space-y-4'>
-        <div className='flex gap-2'>
+    <div className='flex h-full min-h-0 flex-col gap-4'>
+      {/* ── Fixed top bar ───────────────────────────────────────── */}
+      <div
+        className='flex shrink-0 items-center justify-between gap-4 border-b
+          bg-background pb-3 pt-1'
+      >
+        {/* Left: back button + title */}
+        <div className='flex min-w-0 items-center gap-2'>
           <Link href={AppRoutes.Products}>
-            <Button variant='ghost' size='icon'>
+            <Button variant='ghost' size='icon' className='shrink-0'>
               <ChevronLeft className='h-4 w-4' />
             </Button>
           </Link>
-          <div>
-            <h1 className='text-2xl font-bold tracking-tight'>
+          <div className='min-w-0'>
+            <h1 className='truncate text-xl font-bold tracking-tight'>
               {t(currentModeConfig.title)}
             </h1>
-            <p className='text-sm text-muted-foreground'>
+            <p className='truncate text-sm text-muted-foreground'>
               {t(currentModeConfig.description)}
             </p>
           </div>
         </div>
 
+        {/* Right: action buttons */}
+        <div className='flex shrink-0 gap-2'>
+          <Button
+            type='button'
+            variant='outline'
+            onClick={onCancel}
+            disabled={isBusy}
+          >
+            {t('cancel')}
+          </Button>
+          <Button
+            type='submit'
+            form='product-form'
+            disabled={isBusy}
+          >
+            {isBusy
+              ? t(currentModeConfig.busySubmitText)
+              : t(currentModeConfig.idleSubmitText)}
+          </Button>
+        </div>
+      </div>
+
+      {/* ── Form content scrollable area ────────────────────────── */}
+      <div className='flex-1 min-h-0 overflow-y-auto pr-1'>
         <AutoForm
           key={product?.id ?? mode}
           schema={schema}
@@ -170,25 +199,10 @@ export function ProductForm({
           }}
           onSubmit={handleSubmit}
           formProps={{
-            className: 'grid gap-4 grid-cols-3',
+            id: 'product-form',
+            className: 'grid gap-4 grid-cols-3 pb-6',
           }}
-        >
-          <div className='col-span-full flex justify-end gap-2 pt-2'>
-            <Button
-              type='button'
-              variant='outline'
-              onClick={onCancel}
-              disabled={isBusy}
-            >
-              {t('cancel')}
-            </Button>
-            <Button type='submit' disabled={isBusy}>
-              {isBusy
-                ? t(currentModeConfig.busySubmitText)
-                : t(currentModeConfig.idleSubmitText)}
-            </Button>
-          </div>
-        </AutoForm>
+        />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { ProductCreatePage } from '@/features/products/pages/product-create-page
 
 export default function CreateProductPage() {
   return (
-    <Main>
+    <Main fixed>
       <ProductCreatePage />
     </Main>
   );

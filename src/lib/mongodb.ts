@@ -1,4 +1,7 @@
 import { MongoClient } from 'mongodb';
+import dns from 'node:dns/promises';
+
+dns.setServers(['1.1.1.1', '1.0.0.1']);
 
 const uri = process.env.MONGODB_URI;
 const fallbackUri = process.env.MONGODB_URI_LOCAL;
