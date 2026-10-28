@@ -28,6 +28,8 @@ export interface Product {
   subProducts: SubProduct[];
   isActive: boolean;
   isFeatured: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface GetProductsParams {
@@ -38,6 +40,8 @@ export interface GetProductsParams {
   Category?: string;
   Categories?: string;
   IsFeatured?: boolean;
+  SortBy?: string;
+  SortDescending?: boolean;
 }
 
 export interface CreateProductPayload {

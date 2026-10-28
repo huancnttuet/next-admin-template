@@ -54,6 +54,18 @@ export async function GET(req: NextRequest) {
           : isFeaturedRaw === 'false'
             ? false
             : undefined;
+    const sortBy =
+      searchParams.get('SortBy') || searchParams.get('sortBy') || undefined;
+    const sortDescendingRaw =
+      searchParams.get('SortDescending') || searchParams.get('sortDescending');
+    const sortDescending =
+      sortDescendingRaw === null
+        ? undefined
+        : sortDescendingRaw === 'true'
+          ? true
+          : sortDescendingRaw === 'false'
+            ? false
+            : undefined;
 
     const result = await findProductsPaged({
       page: Number.isFinite(page) && page > 0 ? page : 1,
@@ -63,6 +75,8 @@ export async function GET(req: NextRequest) {
       categories,
       isActive,
       isFeatured,
+      sortBy,
+      sortDescending,
     });
 
     return NextResponse.json(result);

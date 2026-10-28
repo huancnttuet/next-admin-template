@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/table';
 import { getColumnPinningStyle } from '@/lib/data-table';
 import { cn } from '@/lib/utils';
+import { useSidebar } from '@/components/ui/sidebar';
 
 interface DataTableProps<TData> extends React.ComponentProps<'div'> {
   table: TanstackTable<TData>;
@@ -42,11 +43,12 @@ export function DataTable<TData>({
   ...props
 }: DataTableProps<TData>) {
   const t = useTranslations('dataTable');
+  const { state, isMobile } = useSidebar();
 
   return (
     <div
       className={cn(
-        'flex w-full flex-col gap-2.5',
+        'relative flex w-full flex-1 flex-col gap-2.5',
         isFetching ? 'pointer-events-none opacity-60 transition-opacity' : '',
         className,
       )}
@@ -55,8 +57,13 @@ export function DataTable<TData>({
       {children}
       <div
         className={cn(
-          `scrollbar-thin max-h-[calc(100dvh-20rem)] overflow-auto rounded-md
-          border`,
+          `scrollbar-thin relative max-h-[calc(100dvh-20rem)] overflow-auto
+          rounded-md border`,
+          isMobile
+            ? 'max-w-[calc(100dvw-1rem)]'
+            : state === 'collapsed'
+              ? 'max-w-[calc(100dvw-9rem)]'
+              : 'max-w-[calc(100dvw-20rem)]',
           tableContainerClassName,
         )}
       >

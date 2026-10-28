@@ -103,6 +103,7 @@ export function UsersTable() {
     data: data?.items ?? [],
     columns,
     pageCount: data?.totalPages ?? 0,
+    rowCount: data?.totalCount ?? 0,
     initialState: {
       pagination: { pageIndex: 0, pageSize: 10 },
       columnPinning: { left: ['select', 'index', 'fullName'] },
@@ -182,7 +183,7 @@ export function UsersTable() {
             isDeleting={deleteMutation.isPending}
           />
         }
-        tableContainerClassName='max-h-[calc(100dvh-20rem)] min-w-[600px]'
+        tableContainerClassName=''
         isFetching={isFetching}
       >
         <DataTableToolbar table={table}>

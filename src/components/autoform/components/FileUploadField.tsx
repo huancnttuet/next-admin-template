@@ -18,6 +18,7 @@ import { useFormContext } from 'react-hook-form';
 import { uploadFileToCloudinary } from '@/lib/cloudinary';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { TextEllipsis } from '@/components/ui/text-ellipsis';
 
 /**
  * customData options:
@@ -72,12 +73,16 @@ const VideoThumbnail: React.FC<{ src: string }> = ({ src }) => {
     const capture = () => {
       canvas.width = video.videoWidth || 160;
       canvas.height = video.videoHeight || 90;
-      canvas.getContext('2d')?.drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas
+        .getContext('2d')
+        ?.drawImage(video, 0, 0, canvas.width, canvas.height);
       setThumbnail(canvas.toDataURL('image/jpeg', 0.7));
     };
 
     const onSeeked = () => capture();
-    const onLoaded = () => { video.currentTime = 1; };
+    const onLoaded = () => {
+      video.currentTime = 1;
+    };
 
     video.addEventListener('loadeddata', onLoaded);
     video.addEventListener('seeked', onSeeked);
@@ -104,7 +109,12 @@ const VideoThumbnail: React.FC<{ src: string }> = ({ src }) => {
   return (
     <>
       {/* Hidden video + canvas used only as canvas-capture fallback */}
-      <video ref={videoRef} className='sr-only' crossOrigin='anonymous' preload='metadata' />
+      <video
+        ref={videoRef}
+        className='sr-only'
+        crossOrigin='anonymous'
+        preload='metadata'
+      />
       <canvas ref={canvasRef} className='sr-only' />
       <VideoIcon className='size-5 text-muted-foreground' />
     </>
@@ -124,7 +134,11 @@ interface MediaLightboxProps {
   onClose: () => void;
 }
 
-const MediaLightbox: React.FC<MediaLightboxProps> = ({ items, initialIndex, onClose }) => {
+const MediaLightbox: React.FC<MediaLightboxProps> = ({
+  items,
+  initialIndex,
+  onClose,
+}) => {
   const [current, setCurrent] = useState(initialIndex);
 
   const goNext = useCallback(
@@ -150,7 +164,8 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ items, initialIndex, onCl
 
   return (
     <div
-      className='fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm'
+      className='absolute inset-0 z-10 flex items-center justify-center
+        bg-black/70 backdrop-blur-sm'
       onClick={onClose}
       role='dialog'
       aria-modal='true'
@@ -160,7 +175,9 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ items, initialIndex, onCl
       <button
         type='button'
         onClick={onClose}
-        className='absolute right-4 top-4 z-10 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
+        className='absolute right-4 top-4 z-10 flex size-9 items-center
+          justify-center rounded-full bg-white/10 text-white transition
+          hover:bg-white/25'
         aria-label='Close preview'
       >
         <X className='size-5' />
@@ -170,8 +187,13 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ items, initialIndex, onCl
       {items.length > 1 && (
         <button
           type='button'
-          onClick={(e) => { e.stopPropagation(); goPrev(); }}
-          className='absolute left-4 z-10 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
+          onClick={(e) => {
+            e.stopPropagation();
+            goPrev();
+          }}
+          className='absolute left-4 z-10 flex size-9 items-center
+            justify-center rounded-full bg-white/10 text-white transition
+            hover:bg-white/25'
           aria-label='Previous media'
         >
           <ChevronLeft className='size-5' />
@@ -179,14 +201,18 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ items, initialIndex, onCl
       )}
 
       {/* Media */}
-      <div className='flex max-h-[90vh] max-w-[90vw] items-center justify-center' onClick={(e) => e.stopPropagation()}>
+      <div
+        className='flex max-h-[60vh] max-w-[60vw] items-center justify-center'
+        onClick={(e) => e.stopPropagation()}
+      >
         {item.type === 'image' ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             key={item.url}
             src={item.url}
             alt={`Preview ${current + 1}`}
-            className='max-h-[90vh] max-w-[90vw] rounded-lg object-contain shadow-2xl'
+            className='max-h-[60vh] max-w-[60vw] rounded-lg object-contain
+              shadow-2xl'
           />
         ) : (
           <video
@@ -194,7 +220,7 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ items, initialIndex, onCl
             src={item.url}
             controls
             autoPlay
-            className='max-h-[90vh] max-w-[90vw] rounded-lg shadow-2xl'
+            className='max-h-[60vh] max-w-[60vw] rounded-lg shadow-2xl'
           />
         )}
       </div>
@@ -203,8 +229,13 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ items, initialIndex, onCl
       {items.length > 1 && (
         <button
           type='button'
-          onClick={(e) => { e.stopPropagation(); goNext(); }}
-          className='absolute right-4 z-10 flex size-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/25'
+          onClick={(e) => {
+            e.stopPropagation();
+            goNext();
+          }}
+          className='absolute right-4 z-10 flex size-9 items-center
+            justify-center rounded-full bg-white/10 text-white transition
+            hover:bg-white/25'
           aria-label='Next media'
         >
           <ChevronRight className='size-5' />
@@ -213,7 +244,10 @@ const MediaLightbox: React.FC<MediaLightboxProps> = ({ items, initialIndex, onCl
 
       {/* Counter */}
       {items.length > 1 && (
-        <p className='absolute bottom-4 text-sm text-white/70'>
+        <p
+          className='absolute bottom-28 rounded bg-black/30 px-2 py-1 text-sm
+            text-white/70'
+        >
           {current + 1} / {items.length}
         </p>
       )}
@@ -233,7 +267,9 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [sizeError, setSizeError] = useState<string | null>(null);
   const [pendingUploads, setPendingUploads] = useState<PendingUploadItem[]>([]);
-  const [mediaLightboxIndex, setMediaLightboxIndex] = useState<number | null>(null);
+  const [mediaLightboxIndex, setMediaLightboxIndex] = useState<number | null>(
+    null,
+  );
 
   const customData = (field.fieldConfig?.customData ??
     {}) as FileUploadCustomData;
@@ -382,9 +418,7 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
           <UploadCloudIcon className='size-8 text-muted-foreground' />
           <div>
             <p className='text-sm font-medium'>
-              {pendingUploads.length > 0
-                ? 'Uploading...'
-                : 'Drag drop or'}{' '}
+              {pendingUploads.length > 0 ? 'Uploading...' : 'Drag drop or'}{' '}
               <span className='text-primary underline-offset-2 hover:underline'>
                 browse
               </span>
@@ -474,7 +508,9 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
               {fp.type === 'image' ? (
                 <button
                   type='button'
-                  className='group relative size-10 shrink-0 overflow-hidden rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+                  className='group relative size-10 shrink-0 overflow-hidden
+                    rounded focus:outline-none focus-visible:ring-2
+                    focus-visible:ring-primary'
                   onClick={() => setMediaLightboxIndex(idx)}
                   aria-label={`Preview image ${idx + 1}`}
                 >
@@ -482,21 +518,35 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
                   <img
                     src={fp.value}
                     alt={`Uploaded file ${idx + 1}`}
-                    className='size-10 rounded object-cover transition group-hover:brightness-75'
+                    className='size-10 rounded object-cover transition
+                      group-hover:brightness-75'
                   />
-                  <ZoomIn className='absolute inset-0 m-auto size-4 text-white opacity-0 transition group-hover:opacity-100' />
+                  <ZoomIn
+                    className='absolute inset-0 m-auto size-4 text-white
+                      opacity-0 transition group-hover:opacity-100'
+                  />
                 </button>
               ) : fp.type === 'video' ? (
                 <button
                   type='button'
-                  className='group relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+                  className='group relative flex size-10 shrink-0 items-center
+                    justify-center overflow-hidden rounded bg-muted
+                    focus:outline-none focus-visible:ring-2
+                    focus-visible:ring-primary'
                   onClick={() => setMediaLightboxIndex(idx)}
                   aria-label={`Preview video ${idx + 1}`}
                 >
                   <VideoThumbnail src={fp.value} />
                   {/* Dark overlay so Play icon is visible on any thumbnail color */}
-                  <div className='absolute inset-0 bg-black/0 transition group-hover:bg-black/45' />
-                  <Play className='absolute inset-0 m-auto size-5 fill-white text-white opacity-0 drop-shadow transition group-hover:opacity-100' />
+                  <div
+                    className='absolute inset-0 bg-black/0 transition
+                      group-hover:bg-black/45'
+                  />
+                  <Play
+                    className='absolute inset-0 m-auto size-5 fill-white
+                      text-white opacity-0 drop-shadow transition
+                      group-hover:opacity-100'
+                  />
                 </button>
               ) : (
                 <div
@@ -509,7 +559,9 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
 
               {/* File name & size */}
               <div className='min-w-0 flex-1'>
-                <p className='truncate text-sm font-medium'>{fp.value}</p>
+                <span className='text-sm font-medium'>
+                  <TextEllipsis>{fp.value}</TextEllipsis>
+                </span>
                 <p className='text-xs text-muted-foreground'>
                   Uploaded to Cloudinary
                 </p>
@@ -541,16 +593,20 @@ export const FileUploadField: React.FC<AutoFormFieldProps> = ({
       )}
 
       {/* MediaLightbox */}
-      {mediaLightboxIndex !== null && (() => {
-        const mediaItems = currentFiles.map((f) => ({ url: f.value, type: f.type }));
-        return (
-          <MediaLightbox
-            items={mediaItems}
-            initialIndex={mediaLightboxIndex}
-            onClose={() => setMediaLightboxIndex(null)}
-          />
-        );
-      })()}
+      {mediaLightboxIndex !== null &&
+        (() => {
+          const mediaItems = currentFiles.map((f) => ({
+            url: f.value,
+            type: f.type,
+          }));
+          return (
+            <MediaLightbox
+              items={mediaItems}
+              initialIndex={mediaLightboxIndex}
+              onClose={() => setMediaLightboxIndex(null)}
+            />
+          );
+        })()}
     </div>
   );
 };

@@ -46,6 +46,7 @@ export function PromocodesTable() {
     data: data?.items ?? [],
     columns,
     pageCount: data?.totalPages ?? 0,
+    rowCount: data?.totalCount ?? 0,
     initialState: {
       pagination: { pageIndex: 0, pageSize: 10 },
       columnPinning: { left: ['select', 'index', 'code', 'name'] },
@@ -57,7 +58,7 @@ export function PromocodesTable() {
     <>
       <DataTable
         table={table}
-        tableContainerClassName='max-h-[calc(100dvh-20rem)] min-w-[980px]'
+        tableContainerClassName=''
         actionBar={<PromocodesTableActionBar table={table} />}
         isFetching={isFetching}
         isLoading={isLoading}

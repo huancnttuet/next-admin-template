@@ -40,6 +40,7 @@ import { hasPermission } from '@/lib/rbac';
 
 export function NavGroup({ title, items }: NavGroupType) {
   const { state, isMobile } = useSidebar();
+  console.log(`🚀${(new Date()).toString()} ~ NavGroup ~ state:`, state)
   const { data: session } = useSession();
   const pathname = usePathname();
 

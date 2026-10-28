@@ -8,7 +8,7 @@ export const OrderTotalField: React.FC<AutoFormFieldProps> = ({
   error,
   id,
 }) => {
-  const { key, value, ...props } = inputProps;
+  const { key, name, value, ...props } = inputProps;
 
   // Watch necessary fields for calculation
   const orderItems = useWatch({ name: 'orderItems' });
@@ -34,12 +34,12 @@ export const OrderTotalField: React.FC<AutoFormFieldProps> = ({
   useEffect(() => {
     // If the currently derived total doesn't match the set value, update it
     if (value !== calculatedTotal) {
-      setValue(key as string, calculatedTotal, {
+      setValue(name as string, calculatedTotal, {
         shouldValidate: true,
         shouldDirty: true,
       });
     }
-  }, [calculatedTotal, value, key, setValue]);
+  }, [calculatedTotal, value, name, setValue]);
 
   return (
     <Input

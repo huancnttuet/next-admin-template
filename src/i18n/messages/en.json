@@ -314,6 +314,8 @@
     "colCategories": "Categories",
     "colPrice": "Price",
     "colQuantity": "Quantity",
+    "colCreatedAt": "Created at",
+    "colUpdatedAt": "Updated at",
     "colStatus": "Status",
     "colFeatured": "Featured",
     "colActions": "Actions",

@@ -190,7 +190,7 @@ export function createProductFormSchema(t: (key: string) => string) {
             accept: 'image/*',
             maxSizeMB: 10,
             multiple: true,
-            maxFiles: 8,
+            maxFiles: 12,
           },
         }),
       ),
@@ -449,6 +449,32 @@ export function updateProductFormSchema(t: (key: string) => string) {
           },
         }),
       ),
+
+    isActive: z
+      .boolean()
+      .default(true)
+      .superRefine(
+        fieldConfig({
+          label: t('fieldActive'),
+          fieldType: 'switch',
+          customData: {
+            className: 'col-span-1 py-2',
+          },
+        }),
+      ),
+    isFeatured: z
+      .boolean()
+      .default(false)
+      .superRefine(
+        fieldConfig({
+          label: t('fieldFeatured'),
+          fieldType: 'switch',
+          customData: {
+            className: 'col-span-2 py-2 ',
+          },
+        }),
+      ),
+
     mainImageFiles: z
       .array(z.string())
       .default([])
@@ -477,7 +503,7 @@ export function updateProductFormSchema(t: (key: string) => string) {
             accept: 'image/*',
             maxSizeMB: 10,
             multiple: true,
-            maxFiles: 8,
+            maxFiles: 12,
           },
         }),
       ),
@@ -596,18 +622,6 @@ export function updateProductFormSchema(t: (key: string) => string) {
             className: 'col-span-3',
           },
         }),
-      ),
-    isActive: z
-      .boolean()
-      .default(true)
-      .superRefine(
-        fieldConfig({ label: t('fieldActive'), fieldType: 'switch' }),
-      ),
-    isFeatured: z
-      .boolean()
-      .default(false)
-      .superRefine(
-        fieldConfig({ label: t('fieldFeatured'), fieldType: 'switch' }),
       ),
   });
 }

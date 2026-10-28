@@ -17,6 +17,27 @@ export function formatDate(
   }
 }
 
+export function formatDateTime(
+  date: Date | string | number | undefined,
+  locale: string = 'vi-VN',
+  opts: Intl.DateTimeFormatOptions = {},
+) {
+  if (!date) return '';
+  try {
+    return new Intl.DateTimeFormat(locale, {
+      month: opts.month ?? 'numeric',
+      day: opts.day ?? 'numeric',
+      year: opts.year ?? 'numeric',
+      hour: opts.hour ?? 'numeric',
+      minute: opts.minute ?? 'numeric',
+      second: opts.second ?? 'numeric',
+      ...opts,
+    }).format(new Date(date));
+  } catch (_err) {
+    return '';
+  }
+}
+
 export function formatCurrency(
   value: number | string | undefined,
   locale: string = 'vi-VN',

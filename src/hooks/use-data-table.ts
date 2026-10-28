@@ -53,6 +53,7 @@ interface UseDataTableProps<TData>
       | 'manualSorting'
     >,
     Required<Pick<TableOptions<TData>, 'pageCount'>> {
+  manualSorting?: boolean;
   initialState?: Omit<Partial<TableState>, 'sorting'> & {
     sorting?: ExtendedColumnSort<TData>[];
   };
@@ -77,6 +78,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     debounceMs = DEBOUNCE_MS,
     throttleMs = THROTTLE_MS,
     clearOnDefault = false,
+    manualSorting = true,
     enableAdvancedFilter = false,
     scroll = false,
     shallow = true,
@@ -302,7 +304,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     manualPagination: true,
-    manualSorting: true,
+    manualSorting,
     manualFiltering: true,
     meta: {
       ...tableProps.meta,

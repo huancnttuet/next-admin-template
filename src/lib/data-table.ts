@@ -31,7 +31,7 @@ export function getColumnPinningStyle<TData>({
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     opacity: 1,
     position: isPinned ? 'sticky' : 'relative',
-    background: isPinned ? 'inherit' : undefined,
+    background: isPinned ? 'hsl(var(--background))' : undefined,
     width: column.getSize(),
     zIndex: isPinned ? 1 : undefined,
   };

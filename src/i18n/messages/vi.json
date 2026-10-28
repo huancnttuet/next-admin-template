@@ -311,6 +311,8 @@
     "colCategories": "Danh mục",
     "colPrice": "Giá",
     "colQuantity": "Số lượng",
+    "colCreatedAt": "Ngày tạo",
+    "colUpdatedAt": "Ngày cập nhật",
     "colStatus": "Trạng thái",
     "colFeatured": "Nổi bật",
     "colActions": "Thao tác",

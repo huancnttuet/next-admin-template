@@ -11,7 +11,7 @@ export default async function EditProductPage({
   const { id } = await params;
 
   return (
-    <Main fixed>
+    <Main>
       <ProductEditPage id={id} />
     </Main>
   );

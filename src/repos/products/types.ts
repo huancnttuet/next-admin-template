@@ -65,6 +65,8 @@ export interface Product {
   subProducts: SubProduct[];
   isActive: boolean;
   isFeatured: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ProductPagedParams {
@@ -75,4 +77,6 @@ export interface ProductPagedParams {
   category?: string;
   categories?: string[];
   isFeatured?: boolean;
+  sortBy?: string;
+  sortDescending?: boolean;
 }

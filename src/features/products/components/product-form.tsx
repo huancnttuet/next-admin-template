@@ -19,6 +19,7 @@ import { FormMode } from '@/types/form';
 import Link from 'next/link';
 import { AppRoutes } from '@/configs/routes';
 import { ChevronLeft } from 'lucide-react';
+import clsx from 'clsx';
 
 interface Props {
   mode: FormMode;
@@ -138,11 +139,13 @@ export function ProductForm({
   };
 
   return (
-    <div className='flex h-full min-h-0 flex-col gap-4'>
+    <div className='fixed flex h-full min-h-0 flex-col gap-4 pr-2'>
       {/* ── Fixed top bar ───────────────────────────────────────── */}
       <div
-        className='flex shrink-0 items-center justify-between gap-4 border-b
-          bg-background pb-3 pt-1'
+        className={clsx(
+          `sticky right-0 top-16 z-10 flex w-full shrink-0 items-center
+          justify-between gap-4 border-b bg-background pb-3 pr-3`,
+        )}
       >
         {/* Left: back button + title */}
         <div className='flex min-w-0 items-center gap-2'>
@@ -162,7 +165,7 @@ export function ProductForm({
         </div>
 
         {/* Right: action buttons */}
-        <div className='flex shrink-0 gap-2'>
+        <div className='flex min-w-0 shrink-0 gap-2'>
           <Button
             type='button'
             variant='outline'
@@ -171,11 +174,7 @@ export function ProductForm({
           >
             {t('cancel')}
           </Button>
-          <Button
-            type='submit'
-            form='product-form'
-            disabled={isBusy}
-          >
+          <Button type='submit' form='product-form' disabled={isBusy}>
             {isBusy
               ? t(currentModeConfig.busySubmitText)
               : t(currentModeConfig.idleSubmitText)}
@@ -184,7 +183,7 @@ export function ProductForm({
       </div>
 
       {/* ── Form content scrollable area ────────────────────────── */}
-      <div className='flex-1 min-h-0 overflow-y-auto pr-1'>
+      <div className='mb-32 min-h-0 flex-1 overflow-y-auto p-2 pr-1'>
         <AutoForm
           key={product?.id ?? mode}
           schema={schema}

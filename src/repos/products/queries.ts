@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 import type { PagedList } from '@/types/api';
 import { getProductsCollection } from './collection';
 import { mapProductDocument } from './mapper';
-import type { Product, ProductPagedParams } from './types';
+import type { Product, ProductDocument, ProductPagedParams } from './types';
 
 export async function findProductsPaged({
   page,
@@ -12,6 +12,8 @@ export async function findProductsPaged({
   category,
   categories,
   isFeatured,
+  sortBy,
+  sortDescending,
 }: ProductPagedParams): Promise<PagedList<Product>> {
   const collection = await getProductsCollection();
   const filter: Record<string, unknown> = {};
@@ -57,13 +59,61 @@ export async function findProductsPaged({
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
   const normalizedPage = Math.min(Math.max(page, 1), totalPages);
   const skip = (normalizedPage - 1) * pageSize;
-
-  const docs = await collection
-    .find(filter)
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(pageSize)
-    .toArray();
+  const sortDirection = sortDescending ? -1 : 1;
+  const sortFieldMap = {
+    name: 'name',
+    price: 'price',
+    quantity: 'quantity',
+    isActive: 'isActive',
+    isFeatured: 'isFeatured',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+  } as const;
+  const sortField = sortBy
+    ? sortFieldMap[sortBy as keyof typeof sortFieldMap]
+    : undefined;
+  const docs =
+    sortField === 'price'
+      ? await collection
+          .aggregate<ProductDocument>([
+            { $match: filter },
+            {
+              $set: {
+                _sortPrice: {
+                  $convert: {
+                    input: {
+                      $replaceAll: {
+                        input: { $toString: { $ifNull: ['$price', '0'] } },
+                        find: ',',
+                        replacement: '',
+                      },
+                    },
+                    to: 'double',
+                    onError: 0,
+                    onNull: 0,
+                  },
+                },
+              },
+            },
+            { $sort: { _sortPrice: sortDirection, _id: 1 } },
+            { $skip: skip },
+            { $limit: pageSize },
+            { $unset: '_sortPrice' },
+          ])
+          .toArray()
+      : sortField
+        ? await collection
+            .find(filter)
+            .sort({ [sortField]: sortDirection, _id: 1 })
+            .skip(skip)
+            .limit(pageSize)
+            .toArray()
+        : await collection
+            .find(filter)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(pageSize)
+            .toArray();
 
   return {
     items: docs.map(mapProductDocument),

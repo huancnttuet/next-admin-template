@@ -13,9 +13,12 @@ import { AppRoutes } from '@/configs/routes';
 import { useTranslations } from 'next-intl';
 import { DeleteProductDialog } from './delete-product-dialog';
 import Image from 'next/image';
+import { useLocale } from 'next-intl';
+import { formatDateTime } from '@/lib/format';
 
 export const useProductColumns = (): ColumnDef<Product>[] => {
   const t = useTranslations('products');
+  const locale = useLocale();
   const router = useRouter();
 
   return [
@@ -38,7 +41,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
           aria-label={t('selectRow')}
         />
       ),
-      size: 20,
+      size: 30,
       enableSorting: false,
       enableHiding: false,
     },
@@ -47,13 +50,17 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
       header: () => <span className='text-muted-foreground'>#</span>,
       cell: ({ row, table }) => {
         const { pageIndex, pageSize } = table.getState().pagination;
+        const rowIndex = table
+          .getRowModel()
+          .rows.findIndex((currentRow) => currentRow.id === row.id);
+
         return (
           <span className='text-muted-foreground'>
-            {pageIndex * pageSize + row.index + 1}
+            {pageIndex * pageSize + rowIndex + 1}
           </span>
         );
       },
-      size: 30,
+      size: 40,
       enableSorting: false,
       enableHiding: false,
     },
@@ -87,8 +94,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
         variant: 'text' as const,
       },
       enableColumnFilter: true,
-      enableSorting: false,
-      size: 300,
+      size: 360,
     },
     {
       id: 'categories',
@@ -148,8 +154,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
       meta: {
         label: t('colPrice'),
       },
-      enableSorting: false,
-      size: 80,
+      size: 120,
     },
     {
       id: 'quantity',
@@ -165,9 +170,9 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
       meta: {
         label: t('colQuantity'),
       },
-      enableSorting: false,
-      size: 50,
+      size: 120,
     },
+
     {
       id: 'isActive',
       accessorKey: 'isActive',
@@ -191,8 +196,7 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
         ],
       },
       enableColumnFilter: true,
-      enableSorting: false,
-      size: 80,
+      size: 120,
     },
     {
       id: 'isFeatured',
@@ -217,9 +221,42 @@ export const useProductColumns = (): ColumnDef<Product>[] => {
         ],
       },
       enableColumnFilter: true,
-      enableSorting: false,
-      size: 80,
+      size: 120,
     },
+
+    {
+      id: 'createdAt',
+      accessorKey: 'createdAt',
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} label={t('colCreatedAt')} />
+      ),
+      cell: ({ row }) => (
+        <span className='text-xs text-muted-foreground'>
+          {formatDateTime(row.original.createdAt, locale)}
+        </span>
+      ),
+      meta: {
+        label: t('colCreatedAt'),
+      },
+      size: 180,
+    },
+    {
+      id: 'updatedAt',
+      accessorKey: 'updatedAt',
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} label={t('colUpdatedAt')} />
+      ),
+      cell: ({ row }) => (
+        <span className='text-xs text-muted-foreground'>
+          {formatDateTime(row.original.updatedAt, locale)}
+        </span>
+      ),
+      meta: {
+        label: t('colUpdatedAt'),
+      },
+      size: 180,
+    },
+
     {
       id: 'actions',
       header: () => (

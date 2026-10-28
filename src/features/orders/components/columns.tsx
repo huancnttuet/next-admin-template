@@ -10,7 +10,7 @@ import {
 } from '../orders.type';
 import { OrderFormDialog } from './order-form-dialog';
 import { DeleteOrderDialog } from './delete-order-dialog';
-import { formatCurrency, formatDate } from '@/lib/format';
+import { formatCurrency, formatDateTime } from '@/lib/format';
 
 function getStatusLabel(t: (key: string) => string, status: OrderStatus) {
   if (status === 'PENDING') return t('statusPending');
@@ -88,7 +88,7 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
       },
       enableColumnFilter: false,
       enableSorting: false,
-      size: 150,
+      size: 200,
     },
     {
       id: 'customer',
@@ -104,7 +104,7 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
       },
       enableColumnFilter: true,
       enableSorting: false,
-      size: 200,
+      size: 250,
     },
     {
       id: 'status',
@@ -140,13 +140,15 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
       ),
       cell: ({ row }) => {
         const total = Number(row.getValue('total'));
-        return <span className='font-medium'>{formatCurrency(total, locale)}</span>;
+        return (
+          <span className='font-medium'>{formatCurrency(total, locale)}</span>
+        );
       },
       meta: {
         label: t('colTotal'),
       },
       enableSorting: false,
-      size: 120,
+      size: 150,
     },
     {
       id: 'shippingCost',
@@ -162,7 +164,7 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
         label: t('colShippingCost'),
       },
       enableSorting: false,
-      size: 120,
+      size: 150,
     },
     {
       id: 'createdAt',
@@ -171,8 +173,8 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
         <DataTableColumnHeader column={column} label={t('colCreatedAt')} />
       ),
       cell: ({ row }) => (
-        <span className='text-xs text-muted-foreground'>
-          {formatDate(row.original.createdAt, locale)}
+        <span className='text-sm text-muted-foreground'>
+          {formatDateTime(row.original.createdAt, locale)}
         </span>
       ),
       meta: {
@@ -188,8 +190,8 @@ export const useOrderColumns = (): ColumnDef<Order>[] => {
         <DataTableColumnHeader column={column} label={t('colUpdatedAt')} />
       ),
       cell: ({ row }) => (
-        <span className='text-xs text-muted-foreground'>
-          {formatDate(row.original.updatedAt, locale)}
+        <span className='text-sm text-muted-foreground'>
+          {formatDateTime(row.original.updatedAt, locale)}
         </span>
       ),
       meta: {

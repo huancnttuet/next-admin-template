@@ -20,6 +20,7 @@ import { AppRoutes } from '@/configs/routes';
 import { useProductColumns } from './columns';
 import { ImportProductsButton } from './import-products-button';
 import { ProductsTableActionBar } from './products-table-action-bar';
+import { getSortingStateParser } from '@/lib/parsers';
 
 export function ProductsTable() {
   const t = useTranslations('products');
@@ -35,6 +36,10 @@ export function ProductsTable() {
   });
 
   const columns = useProductColumns();
+  const [sorting] = useQueryState(
+    'sort',
+    getSortingStateParser<Product>(columns.map((column) => column.id ?? '')),
+  );
 
   const statusFilter = filterValues.isActive?.[0];
   const isFeaturedFilter = filterValues.isFeatured?.[0];
@@ -43,6 +48,8 @@ export function ProductsTable() {
   const { data, isLoading, isFetching } = usePagedProducts({
     Page: page,
     PageSize: perPage,
+    SortBy: sorting?.[0]?.id,
+    SortDescending: sorting?.[0]?.desc,
     Keyword: filterValues.name || undefined,
     IsActive:
       statusFilter === undefined
@@ -66,9 +73,10 @@ export function ProductsTable() {
     data: data?.items ?? [],
     columns,
     pageCount: data?.totalPages ?? 0,
+    rowCount: data?.totalCount ?? 0,
     initialState: {
       pagination: { pageIndex: 0, pageSize: 10 },
-      columnPinning: { left: ['select', 'index', 'name'] },
+      columnPinning: { left: ['select', 'index', 'name'], right: ['actions'] },
     },
     getRowId: (row) => row.id,
   });
@@ -79,7 +87,7 @@ export function ProductsTable() {
         table={table}
         isLoading={isLoading}
         actionBar={<ProductsTableActionBar table={table} />}
-        tableContainerClassName='max-h-[calc(100dvh-20rem)] min-w-[960px]'
+        tableContainerClassName=''
         isFetching={isFetching}
       >
         <DataTableToolbar table={table}>

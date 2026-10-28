@@ -37,7 +37,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
           aria-label={t('selectRow')}
         />
       ),
-      size: 40,
+      size: 25,
       enableSorting: false,
       enableHiding: false,
     },
@@ -52,7 +52,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
           </span>
         );
       },
-      size: 52,
+      size: 40,
       enableSorting: false,
       enableHiding: false,
     },
@@ -74,6 +74,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
       },
       enableColumnFilter: false,
       enableSorting: false,
+      size: 80,
     },
     {
       id: 'name',
@@ -91,6 +92,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
       },
       enableColumnFilter: true,
       enableSorting: false,
+      size: 120,
     },
     {
       id: 'discountType',
@@ -115,6 +117,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
       },
       enableColumnFilter: true,
       enableSorting: false,
+      size: 150,
     },
     {
       id: 'discountValue',
@@ -137,6 +140,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
       meta: {
         label: t('colDiscountValue'),
       },
+      size: 120,
       enableSorting: false,
     },
     {
@@ -153,6 +157,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
         label: t('colMinSpend'),
       },
       enableSorting: false,
+      size: 120,
     },
     {
       id: 'maxAmount',
@@ -168,6 +173,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
         label: t('colMaxAmount'),
       },
       enableSorting: false,
+      size: 120,
     },
     {
       id: 'period',
@@ -184,6 +190,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
         label: t('colPeriod'),
       },
       enableSorting: false,
+      size: 150,
     },
     {
       id: 'isActive',
@@ -209,6 +216,7 @@ export const usePromocodeColumns = (): ColumnDef<Promocode>[] => {
       },
       enableColumnFilter: true,
       enableSorting: false,
+      size: 120,
     },
     {
       id: 'actions',

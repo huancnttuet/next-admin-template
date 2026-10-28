@@ -41,5 +41,7 @@ export function mapProductDocument(doc: ProductDocument): Product {
     subProducts: mapSubProducts(doc),
     isActive: doc.isActive,
     isFeatured: doc.isFeatured,
+    createdAt: doc.createdAt.toISOString(),
+    updatedAt: doc.updatedAt.toISOString(),
   };
 }
